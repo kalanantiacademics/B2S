@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Coding Kiki & Koko</title>
+    <style>
+        /* --- STYLE GLOBAL --- */
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- CONTAINER SLIDE (LAYAR TV) --- */
+        #app-container {
+            width: 95%;
+            max-width: 1600px;
+            aspect-ratio: 16/9;
+            background-color: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            border: 10px solid #FF8C42;
+            /* Warna Orange Kucing */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- AREA KONTEN UTAMA --- */
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2d3436;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 1.5rem;
+            color: #636e72;
+            margin-top: 0;
+        }
+
+        .highlight {
+            color: #FF8C42;
+        }
+
+        /* --- VISUAL ELEMENTS (EMOJI & SHAPES) --- */
+        .visual-area {
+            font-size: 6rem;
+            margin-bottom: 20px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .animate-bounce {
+            animation: bounce 2s infinite;
+        }
+
+        .animate-walk {
+            animation: walk 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-20px);
+            }
+
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes walk {
+            from {
+                transform: rotate(-5deg);
+            }
+
+            to {
+                transform: rotate(5deg);
+            }
+        }
+
+        /* --- SCRATCH BLOCK STYLES --- */
+        .scratch-block {
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            margin: 5px;
+        }
+
+        .block-blue {
+            background-color: #4C97FF;
+            border-color: #3373CC;
+        }
+
+        /* Motion */
+        .block-yellow {
+            background-color: #FFBF00;
+            border-color: #CC9900;
+        }
+
+        /* Events */
+        .block-purple {
+            background-color: #9966FF;
+            border-color: #774DCB;
+        }
+
+        /* Looks */
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .quiz-btn {
+            background: #f1f2f6;
+            border: 4px solid #dfe4ea;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.2rem;
+            font-weight: bold;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .quiz-btn:hover {
+            transform: scale(1.05);
+            background: #fff;
+            border-color: #4C97FF;
+        }
+
+        .feedback-msg {
+            margin-top: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-height: 40px;
+        }
+
+        .correct {
+            color: #2ecc71;
+        }
+
+        .wrong {
+            color: #e74c3c;
+        }
+
+        /* --- NAVIGATION --- */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background: #f7f1e3;
+            border-top: 2px solid #eee;
+        }
+
+        button.nav-btn {
+            background-color: #FF8C42;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            transition: transform 0.1s;
+        }
+
+        button.nav-btn:hover {
+            background-color: #e67e22;
+        }
+
+        button.nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        button.nav-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            font-weight: bold;
+            color: #b2bec3;
+            align-self: center;
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #eee;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #2ecc71;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Logo RGC (Pojok Kiri Atas) -->
+    <img src="https://images2.imgbox.com/51/6a/xhLlGQcZ_o.png" alt="Logo RGC"
+        style="position: absolute; top: 20px; left: 20px; width: 120px; z-index: 10; opacity: 0.9; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+
+    <div id="app-container">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Slide Area -->
+        <div id="slideDisplay" class="slide-content">
+            <!-- Konten akan diisi oleh JavaScript -->
+        </div>
+
+        <!-- Tombol Navigasi -->
+        <div class="controls">
+            <button id="prevBtn" class="nav-btn" onclick="changeSlide(-1)">⬅ Kembali</button>
+            <div class="slide-counter" id="slideCounter">1 / 30</div>
+            <button id="nextBtn" class="nav-btn" onclick="changeSlide(1)">Lanjut ➡</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA SLIDE (30 SLIDE) ---
+        const slides = [
+            // INTRO
+            { type: 'title', title: "Petualangan Kiki & Koko", text: "Belajar Coding di Hutan Ajaib", visual: "🐱🌳😸" },
+            { type: 'story', title: "Kiki & Koko", text: "Mereka adalah penjelajah hutan yang pemberani!", visual: '<img src="https://images2.imgbox.com/76/68/mPvCh2Iw_o.png" style="max-height:300px; border-radius: 20px; border: 5px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">' },
+            { type: 'story', title: "Mengejar Kupu-kupu", text: "Asyik mengejar kupu-kupu cantik, mereka berlari terlalu jauh...", visual: '<img src="https://images2.imgbox.com/55/2d/dUAg4DS2_o.png" style="max-height:300px; border-radius: 20px; border: 5px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">' },
+            { type: 'story', title: "TERSESAT!", text: "Tiba-tiba hutan menjadi gelap. Mereka tidak tahu jalan pulang.", visual: '<img src="https://images2.imgbox.com/02/60/RvXN5i4J_o.png" style="max-height:300px; border-radius: 20px; border: 5px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">' },
+
+            // INTRO CODING
+            { type: 'story', title: "Misi Kita", text: "Bantu mereka keluar dari hutan!", visual: '<div style="display:flex; flex-direction:column; align-items:center; gap:15px;"><iframe src="https://scratch.mit.edu/projects/1254967442/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen style="border-radius:15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></iframe><button class="nav-btn" onclick="window.open(\'https://scratch.mit.edu/projects/1254967442\', \'_blank\')" style="font-size:1rem; padding:10px 25px; background-color:#4C97FF;">Buka Project Scratch ↗</button></div>' },
+            // KONSEP GERAK
+            { type: 'concept', title: "Rumus Jalan Ajaib", text: "Ingat ya! Kanan & Atas itu Positif (10). Kiri & Bawah itu Negatif (-10).", visual: '<img src="https://images2.imgbox.com/db/3d/uAKuv4Qs_o.png" style="max-height:280px; border-radius:15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">' },
+
+            // QUIZ 1: KANAN (Move 10)
+            {
+                type: 'quiz',
+                title: "Tebak: Gerak Kanan ➡",
+                text: "Mana balok untuk jalan ke KANAN?",
+                options: [
+                    { html: '<div class="scratch-block block-blue">move 10 steps</div>', correct: true },
+                    { html: '<div class="scratch-block block-blue">move -10 steps</div>', correct: false }
+                ],
+                visual: "➡"
+            },
+
+            // QUIZ 2: KIRI (Move -10)
+            {
+                type: 'quiz',
+                title: "Tebak: Gerak Kiri ⬅",
+                text: "Mana balok untuk jalan ke KIRI?",
+                options: [
+                    { html: '<div class="scratch-block block-blue">move 10 steps</div>', correct: false },
+                    { html: '<div class="scratch-block block-blue">move -10 steps</div>', correct: true }
+                ],
+                visual: "⬅"
+            },
+
+            // QUIZ 3: ATAS (Change Y 10)
+            {
+                type: 'quiz',
+                title: "Tebak: Gerak Atas ⬆",
+                text: "Mana balok untuk naik ke ATAS?",
+                options: [
+                    { html: '<div class="scratch-block block-blue">change y by 10</div>', correct: true },
+                    { html: '<div class="scratch-block block-blue">change y by -10</div>', correct: false }
+                ],
+                visual: "⬆"
+            },
+
+            // QUIZ 4: BAWAH (Change Y -10)
+            {
+                type: 'quiz',
+                title: "Tebak: Gerak Bawah ⬇",
+                text: "Mana balok untuk turun ke BAWAH?",
+                options: [
+                    { html: '<div class="scratch-block block-blue">change y by 10</div>', correct: false },
+                    { html: '<div class="scratch-block block-blue">change y by -10</div>', correct: true }
+                ],
+                visual: "⬇"
+            },
+
+            // ENDING
+            { type: 'story', title: "Ayo Jalan!", text: "Sekarang kalian sudah siap! Tekan Bendera Hijau!", visual: "🚩👆" },
+            { type: 'story', title: "BERHASIL!", text: "Lihat! Si Belang sudah menunggu di bawah pohon apel.", visual: "🎉😻😸🐯🎉" },
+            { type: 'title', title: "TAMAT", text: "Terima kasih sudah membantu Kiki & Koko! 🌟", visual: "🏆⭐⭐⭐" }
+        ];
+
+        let currentIndex = 0;
+
+        // --- FUNGSI UTAMA ---
+
+        function renderSlide() {
+            const slide = slides[currentIndex];
+            const display = document.getElementById('slideDisplay');
+            const progressBar = document.getElementById('progressBar');
+            const counter = document.getElementById('slideCounter');
+
+            // Update Progress Bar
+            const progress = ((currentIndex + 1) / slides.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            counter.innerText = `${currentIndex + 1} / ${slides.length}`;
+
+            // Reset Content
+            display.innerHTML = '';
+
+            // 1. Render Visual (Icon/Emoji/Block)
+            const visualDiv = document.createElement('div');
+            // Cek apakah visual berisi <iframe> (Project Scratch)
+            if (slide.visual.includes('<iframe')) {
+                visualDiv.className = 'visual-area'; // Tidak pakai animasi bounce
+            } else {
+                visualDiv.className = 'visual-area animate-bounce';
+            }
+            visualDiv.innerHTML = slide.visual;
+            display.appendChild(visualDiv);
+
+            // 2. Render Judul
+            const titleEl = document.createElement('h1');
+            titleEl.innerText = slide.title;
+            display.appendChild(titleEl);
+
+            // 3. Render Teks Cerita
+            if (slide.text) {
+                const textEl = document.createElement('p');
+                textEl.innerText = slide.text;
+                display.appendChild(textEl);
+            }
+
+            // 4. Render Quiz (Jika tipe quiz)
+            if (slide.type === 'quiz') {
+                const quizContainer = document.createElement('div');
+                quizContainer.className = 'quiz-container';
+
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.className = 'feedback-msg';
+                feedbackDiv.id = 'feedbackMsg';
+
+                slide.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'quiz-btn';
+                    // Cek apakah opsi berupa HTML (gambar blok) atau Teks biasa
+                    if (opt.html) {
+                        btn.innerHTML = opt.html;
+                    } else {
+                        btn.innerText = opt.text;
+                    }
+
+                    btn.onclick = () => {
+                        if (opt.correct) {
+                            feedbackDiv.innerText = "YAY BENAR! 🎉";
+                            feedbackDiv.className = "feedback-msg correct";
+                            btn.style.backgroundColor = "#a8e6cf";
+                            btn.style.borderColor = "#2ecc71";
+                        } else {
+                            feedbackDiv.innerText = "Ups, coba lagi ya.. 🤔";
+                            feedbackDiv.className = "feedback-msg wrong";
+                            btn.style.backgroundColor = "#ffcccc";
+                            btn.style.borderColor = "#e74c3c";
+                        }
+                    };
+                    quizContainer.appendChild(btn);
+                });
+
+                display.appendChild(quizContainer);
+                display.appendChild(feedbackDiv);
+            }
+
+            // Atur status tombol
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === slides.length - 1;
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentIndex + direction;
+            if (newIndex >= 0 && newIndex < slides.length) {
+                currentIndex = newIndex;
+                renderSlide();
+            }
+        }
+
+        // Keyboard Navigation (Panah Kiri/Kanan)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") changeSlide(1);
+            if (e.key === "ArrowLeft") changeSlide(-1);
+        });
+
+        // Initialize pertama kali
+        renderSlide();
+
+    </script>
+</body>
+
+</html>
