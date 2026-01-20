@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Inventor - Ruangguru Coding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#F97316',
+                            blue: '#3B82F6',
+                            purple: '#8B5CF6',
+                            green: '#10B981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; overflow: hidden; background-color: #f8fafc; }
+        .slide-container { display: flex; flex-direction: column; height: calc(100vh - 80px); justify-content: center; align-items: center; padding: 2rem; opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .slide-active { opacity: 1; }
+        
+        /* App Inventor Mockup Styles */
+        .mockup-header { background-color: #109D59; color: white; padding: 10px; font-weight: bold; }
+        .mockup-palette { background-color: #F0F0F0; border-right: 1px solid #CCC; }
+        .mockup-viewer { background-color: white; border: 1px solid #333; border-radius: 20px; overflow: hidden; position: relative; }
+        .mockup-properties { background-color: #F0F0F0; border-left: 1px solid #CCC; }
+        
+        /* Animations */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 h-20 bg-white border-b border-slate-200 z-50 px-8 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <!-- Logo Placeholder -->
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <div class="font-bold text-xl tracking-tight text-slate-800">
+                    Ruangguru <span class="text-brand-orange">Coding</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="relative">
+                <select id="meetingSelector" class="appearance-none bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 py-2 px-4 pr-8 rounded-xl font-bold cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-brand-orange">
+                    <option value="m1">Pertemuan 1: Designer View</option>
+                    <option value="m2">Pertemuan 2: Logic & Blocks</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="mainContainer" class="mt-20 w-full h-full relative">
+        <div id="slideContent" class="slide-container slide-active">
+            <!-- Slide content rendered here -->
+        </div>
+    </main>
+
+    <!-- Footer Controls -->
+    <div class="fixed bottom-0 left-0 right-0 h-16 bg-white/90 backdrop-blur border-t border-slate-200 flex items-center justify-between px-8 z-50">
+        <div class="text-sm font-bold text-slate-400">
+            <span id="meetingTitle">Pertemuan 1</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <button id="prevBtn" class="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <div class="font-mono font-bold text-slate-600 w-16 text-center">
+                <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
+            </div>
+            <button id="nextBtn" class="w-10 h-10 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg shadow-orange-500/30 hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        const slideContent = document.getElementById('slideContent');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const totalSlidesEl = document.getElementById('totalSlides');
+        const meetingSelector = document.getElementById('meetingSelector');
+        const meetingTitleEl = document.getElementById('meetingTitle');
+
+        let currentMeeting = 'm1';
+        let currentIndex = 0;
+
+        const slidesData = {
+            m1: [
+                {
+                    type: 'intro',
+                    title: 'Animal Sounds',
+                    subtitle: 'Pertemuan 1: Designer View',
+                    icon: 'fa-paw',
+                    color: 'bg-gradient-to-br from-orange-400 to-pink-500',
+                    content: `
+                        <div class="text-center max-w-2xl mx-auto">
+                            <p class="text-xl text-slate-600 mb-8">
+                                Selamat datang, Calon Programmer! 🚀
+                                <br>Hari ini kita akan membuat aplikasi yang bisa bersuara: 
+                                <br><b class="text-brand-orange text-2xl">🦁 Hewan Bicara 🐘</b>
+                            </p>
+                            <div class="grid grid-cols-2 gap-4 text-left">
+                                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                                    <div class="text-orange-500 text-xl mb-2"><i class="fa-solid fa-shapes"></i></div>
+                                    <h4 class="font-bold text-slate-800">Designer View</h4>
+                                    <p class="text-sm text-slate-500">Mengatur tampilan & wajah aplikasi.</p>
+                                </div>
+                                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                                    <div class="text-blue-500 text-xl mb-2"><i class="fa-solid fa-kaaba"></i></div>
+                                    <h4 class="font-bold text-slate-800">Decomposition</h4>
+                                    <p class="text-sm text-slate-500">Memecah masalah besar jadi kecil.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Warm-up: Programmer & Robot',
+                    subtitle: 'Komputer butuh instruksi JELAS',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl">
+                            <h3 class="text-3xl font-bold mb-6 text-slate-800">🤖 Programmer & Robot</h3>
+                            
+                            <div class="bg-white p-8 rounded-3xl shadow-xl border-2 border-slate-100 w-full mb-8 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 p-4 opacity-10">
+                                    <i class="fa-solid fa-robot text-9xl"></i>
+                                </div>
+                                <p class="text-xl text-slate-600 mb-6 font-bold">
+                                    Misi: Pandu temanmu (Robot) mengambil barang!
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                                    <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                                        <h4 class="font-bold text-red-700 mb-2"><i class="fa-solid fa-xmark"></i> Instruksi Salah</h4>
+                                        <p class="text-slate-600">"Jalan ke sana!"</p>
+                                        <p class="text-xs text-slate-400 mt-2">Robot bingung: "Sana" itu ke mana? Berapa langkah?</p>
+                                    </div>
+                                    <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+                                        <h4 class="font-bold text-green-700 mb-2"><i class="fa-solid fa-check"></i> Instruksi Benar</h4>
+                                        <p class="text-slate-600">"Maju <b>3 langkah</b>. Belok <b>Kiri 90 derajat</b>. Maju <b>1 langkah</b>."</p>
+                                        <p class="text-xs text-slate-400 mt-2">Robot paham: Detail & Langkah demi langkah.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-800 text-white px-8 py-3 rounded-full animate-bounce">
+                                <i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>
+                                Koding = Memberi instruksi <b>spesifik</b> ke komputer!
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Digital Literacy: Reality Check',
+                    subtitle: 'Hidup Kita & Teknologi',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl">
+                            <h3 class="text-3xl font-bold mb-8 text-slate-800">Seberapa Sering Kamu Pakai Ini? 📱</h3>
+                            
+                            <div class="grid grid-cols-3 gap-8 w-full mb-8">
+                                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200">
+                                    <i class="fa-brands fa-tiktok text-6xl mb-4 text-slate-900"></i>
+                                    <p class="font-bold text-slate-700">Media Sosial</p>
+                                    <p class="text-xs text-slate-500 mt-2">TikTok, Instagram, YouTube</p>
+                                </div>
+                                <div class="bg-purple-50 p-6 rounded-2xl border border-purple-200">
+                                    <i class="fa-solid fa-gamepad text-6xl mb-4 text-purple-600"></i>
+                                    <p class="font-bold text-slate-700">Games</p>
+                                    <p class="text-xs text-slate-500 mt-2">Roblox, Mobile Legends</p>
+                                </div>
+                                <div class="bg-orange-50 p-6 rounded-2xl border border-orange-200">
+                                    <i class="fa-solid fa-cart-shopping text-6xl mb-4 text-orange-600"></i>
+                                    <p class="font-bold text-slate-700">Jajan Online</p>
+                                    <p class="text-xs text-slate-500 mt-2">Shopee, GoFood</p>
+                                </div>
+                            </div>
+
+                            <p class="text-xl text-slate-600 leading-relaxed max-w-2xl bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                                Teknologi sudah ada di sekeliling kita. <br>
+                                Tapi pertanyaannya: <br>
+                                <span class="font-bold text-brand-orange text-2xl">Apakah kamu cuma PENONTON?</span>
+                            </p>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Digital Literacy: Level Up',
+                    subtitle: 'Konsumen vs Pencipta',
+                    content: `
+                         <div class="flex flex-col md:flex-row gap-8 w-full max-w-6xl items-stretch h-[450px]">
+                            <!-- Consumer Card -->
+                            <div class="flex-1 bg-white p-8 rounded-3xl shadow-lg border-2 border-slate-100 flex flex-col items-center justify-between hover:border-slate-300 transition group cursor-pointer relative overflow-hidden" onclick="this.classList.toggle('ring-4'); this.classList.toggle('ring-slate-200')">
+                                <div class="absolute top-0 right-0 bg-slate-200 text-slate-600 px-4 py-1 rounded-bl-xl font-bold text-sm">Level 1</div>
+                                <div class="text-6xl mb-4 grayscale group-hover:grayscale-0 transition duration-500">🎮</div>
+                                <h4 class="text-3xl font-bold text-slate-700">KONSUMEN</h4>
+                                <ul class="text-left w-full space-y-4 text-slate-600 mt-4 text-lg">
+                                    <li class="flex items-center gap-3"><i class="fa-solid fa-eye text-slate-400"></i> Cuma melihat</li>
+                                    <li class="flex items-center gap-3"><i class="fa-solid fa-gamepad text-slate-400"></i> Cuma main</li>
+                                    <li class="flex items-center gap-3"><i class="fa-solid fa-money-bill-wave text-slate-400"></i> Keluar uang</li>
+                                </ul>
+                                <div class="mt-8 text-center text-slate-400 text-sm font-bold bg-slate-50 w-full py-2 rounded">Pasif</div>
+                            </div>
+
+                            <div class="flex items-center justify-center">
+                                <i class="fa-solid fa-arrow-right text-4xl text-slate-300"></i>
+                            </div>
+
+                            <!-- Creator Card -->
+                            <div class="flex-1 bg-gradient-to-b from-brand-orange to-red-500 p-8 rounded-3xl shadow-xl border-none flex flex-col items-center justify-between text-white transform hover:scale-105 transition duration-300 cursor-pointer relative overflow-hidden ring-4 ring-orange-200">
+                                <div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 px-4 py-1 rounded-bl-xl font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-crown"></i> Level 99</div>
+                                <div class="text-6xl mb-4 animate-bounce">💻</div>
+                                <h4 class="text-3xl font-bold">PENCIPTA</h4>
+                                <ul class="text-left w-full space-y-4 text-orange-50 mt-4 text-lg font-medium">
+                                    <li class="flex items-center gap-3"><i class="fa-solid fa-pen-ruler text-yellow-300"></i> Membuat aturan</li>
+                                    <li class="flex items-center gap-3"><i class="fa-solid fa-puzzle-piece text-yellow-300"></i> Memecahkan masalah</li>
+                                    <li class="flex items-center gap-3"><i class="fa-solid fa-sack-dollar text-yellow-300"></i> Menghasilkan karya</li>
+                                </ul>
+                                <div class="mt-8 text-center text-brand-orange text-sm font-bold bg-white w-full py-2 rounded shadow">Aktif & Kreatif</div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Digital Literacy: Superpower',
+                    subtitle: 'Why Coding?',
+                    content: `
+                        <div class="flex items-center justify-center h-full w-full max-w-5xl">
+                             <div class="relative w-full bg-slate-900 rounded-3xl overflow-hidden p-12 text-center text-white shadow-2xl">
+                                <!-- Background decoration -->
+                                <div class="absolute top-0 left-0 w-full h-full opacity-20 bg-[url('https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif')] bg-cover mix-blend-overlay"></div>
+                                
+                                <h3 class="text-4xl font-bold mb-8 relative z-10">Koding adalah <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500">Superpower</span></h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition transform hover:-translate-y-2">
+                                        <div class="text-4xl mb-4">🌍</div>
+                                        <h4 class="font-bold text-xl mb-2">Mengerti Dunia</h4>
+                                        <p class="text-sm text-slate-300">Paham bagaimana HP, Internet, dan AI bekerja.</p>
+                                    </div>
+                                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition transform hover:-translate-y-2">
+                                        <div class="text-4xl mb-4">🧠</div>
+                                        <h4 class="font-bold text-xl mb-2">Otak Cerdas</h4>
+                                        <p class="text-sm text-slate-300">Melatih berpikir logis, runtut, dan teliti.</p>
+                                    </div>
+                                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition transform hover:-translate-y-2">
+                                        <div class="text-4xl mb-4">💡</div>
+                                        <h4 class="font-bold text-xl mb-2">Problem Solver</h4>
+                                        <p class="text-sm text-slate-300">Punya masalah? Kita buat aplikasinya!</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-12 inline-block bg-brand-orange px-8 py-3 rounded-full font-bold text-lg hover:bg-orange-600 transition cursor-pointer animate-pulse relative z-10">
+                                    Siap jadi Creator? 🚀
+                                </div>
+                             </div>
+                        </div>
+                    `
+                },
+                {
+                     type: 'step',
+                     step: 1,
+                     title: 'Setup: Login & Connect',
+                     content: `
+                         <div class="grid md:grid-cols-2 gap-8 w-full max-w-5xl items-center">
+                             <div class="space-y-6">
+                                 <h3 class="text-2xl font-bold text-slate-800">Persiapan Perang! ⚔️</h3>
+                                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                                     <div class="flex items-center gap-4">
+                                         <span class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold">1</span>
+                                         <p>Login ke <a href="#" class="text-blue-600 font-bold underline">ai2.appinventor.mit.edu</a></p>
+                                     </div>
+                                     <div class="flex items-center gap-4">
+                                         <span class="w-8 h-8 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold">2</span>
+                                         <p>Klik menu <b>Connect</b> -> Pilih <b>AI Companion</b>.</p>
+                                     </div>
+                                     <div class="flex items-center gap-4">
+                                         <span class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">3</span>
+                                         <p>Scan QR Code yang muncul dengan HP!</p>
+                                     </div>
+                                 </div>
+                             </div>
+                             
+                             <!-- QR Animation -->
+                             <div class="flex justify-center">
+                                 <div class="relative w-64 h-64 bg-slate-900 rounded-2xl p-4 shadow-2xl flex items-center justify-center">
+                                     <div class="w-full h-full bg-white rounded-lg flex items-center justify-center overflow-hidden relative">
+                                         <i class="fa-solid fa-qrcode text-9xl text-slate-800"></i>
+                                         <!-- Scan line -->
+                                         <div class="absolute top-0 left-0 w-full h-1 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-[scan_2s_ease-in-out_infinite]"></div>
+                                     </div>
+                                     <style>
+                                         @keyframes scan { 0%,100% { top: 0; } 50% { top: 100%; } }
+                                     </style>
+                                 </div>
+                             </div>
+                         </div>
+                     `
+                },
+                {
+                    type: 'concept',
+                    title: 'Interactive Tour: Designer View',
+                    subtitle: 'Hover to Explore!',
+                    content: `
+                        <div class="w-full max-w-6xl">
+                            <!-- Info Box -->
+                            <div class="bg-slate-800 text-white p-4 rounded-xl text-center mb-6 h-20 flex items-center justify-center shadow-lg transition-all duration-300">
+                                <p id="designerInfo" class="text-lg font-bold">Arahkan kursor ke bagian-bagian layar di bawah! 👆</p>
+                            </div>
+
+                            <!-- Interface Mockup Grid -->
+                            <div class="flex h-[400px] border-4 border-slate-300 rounded-xl overflow-hidden shadow-2xl bg-white select-none">
+                                
+                                <!-- Palette -->
+                                <div class="w-1/5 border-r border-slate-200 p-2 bg-slate-50 hover:bg-yellow-50 transition cursor-help relative group"
+                                     onmouseenter="document.getElementById('designerInfo').innerText = '🎨 Palette: Lemari alat! Tempat mengambil tombol, gambar, dan komponen lain.'"
+                                     onmouseleave="document.getElementById('designerInfo').innerText = 'Arahkan kursor ke bagian-bagian layar di bawah! 👆'">
+                                    <div class="font-bold text-xs text-slate-500 border-b mb-2">Palette</div>
+                                    <div class="space-y-1 opacity-50">
+                                        <div class="h-4 w-3/4 bg-slate-200 rounded"></div>
+                                        <div class="h-4 w-1/2 bg-slate-200 rounded"></div>
+                                        <div class="h-4 w-2/3 bg-slate-200 rounded"></div>
+                                    </div>
+                                    <div class="absolute inset-0 bg-yellow-500/10 opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+                                </div>
+
+                                <!-- Viewer (Center) -->
+                                <div class="flex-1 bg-white p-4 flex justify-center hover:bg-blue-50 transition cursor-help relative group"
+                                     onmouseenter="document.getElementById('designerInfo').innerText = '📱 Viewer: Layar HP tiruan. Apa yang kamu susun di sini akan muncul di HP.'"
+                                     onmouseleave="document.getElementById('designerInfo').innerText = 'Arahkan kursor ke bagian-bagian layar di bawah! 👆'">
+                                    <div class="w-48 h-full border-4 border-slate-800 rounded-2xl bg-white shadow-sm flex flex-col items-center pt-4">
+                                        <div class="w-16 h-1 bg-slate-200 rounded-full mb-4"></div>
+                                        <div class="text-xs text-slate-300">Screen1</div>
+                                    </div>
+                                    <div class="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+                                </div>
+
+                                <!-- Components -->
+                                <div class="w-1/6 border-l border-slate-200 p-2 bg-slate-50 hover:bg-green-50 transition cursor-help relative group"
+                                     onmouseenter="document.getElementById('designerInfo').innerText = '📋 Components: Daftar absen. Semua benda yang ada di layar akan tercatat di sini.'"
+                                     onmouseleave="document.getElementById('designerInfo').innerText = 'Arahkan kursor ke bagian-bagian layar di bawah! 👆'">
+                                    <div class="font-bold text-xs text-slate-500 border-b mb-2">Components</div>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-1 opacity-50"><div class="w-2 h-2 bg-slate-400"></div><div class="h-2 w-16 bg-slate-200"></div></div>
+                                        <div class="flex items-center gap-1 opacity-50 ml-2"><div class="w-2 h-2 bg-slate-400"></div><div class="h-2 w-12 bg-slate-200"></div></div>
+                                    </div>
+                                    <div class="absolute inset-0 bg-green-500/10 opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+                                </div>
+
+                                <!-- Properties -->
+                                <div class="w-1/5 border-l border-slate-200 p-2 bg-slate-50 hover:bg-purple-50 transition cursor-help relative group"
+                                     onmouseenter="document.getElementById('designerInfo').innerText = '⚙️ Properties: Pengaturan. Ganti warna, ukuran, dan tulisan di sini.'"
+                                     onmouseleave="document.getElementById('designerInfo').innerText = 'Arahkan kursor ke bagian-bagian layar di bawah! 👆'">
+                                    <div class="font-bold text-xs text-slate-500 border-b mb-2">Properties</div>
+                                    <div class="space-y-2 opacity-50">
+                                        <div class="h-6 w-full bg-slate-200 rounded border border-slate-300"></div>
+                                        <div class="h-6 w-full bg-slate-200 rounded border border-slate-300"></div>
+                                        <div class="h-20 w-full bg-slate-200 rounded border border-slate-300"></div>
+                                    </div>
+                                     <div class="absolute inset-0 bg-purple-500/10 opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 1,
+                    title: 'Langkah 1: Project Baru',
+                    content: `
+                        <div class="grid md:grid-cols-2 gap-8 w-full max-w-5xl items-center">
+                            <div class="space-y-6">
+                                <h3 class="text-2xl font-bold text-slate-800">Mulai Petualangan! 🚀</h3>
+                                <p class="text-slate-600">Kita buat halaman kosong untuk aplikasi kita.</p>
+                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                                    <div class="flex items-start gap-4">
+                                        <span class="w-8 h-8 shrink-0 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold">1</span>
+                                        <p>Klik tombol <b>Start new project</b> di pojok kiri atas.</p>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <span class="w-8 h-8 shrink-0 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold">2</span>
+                                        <div>
+                                            <p class="mb-1">Beri nama project: <b class="font-mono text-purple-600 bg-purple-50 px-1 rounded">Animals</b></p>
+                                            <p class="text-xs text-red-500 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Tidak boleh ada spasi!</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <span class="w-8 h-8 shrink-0 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">3</span>
+                                        <p>Klik tombol <b>OK</b>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Interactive Dialog Mockup -->
+                            <div class="flex justify-center items-center bg-slate-200/50 rounded-xl h-64 p-4">
+                                <div class="bg-white rounded-lg shadow-2xl w-full max-w-sm overflow-hidden border border-slate-300 transform hover:scale-105 transition duration-300">
+                                    <div class="bg-green-700 text-white px-4 py-2 font-bold text-sm">Create new App Inventor project</div>
+                                    <div class="p-6">
+                                        <p class="text-sm font-bold text-slate-600 mb-2">Project Name:</p>
+                                        <div class="relative">
+                                            <input type="text" value="Animals" disabled class="w-full border border-slate-300 rounded px-2 py-1 text-slate-700 font-mono bg-white mb-4">
+                                            <i class="fa-solid fa-check text-green-500 absolute right-2 top-2"></i>
+                                        </div>
+                                        <div class="flex gap-2 justify-end">
+                                            <button class="px-4 py-1.5 rounded text-sm text-slate-600 hover:bg-slate-100 font-bold">Cancel</button>
+                                            <button class="px-4 py-1.5 rounded text-sm bg-slate-300 text-slate-500 font-bold cursor-not-allowed">OK</button>
+                                            <div class="absolute inset-0 bg-transparent cursor-pointer" onclick="this.nextElementSibling.classList.remove('hidden'); this.style.display='none'"></div>
+                                            <div class="absolute inset-0 bg-white/80 flex items-center justify-center text-brand-orange font-bold text-lg hidden animate-bounce">Success! Project Created.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 2,
+                    title: 'Langkah 2: Layout',
+                    content: `
+                         <div class="flex flex-col md:flex-row gap-8 w-full max-w-6xl h-[500px]">
+                            <!-- Instruction -->
+                            <div class="w-full md:w-1/3 space-y-4 overflow-y-auto pr-2">
+                                <h3 class="font-bold text-xl text-slate-800">Siapkan Wadahnya! 📦</h3>
+                                <p class="text-sm text-slate-600">Agar tombol rapi di tengah, kita butuh Layout.</p>
+                                <ol class="list-decimal list-inside space-y-4 text-sm font-bold text-slate-700">
+                                    <li>Panel <b>Palette</b> (Kiri) -> Klik <b>Layout</b>.</li>
+                                    <li>Tarik <span class="bg-green-100 text-green-700 px-2 rounded">VerticalArrangement</span> ke Viewer.</li>
+                                    <li>
+                                        Panel <b>Properties</b> (Kanan):
+                                        <div class="mt-2 bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-900 font-normal">
+                                            <p class="mb-2 border-b border-blue-200 pb-1">Agar ada di tengah:</p>
+                                            <ul class="list-disc list-inside space-y-1">
+                                                <li>AlignHorizontal -> <b class="font-bold">Center</b></li>
+                                                <li>Width -> <b class="font-bold">Fill Parent</b></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <!-- Interactive Mockup Area -->
+                            <div class="flex-1 bg-slate-100 border border-slate-300 rounded-xl p-2 flex gap-2 font-mono text-xs">
+                                <!-- Viewer Mock -->
+                                <div class="flex-1 bg-white border-8 border-slate-800 rounded-2xl relative overflow-hidden flex flex-col items-center pt-8 shadow-inner">
+                                    <div class="absolute top-2 w-20 h-4 bg-black rounded-full"></div>
+                                    <!-- The Component inside Viewer -->
+                                    <div class="w-full h-32 border-2 border-green-400 bg-green-50/50 rounded flex items-center justify-center text-green-700 font-bold transform transition-all hover:w-full duration-500 cursor-pointer group shadow-sm" title="Visualisasi Fill Parent">
+                                        <span class="group-hover:hidden">VerticalArrangement1</span>
+                                        <span class="hidden group-hover:inline">Fill Parent! Width 100%</span>
+                                    </div>
+                                </div>
+                                <!-- Properties Mock -->
+                                <div class="w-1/3 bg-white border border-slate-200 rounded p-2 shadow-sm">
+                                    <div class="font-bold mb-2 border-b text-slate-700">Properties</div>
+                                    <div class="font-bold text-green-700 text-[10px] mb-4">VerticalArrangement1</div>
+                                    
+                                    <div class="mb-4 group cursor-help">
+                                        <div class="text-[10px] text-slate-400 mb-1">AlignHorizontal</div>
+                                        <div class="bg-blue-50 border border-blue-300 px-2 py-1 rounded text-blue-700 font-bold flex justify-between items-center">
+                                            Center : 3 <i class="fa-solid fa-sort-down mb-1"></i>
+                                        </div>
+                                        <div class="text-[9px] text-blue-400 mt-1 opacity-0 group-hover:opacity-100 transition">Membuat isi jadi di tengah</div>
+                                    </div>
+                                    
+                                    <div class="mb-2 group cursor-help">
+                                        <div class="text-[10px] text-slate-400 mb-1">Width</div>
+                                        <div class="bg-blue-50 border border-blue-300 px-2 py-1 rounded text-blue-700 font-bold flex justify-between items-center">
+                                            Fill Parent... <i class="fa-solid fa-sort-down mb-1"></i>
+                                        </div>
+                                        <div class="text-[9px] text-blue-400 mt-1 opacity-0 group-hover:opacity-100 transition">Melebar seukuran layar</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 3,
+                    title: 'Langkah 3: Tombol & Rename',
+                    content: `
+                        <div class="grid md:grid-cols-2 gap-12 w-full max-w-5xl items-center">
+                            <div>
+                                <h3 class="font-bold text-xl mb-4">Masukkan Tombol & Beri Nama 🏷️</h3>
+                                <ol class="list-decimal list-inside space-y-4 text-slate-700">
+                                    <li>Palette -> <b>User Interface</b> -> Tarik 2 <b>Button</b> ke dalam kontak layout.</li>
+                                    <li class="bg-orange-50 p-4 rounded-xl border border-orange-200 shadow-sm">
+                                        <span class="font-bold text-orange-800 uppercase text-sm tracking-wider"><i class="fa-solid fa-triangle-exclamation"></i> PENTING: RENAME!</span><br>
+                                        <p class="text-sm mt-2 mb-2">Agar tidak bingung saat koding nanti.</p>
+                                        <ul class="list-disc list-inside ml-2 text-sm space-y-1">
+                                            <li>Klik Button1 -> Klik tombol <span class="border px-1 rounded bg-slate-100 text-xs">Rename</span> -> <b class="font-mono text-green-600">ElephantButton</b></li>
+                                            <li>Klik Button2 -> Klik tombol <span class="border px-1 rounded bg-slate-100 text-xs">Rename</span> -> <b class="font-mono text-green-600">LionButton</b></li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-lg border border-slate-200 w-full max-w-sm mx-auto">
+                                <div class="text-sm font-bold text-slate-500 mb-4 border-b pb-2 flex justify-between">
+                                    <span>Components Tree</span>
+                                    <span><i class="fa-solid fa-layer-group"></i></span>
+                                </div>
+                                <div class="font-mono text-sm space-y-3">
+                                    <div class="pl-0 text-slate-400"><i class="fa-solid fa-mobile-screen"></i> Screen1</div>
+                                    <div class="pl-4 border-l-2 border-slate-200 ml-1">
+                                        <div class="flex items-center gap-2 text-slate-500">
+                                            <i class="fa-regular fa-square"></i> VerticalArrangement1
+                                        </div>
+                                        <div class="pl-6 border-l-2 border-green-200 ml-1 mt-2 space-y-3">
+                                            <!-- Button 1 -->
+                                            <div class="relative group">
+                                                <div class="bg-blue-50 px-3 py-2 rounded-lg text-blue-800 flex justify-between items-center cursor-pointer border border-blue-100 hover:bg-blue-100 transition" 
+                                                     onclick="document.getElementById('rename1').classList.remove('hidden'); this.style.display='none'">
+                                                    <span><i class="fa-solid fa-stop text-blue-500 mr-2"></i> Button1</span>
+                                                    <span class="text-[10px] bg-white px-2 py-0.5 rounded border shadow-sm">Rename</span>
+                                                </div>
+                                                <div id="rename1" class="hidden bg-green-50 px-3 py-2 rounded-lg text-green-800 border border-green-200 flex items-center gap-2 animate-pulse">
+                                                    <i class="fa-solid fa-check-circle"></i> ElephantButton
+                                                </div>
+                                            </div>
+
+                                            <!-- Button 2 -->
+                                            <div class="relative group">
+                                                <div class="bg-blue-50 px-3 py-2 rounded-lg text-blue-800 flex justify-between items-center cursor-pointer border border-blue-100 hover:bg-blue-100 transition" 
+                                                     onclick="document.getElementById('rename2').classList.remove('hidden'); this.style.display='none'">
+                                                    <span><i class="fa-solid fa-stop text-blue-500 mr-2"></i> Button2</span>
+                                                    <span class="text-[10px] bg-white px-2 py-0.5 rounded border shadow-sm">Rename</span>
+                                                </div>
+                                                <div id="rename2" class="hidden bg-green-50 px-3 py-2 rounded-lg text-green-800 border border-green-200 flex items-center gap-2 animate-pulse">
+                                                    <i class="fa-solid fa-check-circle"></i> LionButton
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-center text-slate-400 mt-6 italic">Klik tombol Rename di atas simulasi!</p>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 4,
+                    title: 'Langkah 4: Wajah Hewan',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl">
+                            <h3 class="text-2xl font-bold text-slate-800 mb-2">Ganti Teks dengan Gambar 🖼️</h3>
+                            <p class="mb-8 text-slate-600">Tombol "Text for Button" itu membosankan. Ayo ganti!</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full text-left">
+                                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hover:shadow-lg transition">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-brand-orange font-bold text-xl mb-4">1</div>
+                                    <h4 class="font-bold text-slate-800 mb-2">Upload File</h4>
+                                    <p class="text-sm text-slate-500 mb-4">Di panel <b>Media</b> (bawah), upload:</p>
+                                    <div class="flex gap-2">
+                                        <div class="bg-slate-100 px-3 py-1 rounded-full text-xs font-mono border">lion.png</div>
+                                        <div class="bg-slate-100 px-3 py-1 rounded-full text-xs font-mono border">elephant.png</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 hover:shadow-lg transition">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold text-xl mb-4">2</div>
+                                    <h4 class="font-bold text-slate-800 mb-2">Edit Properties</h4>
+                                    <p class="text-sm text-slate-500 mb-4">Klik tombolnya, lalu ubah:</p>
+                                    <ul class="space-y-2 text-sm">
+                                        <li class="flex items-center gap-2 bg-slate-50 p-2 rounded border border-slate-100">
+                                            <span class="font-bold w-16">Image</span> 
+                                            <i class="fa-solid fa-arrow-right text-slate-300"></i> 
+                                            <span class="text-blue-600 font-medium">Pilih nama file hewan</span>
+                                        </li>
+                                        <li class="flex items-center gap-2 bg-slate-50 p-2 rounded border border-slate-100">
+                                            <span class="font-bold w-16">Text</span> 
+                                            <i class="fa-solid fa-arrow-right text-slate-300"></i> 
+                                            <span class="text-red-500 font-medium">Hapus text-nya! (Kosongkan)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Detailed Interactive Reveal -->
+                            <div class="mt-8 bg-slate-100 p-8 rounded-3xl relative overflow-hidden group w-full cursor-pointer hover:bg-white transition duration-500 border border-slate-200 shadow-inner">
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 font-bold p-8 text-center group-hover:opacity-0 transition z-10">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-4xl mb-2 text-slate-300"></i>
+                                    <span class="text-xl">Sentuh di sini untuk melihat hasil akhirnya!</span>
+                                </div>
+                                
+                                <div class="opacity-0 group-hover:opacity-100 transition duration-700 ease-out flex gap-8 justify-center items-center transform scale-90 group-hover:scale-100">
+                                    <!-- Lion Result -->
+                                    <div class="text-center relative">
+                                        <div class="w-32 h-32 bg-white rounded-xl shadow-xl flex items-center justify-center border-4 border-slate-200 overflow-hidden relative">
+                                            <div class="text-7xl">🦁</div>
+                                            <!-- Label check -->
+                                            <div class="absolute bottom-0 right-0 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-tl-lg font-bold"><i class="fa-solid fa-check"></i> Image OK</div>
+                                        </div>
+                                        <div class="mt-2 text-xs font-mono font-bold text-slate-400">LionButton</div>
+                                    </div>
+                                    
+                                    <!-- Elephant Result -->
+                                    <div class="text-center relative">
+                                        <div class="w-32 h-32 bg-white rounded-xl shadow-xl flex items-center justify-center border-4 border-slate-200 overflow-hidden relative">
+                                            <div class="text-7xl">🐘</div>
+                                             <!-- Label check -->
+                                             <div class="absolute bottom-0 right-0 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-tl-lg font-bold"><i class="fa-solid fa-check"></i> Image OK</div>
+                                        </div>
+                                        <div class="mt-2 text-xs font-mono font-bold text-slate-400">ElephantButton</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'CT: Overwhelmed? 😫',
+                    subtitle: 'Computational Thinking',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl">
+                            <h3 class="text-3xl font-bold mb-6 text-slate-800">Pernah Lihat Masalah Raksasa?</h3>
+                            
+                            <div class="flex gap-8 items-center justify-center mb-8">
+                                <div class="text-[120px]">🍔</div>
+                                <div class="text-left bg-white p-6 rounded-2xl shadow-lg border border-slate-200 max-w-md">
+                                    <p class="text-lg text-slate-600 font-bold mb-2">Gimana cara makan Burger Raksasa ini?</p>
+                                    <p class="text-slate-500 text-sm">Kalau langsung dilahap, mulut nggak muat! Perut sakit!</p>
+                                </div>
+                            </div>
+
+                            <div id="burgerSolution" class="hidden animate-fade-in-up w-full">
+                                <div class="bg-green-100 p-6 rounded-2xl border-2 border-green-400 text-green-800 font-bold text-2xl mb-6">
+                                    Solusinya: "POTONG KECIL-KECIL!" 🔪
+                                </div>
+                                <p class="text-slate-600 mb-2">Di dunia komputer, ini disebut:</p>
+                                <h2 class="text-5xl font-extrabold text-blue-600 tracking-wider">DECOMPOSITION</h2>
+                            </div>
+
+                            <button onclick="document.getElementById('burgerSolution').classList.remove('hidden'); this.style.display='none'" class="bg-brand-orange text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-orange-600 transition animate-bounce">
+                                Cari Tahu Solusinya! 👇
+                            </button>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'CT: Decomposition in Real Life',
+                    subtitle: 'Membedah Benda Rumit',
+                    content: `
+                        <div class="flex flex-col items-center max-w-5xl">
+                            <h3 class="text-2xl font-bold mb-8 text-slate-700 w-full text-center">Contoh: Sebuah Sepeda 🚲</h3>
+                            
+                            <div class="flex flex-col md:flex-row gap-12 w-full items-center">
+                                <!-- Big Object -->
+                                <div class="w-1/3 text-center group cursor-pointer">
+                                    <div class="text-[150px] transition transform group-hover:scale-110 duration-500 will-change-transform">🚲</div>
+                                    <p class="font-bold text-slate-800 mt-4">1 Benda Besar</p>
+                                </div>
+                                
+                                <i class="fa-solid fa-arrow-right text-4xl text-slate-300 md:block hidden"></i>
+                                <i class="fa-solid fa-arrow-down text-4xl text-slate-300 md:hidden block"></i>
+
+                                <!-- Decomposed Parts -->
+                                <div class="flex-1 grid grid-cols-2 gap-4">
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow hover:bg-blue-50 transition cursor-help text-center">
+                                        <div class="text-4xl mb-2">🎡</div>
+                                        <p class="font-bold text-slate-700">Roda</p>
+                                        <p class="text-xs text-slate-500">Supaya bisa jalan</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow hover:bg-red-50 transition cursor-help text-center">
+                                        <div class="text-4xl mb-2">🛑</div>
+                                        <p class="font-bold text-slate-700">Rem</p>
+                                        <p class="text-xs text-slate-500">Supaya bisa berhenti</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow hover:bg-yellow-50 transition cursor-help text-center">
+                                        <div class="text-4xl mb-2">💺</div>
+                                        <p class="font-bold text-slate-700">Sadel</p>
+                                        <p class="text-xs text-slate-500">Tempat duduk</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow hover:bg-gray-50 transition cursor-help text-center">
+                                        <div class="text-4xl mb-2">🔗</div>
+                                        <p class="font-bold text-slate-700">Rantai</p>
+                                        <p class="text-xs text-slate-500">Penyalur tenaga</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 bg-blue-100 text-blue-800 px-6 py-2 rounded-lg font-bold border border-blue-200">
+                                Kalau sepedamu rusak, kamu tidak memperbaiki "semuanya". <br>Kamu cek rodanya, atau rantainya. Satu per satu!
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'CT: Bedah Aplikasi Kita',
+                    subtitle: 'Animal Sounds Decomposition',
+                    content: `
+                        <div class="max-w-5xl w-full">
+                            <div class="text-center mb-6">
+                                <p class="text-lg text-slate-600">Bagaimana dengan aplikasi <b>Hewan Bicara</b>? <br>Mari kita potong-potong!</p>
+                            </div>
+
+                            <div class="grid md:grid-cols-3 gap-6 h-[400px]">
+                                <!-- Visual -->
+                                <div class="bg-pink-50 p-6 rounded-2xl border-2 border-pink-200 text-center flex flex-col shadow-lg transform hover:-translate-y-2 transition duration-300">
+                                    <div class="w-16 h-16 bg-pink-500 text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow">👁️</div>
+                                    <h4 class="font-bold text-pink-700 text-xl mb-2">1. VISUAL</h4>
+                                    <p class="text-xs font-bold text-pink-400 uppercase tracking-widest mb-4">Designer View</p>
+                                    <div class="bg-white p-4 rounded-xl shadow-inner text-left flex-1 border border-pink-100">
+                                        <ul class="space-y-2 text-sm text-slate-600">
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Tombol Singa</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Tombol Gajah</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Gambar Hewan</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Layout Tengah</li>
+                                        </ul>
+                                    </div>
+                                    <div class="mt-4 text-xs font-bold text-green-600 bg-green-100 py-1 rounded">SUDAH SELESAI! ✅</div>
+                                </div>
+
+                                <!-- Properties -->
+                                <div class="bg-blue-50 p-6 rounded-2xl border-2 border-blue-200 text-center flex flex-col shadow-lg transform hover:-translate-y-2 transition duration-300">
+                                    <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow">⚙️</div>
+                                    <h4 class="font-bold text-blue-700 text-xl mb-2">2. PROPERTIES</h4>
+                                    <p class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">Designer View</p>
+                                    <div class="bg-white p-4 rounded-xl shadow-inner text-left flex-1 border border-blue-100">
+                                        <ul class="space-y-2 text-sm text-slate-600">
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Rename Button</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Upload File</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Hapus Teks</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Atur Width</li>
+                                        </ul>
+                                    </div>
+                                    <div class="mt-4 text-xs font-bold text-green-600 bg-green-100 py-1 rounded">SUDAH SELESAI! ✅</div>
+                                </div>
+
+                                <!-- Function -->
+                                <div class="bg-purple-50 p-6 rounded-2xl border-2 border-purple-200 text-center flex flex-col shadow-lg transform hover:-translate-y-2 transition duration-300 relative overflow-hidden">
+                                     <!-- Coming soon badge -->
+                                    <div class="absolute top-3 right-[-35px] rotate-45 bg-yellow-400 text-yellow-900 text-[10px] font-bold py-1 w-32 shadow-md">NEXT WEEK</div>
+                                    
+                                    <div class="w-16 h-16 bg-purple-500 text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow">🧠</div>
+                                    <h4 class="font-bold text-purple-700 text-xl mb-2">3. LOGIC</h4>
+                                    <p class="text-xs font-bold text-purple-400 uppercase tracking-widest mb-4">Blocks View</p>
+                                    <div class="bg-white p-4 rounded-xl shadow-inner text-left flex-1 border border-purple-100">
+                                        <ul class="space-y-2 text-sm text-purple-900 font-medium">
+                                            <li class="opacity-50"><i class="fa-regular fa-square mr-2"></i>Kapan diklik?</li>
+                                            <li class="opacity-50"><i class="fa-regular fa-square mr-2"></i>Bunyi apa?</li>
+                                            <li class="opacity-50"><i class="fa-regular fa-square mr-2"></i>Mainkan Suara</li>
+                                        </ul>
+                                        <div class="mt-4 text-center text-5xl opacity-20">🔜</div>
+                                    </div>
+                                    <div class="mt-4 text-xs font-bold text-slate-500 bg-slate-200 py-1 rounded">BELUM DIBUAT ⏳</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Reflection & Next Week',
+                    subtitle: 'Apa yang sudah kita pelajari?',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl w-full">
+                            <div class="grid md:grid-cols-2 gap-8 w-full mb-8">
+                                <div class="bg-white p-6 rounded-2xl shadow-md border-l-4 border-brand-orange text-left">
+                                    <h4 class="font-bold text-lg mb-2 text-slate-700">🔍 Cek Pemahaman</h4>
+                                    <ul class="space-y-3 text-sm text-slate-600">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-regular fa-square-check text-brand-orange mt-1"></i>
+                                            <span>Apa bedanya <b>Designer View</b> & <b>Blocks View</b>?</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-regular fa-square-check text-brand-orange mt-1"></i>
+                                            <span>Kenapa kita butuh <b>Vertical Arrangement</b> (Layout)?</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-regular fa-square-check text-brand-orange mt-1"></i>
+                                            <span>Kenapa nama komponen harus diganti (Rename)?</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gradient-to-br from-purple-600 to-blue-600 p-6 rounded-2xl shadow-xl text-white relative overflow-hidden group">
+                                    <div class="absolute -right-4 -top-4 text-7xl opacity-20 rotate-12 group-hover:rotate-0 transition duration-500">🚀</div>
+                                    <h4 class="font-bold text-xl mb-2 border-b border-white/30 pb-2">Next Mission:</h4>
+                                    <p class="text-lg font-bold mb-4">Memberi "Nyawa" pada Tombol! 🔊</p>
+                                    <p class="text-sm opacity-90 leading-relaxed">
+                                        Minggu depan kita akan masuk ke <b>Blocks View</b>. 
+                                        Kita akan koding agar saat tombol ditekan, suara Singa & Gajah keluar!
+                                    </p>
+                                    <div class="mt-4 bg-white/20 rounded-lg p-2 text-center text-xs font-mono">
+                                        when LionButton.Click do call Sound1.Play
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p class="text-slate-500 italic">Sampai jumpa di pertemuan berikutnya! 👋</p>
+                        </div>
+                    `
+                }
+            ],
+            m2: [
+                {
+                    type: 'intro',
+                    title: 'Logic & Sound',
+                    subtitle: 'Pertemuan 2: Memberi "Nyawa"',
+                    icon: 'fa-music',
+                    color: 'bg-purple-500',
+                    content: `
+                        <p class="text-xl text-slate-600 mb-8 max-w-2xl text-center">
+                            Tampilan sudah jadi, tapi belum ada suaranya. 🔇
+                            <br>Hari ini kita akan mengoding <b>Event Handler</b>!
+                        </p>
+                        <div class="grid grid-cols-2 gap-6 max-w-2xl w-full">
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
+                                <i class="fa-solid fa-ghost text-4xl text-purple-400 mb-4"></i>
+                                <h4 class="font-bold mb-2">Invisible Components</h4>
+                                <p class="text-xs text-slate-500">Komponen yang ada tapi tidak terlihat di layar (Contoh: Suara).</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
+                                <i class="fa-solid fa-code text-4xl text-green-400 mb-4"></i>
+                                <h4 class="font-bold mb-2">Event Handler</h4>
+                                <p class="text-xs text-slate-500">"Jika Tombol Diklik, Maka..." (Sebab-Akibat).</p>
+                            </div>
+                        </div>
+                    `
+                },
+                 {
+                    type: 'step',
+                    step: 1,
+                    title: 'Add Sound Component',
+                    content: `
+                         <div class="flex flex-col md:flex-row gap-8 w-full max-w-6xl items-center">
+                            <div class="flex-1 space-y-4">
+                                <ol class="list-decimal list-inside space-y-4 text-slate-700 text-lg">
+                                    <li>Palette -> Kategori <b>Media</b>.</li>
+                                    <li>Tarik <b>Sound</b> ke layar Viewer (2 kali).</li>
+                                    <li>Komponen akan muncul di bawah layar (<i>Non-visible components</i>).</li>
+                                    <li class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm">
+                                        <b>Rename lagi!</b><br>
+                                        Sound1 -> <b class="font-mono text-purple-700">ElephantSound</b><br>
+                                        Sound2 -> <b class="font-mono text-purple-700">LionSound</b>
+                                    </li>
+                                </ol>
+                            </div>
+                             <div class="flex-1">
+                                <div class="bg-white p-4 rounded-xl shadow-lg border border-slate-200 relative">
+                                    <div class="h-48 bg-slate-100 rounded border border-slate-300 flex items-center justify-center text-slate-400 mb-4">
+                                        (Screen Viewer Area)
+                                    </div>
+                                    <div class="border-t-2 border-dashed border-slate-300 pt-4">
+                                        <div class="text-xs font-bold text-slate-500 mb-2 uppercase">Non-visible components</div>
+                                        <div class="flex gap-4">
+                                            <div class="flex flex-col items-center">
+                                                <i class="fa-solid fa-volume-high text-xl text-purple-600"></i>
+                                                <span class="text-[10px] font-mono mt-1">ElephantSound</span>
+                                            </div>
+                                            <div class="flex flex-col items-center">
+                                                <i class="fa-solid fa-volume-high text-xl text-purple-600"></i>
+                                                <span class="text-[10px] font-mono mt-1">LionSound</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 2,
+                    title: 'Connect Sound Files',
+                    content: `
+                        <div class="max-w-4xl w-full text-center">
+                            <p class="mb-8 text-slate-600">Komponen suara butuh "isi" file MP3.</p>
+                            
+                            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-left grid grid-cols-[1fr_auto_1fr] gap-4 items-center">
+                                <div class="text-center">
+                                    <div class="font-bold text-slate-700 mb-2">Properties: ElephantSound</div>
+                                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                                        <div class="text-xs text-slate-400 text-left mb-1">Source</div>
+                                        <div class="flex items-center justify-between bg-white border border-slate-300 p-2 rounded cursor-pointer hover:border-brand-orange">
+                                            <span class="text-sm font-mono">None</span>
+                                            <i class="fa-solid fa-caret-down"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <i class="fa-solid fa-arrow-right text-3xl text-slate-300"></i>
+
+                                <div class="text-center">
+                                    <div class="font-bold text-green-600 mb-2">Upload & Select</div>
+                                    <div class="bg-green-50 border border-green-200 p-4 rounded-xl">
+                                        <div class="text-xs text-green-700 text-left mb-1">Source</div>
+                                        <div class="flex items-center justify-between bg-white border border-green-300 p-2 rounded shadow-sm">
+                                            <span class="text-sm font-bold">elephant.mp3</span>
+                                            <i class="fa-solid fa-check text-green-500"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 text-sm text-slate-500 bg-slate-100 inline-block px-4 py-2 rounded-full border border-slate-200">
+                                Lakukan juga untuk <b>LionSound</b> dengan file <i>lion_roar.mp3</i>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 3,
+                    title: 'Coding Time (Blocks)',
+                    content: `
+                        <div class="flex flex-col items-center w-full max-w-5xl">
+                            <div class="bg-slate-800 text-white px-6 py-2 rounded-full text-sm font-bold mb-6 shadow-lg transform rotate-[-2deg]">
+                                Klik tombol "Blocks" di pojok kanan atas!
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-12 w-full">
+                                <div>
+                                    <h4 class="font-bold text-lg mb-4">Logika Puzzle:</h4>
+                                    <ol class="space-y-4 text-slate-700">
+                                        <li class="flex items-center gap-3">
+                                            <div class="bg-yellow-100 text-yellow-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+                                            <span>Klik <b>LionButton</b> (Kiri).</span>
+                                        </li>
+                                        <li class="flex items-center gap-3">
+                                            <div class="bg-yellow-100 text-yellow-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+                                            <span>Tarik blok kuning: <br><code class="bg-yellow-200 px-1 rounded text-xs">when LionButton.Click</code></span>
+                                        </li>
+                                        <li class="flex items-center gap-3">
+                                            <div class="bg-purple-100 text-purple-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+                                            <span>Klik <b>LionSound</b> -> Tarik: <br><code class="bg-purple-200 px-1 rounded text-xs">call LionSound.Play</code></span>
+                                        </li>
+                                        <li class="flex items-center gap-3">
+                                            <div class="bg-green-100 text-green-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
+                                            <span>Pasangkan sampai bunyi "Klik"!</span>
+                                        </li>
+                                    </ol>
+                                </div>
+
+                                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-xl relative overflow-hidden">
+                                    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
+                                    
+                                    <!-- Blocks Visualization -->
+                                    <div class="relative z-10 flex flex-col gap-8 items-start">
+                                        <!-- Block 1 -->
+                                        <div class="filter drop-shadow-md cursor-pointer hover:scale-105 transition">
+                                            <div class="bg-yellow-500 text-white px-4 py-2 rounded-t-lg rounded-bl-lg rounded-br-none font-sans text-xs font-bold mb-0">
+                                                when LionButton .Click do
+                                            </div>
+                                            <div class="bg-yellow-500 w-4 h-3 ml-4 rounded-b-lg mb-[-12px] z-20 relative"></div>
+                                            <div class="pl-3 border-l-4 border-yellow-700/20 ml-1">
+                                                <div class="bg-purple-500 text-white px-3 py-2 rounded-lg font-sans text-xs font-bold mt-[2px]">
+                                                    call LionSound .Play
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Block 2 -->
+                                        <div class="filter drop-shadow-md opacity-80">
+                                            <div class="bg-yellow-500 text-white px-4 py-2 rounded-t-lg rounded-bl-lg rounded-br-none font-sans text-xs font-bold mb-0">
+                                                when ElephantButton .Click do
+                                            </div>
+                                            <div class="bg-yellow-500 w-4 h-3 ml-4 rounded-b-lg mb-[-12px] z-20 relative"></div>
+                                            <div class="pl-3 border-l-4 border-yellow-700/20 ml-1">
+                                                <div class="bg-purple-500 text-white px-3 py-2 rounded-lg font-sans text-xs font-bold mt-[2px]">
+                                                    call ElephantSound .Play
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 4,
+                    title: 'Testing: AI Companion',
+                    content: `
+                        <div class="text-center max-w-3xl">
+                             <h3 class="text-2xl font-bold mb-6">Momen Kebenaran! 📱✨</h3>
+                             <div class="flex flex-col md:flex-row gap-8 items-center bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+                                 <div class="flex-1 space-y-4 text-left">
+                                     <div class="flex items-center gap-3">
+                                         <span class="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                                         <p class="text-sm">Menu Atas: <b>Connect</b> -> <b>AI Companion</b>.</p>
+                                     </div>
+                                      <div class="flex items-center gap-3">
+                                         <span class="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                                         <p class="text-sm">Buka App di HP -> Klik <b>Scan QR Code</b>.</p>
+                                     </div>
+                                      <div class="flex items-center gap-3">
+                                         <span class="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                                         <p class="text-sm">Arahkan kamera ke layar laptop.</p>
+                                     </div>
+                                 </div>
+                                 
+                                 <div class="w-px h-32 bg-slate-200 hidden md:block"></div>
+
+                                 <div class="flex-1 flex flex-col items-center">
+                                     <div class="bg-white border-2 border-slate-800 p-2 rounded-lg mb-2 shadow-sm">
+                                         <div class="w-32 h-32 bg-slate-900 flex items-center justify-center text-white text-xs text-center p-2">
+                                             [ FAKE QR CODE ]<br>a b c d e f
+                                         </div>
+                                     </div>
+                                     <p class="text-xs text-slate-400">Tunggu loading bar...</p>
+                                 </div>
+                             </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Wrap Up: Algorithm & Footprint',
+                    subtitle: 'Computational Thinking & Digital Literacy',
+                    content: `
+                        <div class="grid md:grid-cols-2 gap-8 max-w-5xl">
+                            
+                            <!-- CT -->
+                            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-yellow-400 flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 text-2xl mb-4">
+                                    <i class="fa-solid fa-list-ol"></i>
+                                </div>
+                                <h4 class="font-bold text-xl mb-2">Algorithm</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    Urutan logis langkah demi langkah.
+                                </p>
+                                <div class="mt-4 bg-slate-50 p-3 rounded-lg text-xs font-mono text-left w-full">
+                                    1. Klik Tombol<br>
+                                    2. Panggil Suara<br>
+                                    3. Putar Suara
+                                </div>
+                            </div>
+
+                            <!-- DL -->
+                            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-red-400 flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-600 text-2xl mb-4">
+                                    <i class="fa-solid fa-shoe-prints"></i>
+                                </div>
+                                <h4 class="font-bold text-xl mb-2">Jejak Digital</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    Apa yang kita unggah akan membekas selamanya.
+                                    <br>Hati-hati saat upload foto/suara ke internet!
+                                </p>
+                                <div class="mt-4 bg-red-50 p-3 rounded-lg text-xs text-red-800 font-bold">
+                                    Think before you post! 🛑
+                                </div>
+                            </div>
+
+                        </div>
+                    `
+                }
+            ]
+        };
+
+        function renderSlide(index) {
+            const data = slidesData[currentMeeting][index];
+            if (!data) return;
+
+            // Update Controls
+            currentSlideEl.textContent = index + 1;
+            totalSlidesEl.textContent = slidesData[currentMeeting].length;
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === slidesData[currentMeeting].length - 1;
+
+            // Build HTML
+            let html = '';
+            
+            // Header for Slide
+            html += `<div class="text-center mb-8 animate-float">`;
+            if (data.type === 'intro' || data.type === 'concept') {
+                if (data.icon) {
+                    html += `<div class="w-20 h-20 mx-auto ${data.color || 'bg-brand-blue'} rounded-3xl shadow-xl flex items-center justify-center text-white text-4xl mb-6"><i class="fa-solid ${data.icon}"></i></div>`;
+                }
+                if (data.subtitle) {
+                    html += `<p class="text-brand-orange font-bold uppercase tracking-widest text-sm mb-2">${data.subtitle}</p>`;
+                }
+                html += `<h2 class="text-4xl md:text-5xl font-black text-slate-800 mb-4">${data.title}</h2>`;
+            } else if (data.type === 'step') {
+                 html += `<div class="inline-block bg-slate-900 text-white px-4 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-wider">Langkah ${data.step}</div>`;
+                 html += `<h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">${data.title}</h2>`;
+            }
+            html += `</div>`;
+
+            // Content
+            html += data.content;
+
+            // Inject
+            slideContent.classList.remove('slide-active');
+            setTimeout(() => {
+                slideContent.innerHTML = html;
+                slideContent.classList.add('slide-active');
+            }, 300); // Wait for fade out
+        }
+
+        // Event Listeners
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderSlide(currentIndex);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < slidesData[currentMeeting].length - 1) {
+                currentIndex++;
+                renderSlide(currentIndex);
+            }
+        });
+
+        meetingSelector.addEventListener('change', (e) => {
+            currentMeeting = e.target.value;
+            currentIndex = 0;
+            updateMeetingContext();
+            renderSlide(currentIndex);
+        });
+
+        function updateMeetingContext() {
+            const title = currentMeeting === 'm1' ? 'Pertemuan 1: Designer View' : 'Pertemuan 2: Logic blocks';
+            meetingTitleEl.textContent = title;
+        }
+
+        // Init
+        updateMeetingContext();
+        renderSlide(0);
+
+    </script>
+</body>
+</html>
