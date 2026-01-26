@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Inventor - Ruangguru Coding</title>
+    <title>Pembelajaran Coding - App Inventor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
     </script>
     <style>
         body { font-family: 'Outfit', sans-serif; overflow: hidden; background-color: #f8fafc; }
-        .slide-container { display: flex; flex-direction: column; height: calc(100vh - 80px); justify-content: center; align-items: center; padding: 2rem; opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .slide-container { display: flex; flex-direction: column; height: calc(100vh - 144px); overflow-y: auto; justify-content: flex-start; align-items: center; padding: 2rem; opacity: 0; transition: opacity 0.5s ease-in-out; }
         .slide-active { opacity: 1; }
         
         /* App Inventor Mockup Styles */
@@ -48,15 +48,8 @@
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 h-20 bg-white border-b border-slate-200 z-50 px-8 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-4">
-            <!-- Logo Placeholder -->
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                    <i class="fa-solid fa-code"></i>
-                </div>
-                <div class="font-bold text-xl tracking-tight text-slate-800">
-                    Ruangguru <span class="text-brand-orange">Coding</span>
-                </div>
-            </div>
+            <!-- Logo -->
+            <img src="https://images2.imgbox.com/51/6a/xhLlGQcZ_o.png" alt="Ruangguru Coding" class="h-10">
         </div>
 
         <div class="flex items-center gap-6">
@@ -64,6 +57,7 @@
                 <select id="meetingSelector" class="appearance-none bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 py-2 px-4 pr-8 rounded-xl font-bold cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-brand-orange">
                     <option value="m1">Pertemuan 1: Designer View</option>
                     <option value="m2">Pertemuan 2: Logic & Blocks</option>
+                    <option value="m3">Pertemuan 3: Canvas & Colors</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
                     <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -89,7 +83,7 @@
             <button id="prevBtn" class="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition disabled:opacity-50 disabled:cursor-not-allowed">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <div class="font-mono font-bold text-slate-600 w-16 text-center">
+            <div class="font-mono font-bold text-slate-600 min-w-[5rem] px-2 text-center">
                 <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
             </div>
             <button id="nextBtn" class="w-10 h-10 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg shadow-orange-500/30 hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
@@ -852,6 +846,43 @@
                         </div>
                     `
                 },
+                {
+                    type: 'concept',
+                    title: 'Jejak Digital',
+                    subtitle: 'Digital Literacy',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl">
+                            <h3 class="text-3xl font-bold mb-6 text-slate-800">Hati-hati Melangkah! 👣</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-8 w-full items-center mb-8">
+                                <div class="bg-white p-6 rounded-2xl shadow-xl border-l-8 border-red-500 text-left">
+                                    <h4 class="font-bold text-xl text-red-600 mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Bahaya Upload</h4>
+                                    <p class="text-slate-600 text-sm mb-4">
+                                        Apa yang terjadi jika kamu unggah suara/video jelek ke internet?
+                                    </p>
+                                    <ul class="space-y-2 text-sm text-slate-500">
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-xmark text-red-400"></i> Sulit dihapus permanen.</li>
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-xmark text-red-400"></i> Bisa dilihat semua orang.</li>
+                                        <li class="flex items-center gap-2"><i class="fa-solid fa-xmark text-red-400"></i> Bisa dicopy orang lain.</li>
+                                    </ul>
+                                </div>
+
+                                <div class="relative h-64 bg-slate-100 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-200">
+                                    <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                                    <i class="fa-solid fa-shoe-prints text-9xl text-slate-300 transform -rotate-12"></i>
+                                    <div class="absolute bottom-4 bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg">
+                                        You leave a mark. Forever.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 text-green-800 px-8 py-4 rounded-xl font-bold border border-green-200 w-full max-w-2xl">
+                                <i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>
+                                Pesan Utama: Gunakan skill membuat aplikasi untuk hal yang <span class="underline decoration-wavy decoration-green-400">bermanfaat & positif!</span>
+                            </div>
+                        </div>
+                    `
+                },
                  {
                     type: 'step',
                     step: 1,
@@ -860,31 +891,36 @@
                          <div class="flex flex-col md:flex-row gap-8 w-full max-w-6xl items-center">
                             <div class="flex-1 space-y-4">
                                 <ol class="list-decimal list-inside space-y-4 text-slate-700 text-lg">
-                                    <li>Palette -> Kategori <b>Media</b>.</li>
+                                    <li>Buka Palette -> Kategori <b>Media</b>.</li>
                                     <li>Tarik <b>Sound</b> ke layar Viewer (2 kali).</li>
-                                    <li>Komponen akan muncul di bawah layar (<i>Non-visible components</i>).</li>
-                                    <li class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm">
-                                        <b>Rename lagi!</b><br>
-                                        Sound1 -> <b class="font-mono text-purple-700">ElephantSound</b><br>
-                                        Sound2 -> <b class="font-mono text-purple-700">LionSound</b>
+                                    <li>
+                                        <p class="text-sm text-slate-500 ml-6 mb-2">Komponen akan muncul di bawah layar (<i>Non-visible</i>).</p>
+                                    </li>
+                                    <li class="bg-purple-50 p-4 rounded-xl border border-purple-200 text-sm shadow-sm">
+                                        <b class="text-purple-800 block mb-2"><i class="fa-solid fa-pen"></i> Wajib Rename:</b>
+                                        <ul class="space-y-1 ml-4">
+                                            <li>Sound1 -> <b class="font-mono text-purple-700 bg-white px-1 rounded border">Lion_Sound</b></li>
+                                            <li>Sound2 -> <b class="font-mono text-purple-700 bg-white px-1 rounded border">Elephant_Sound</b></li>
+                                        </ul>
                                     </li>
                                 </ol>
                             </div>
                              <div class="flex-1">
-                                <div class="bg-white p-4 rounded-xl shadow-lg border border-slate-200 relative">
-                                    <div class="h-48 bg-slate-100 rounded border border-slate-300 flex items-center justify-center text-slate-400 mb-4">
+                                <div class="bg-white p-4 rounded-xl shadow-lg border border-slate-200 relative group">
+                                    <div class="absolute -top-3 -right-3 bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg z-10 animate-bounce">!</div>
+                                    <div class="h-48 bg-slate-100 rounded border border-slate-300 flex items-center justify-center text-slate-400 mb-4 font-mono text-xs">
                                         (Screen Viewer Area)
                                     </div>
-                                    <div class="border-t-2 border-dashed border-slate-300 pt-4">
-                                        <div class="text-xs font-bold text-slate-500 mb-2 uppercase">Non-visible components</div>
-                                        <div class="flex gap-4">
-                                            <div class="flex flex-col items-center">
-                                                <i class="fa-solid fa-volume-high text-xl text-purple-600"></i>
-                                                <span class="text-[10px] font-mono mt-1">ElephantSound</span>
+                                    <div class="border-t-2 border-dashed border-slate-300 pt-4 bg-slate-50 -m-4 mt-0 p-4 rounded-b-xl">
+                                        <div class="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Non-visible components</div>
+                                        <div class="flex gap-4 justify-center">
+                                            <div class="flex flex-col items-center p-2 bg-white rounded border border-slate-200 shadow-sm">
+                                                <i class="fa-solid fa-music text-2xl text-purple-600 mb-1"></i>
+                                                <span class="text-[10px] font-mono font-bold text-slate-700">Lion_Sound</span>
                                             </div>
-                                            <div class="flex flex-col items-center">
-                                                <i class="fa-solid fa-volume-high text-xl text-purple-600"></i>
-                                                <span class="text-[10px] font-mono mt-1">LionSound</span>
+                                            <div class="flex flex-col items-center p-2 bg-white rounded border border-slate-200 shadow-sm">
+                                                <i class="fa-solid fa-music text-2xl text-purple-600 mb-1"></i>
+                                                <span class="text-[10px] font-mono font-bold text-slate-700">Elephant_Sound</span>
                                             </div>
                                         </div>
                                     </div>
@@ -899,36 +935,41 @@
                     title: 'Connect Sound Files',
                     content: `
                         <div class="max-w-4xl w-full text-center">
-                            <p class="mb-8 text-slate-600">Komponen suara butuh "isi" file MP3.</p>
+                            <p class="mb-8 text-slate-600">Hubungkan komponen suara dengan file aslinya!</p>
                             
                             <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-left grid grid-cols-[1fr_auto_1fr] gap-4 items-center">
-                                <div class="text-center">
-                                    <div class="font-bold text-slate-700 mb-2">Properties: ElephantSound</div>
-                                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
-                                        <div class="text-xs text-slate-400 text-left mb-1">Source</div>
-                                        <div class="flex items-center justify-between bg-white border border-slate-300 p-2 rounded cursor-pointer hover:border-brand-orange">
-                                            <span class="text-sm font-mono">None</span>
-                                            <i class="fa-solid fa-caret-down"></i>
-                                        </div>
+                                <div class="text-center group">
+                                    <div class="font-bold text-slate-700 mb-2">1. Pilih Komponen</div>
+                                    <div class="bg-purple-50 border-2 border-purple-200 p-4 rounded-xl group-hover:bg-purple-100 transition">
+                                        <i class="fa-solid fa-music text-purple-500 text-2xl mb-2"></i>
+                                        <div class="text-sm font-bold text-purple-900">Lion_Sound</div>
                                     </div>
                                 </div>
 
                                 <i class="fa-solid fa-arrow-right text-3xl text-slate-300"></i>
 
-                                <div class="text-center">
-                                    <div class="font-bold text-green-600 mb-2">Upload & Select</div>
-                                    <div class="bg-green-50 border border-green-200 p-4 rounded-xl">
-                                        <div class="text-xs text-green-700 text-left mb-1">Source</div>
+                                <div class="text-center group">
+                                    <div class="font-bold text-slate-700 mb-2">2. Atur Properties</div>
+                                    <div class="bg-green-50 border-2 border-green-200 p-4 rounded-xl group-hover:bg-green-100 transition relative">
+                                        <div class="text-[10px] text-green-700 text-left mb-1 uppercase font-bold">Source</div>
                                         <div class="flex items-center justify-between bg-white border border-green-300 p-2 rounded shadow-sm">
-                                            <span class="text-sm font-bold">elephant.mp3</span>
-                                            <i class="fa-solid fa-check text-green-500"></i>
+                                            <span class="text-sm font-bold truncate max-w-[100px]">lion.mp3</span>
+                                            <i class="fa-solid fa-upload text-green-500"></i>
                                         </div>
+                                        <div class="absolute -right-2 -bottom-2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded-full shadow">Upload File!</div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="mt-6 text-sm text-slate-500 bg-slate-100 inline-block px-4 py-2 rounded-full border border-slate-200">
-                                Lakukan juga untuk <b>LionSound</b> dengan file <i>lion_roar.mp3</i>
+                            <div class="mt-8 flex gap-4 justify-center">
+                                <div class="text-sm text-slate-600 bg-white shadow-sm px-6 py-3 rounded-full border border-slate-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-green-500"></i>
+                                    Lion_Sound -> <b>lion.mp3</b>
+                                </div>
+                                <div class="text-sm text-slate-600 bg-white shadow-sm px-6 py-3 rounded-full border border-slate-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-green-500"></i>
+                                    Elephant_Sound -> <b>elephant.mp3</b>
+                                </div>
                             </div>
                         </div>
                     `
@@ -938,65 +979,74 @@
                     step: 3,
                     title: 'Coding Time (Blocks)',
                     content: `
-                        <div class="flex flex-col items-center w-full max-w-5xl">
-                            <div class="bg-slate-800 text-white px-6 py-2 rounded-full text-sm font-bold mb-6 shadow-lg transform rotate-[-2deg]">
-                                Klik tombol "Blocks" di pojok kanan atas!
+                        <div class="flex flex-col items-center w-full max-w-6xl">
+                            <div class="bg-slate-800 text-white px-8 py-3 rounded-full text-lg font-bold mb-8 shadow-xl transform hover:scale-110 transition cursor-pointer ring-4 ring-slate-200">
+                                Klik tombol "Blocks" di pojok kanan atas! ↗️
                             </div>
 
                             <div class="grid md:grid-cols-2 gap-12 w-full">
-                                <div>
-                                    <h4 class="font-bold text-lg mb-4">Logika Puzzle:</h4>
-                                    <ol class="space-y-4 text-slate-700">
-                                        <li class="flex items-center gap-3">
-                                            <div class="bg-yellow-100 text-yellow-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
-                                            <span>Klik <b>LionButton</b> (Kiri).</span>
-                                        </li>
-                                        <li class="flex items-center gap-3">
-                                            <div class="bg-yellow-100 text-yellow-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
-                                            <span>Tarik blok kuning: <br><code class="bg-yellow-200 px-1 rounded text-xs">when LionButton.Click</code></span>
-                                        </li>
-                                        <li class="flex items-center gap-3">
-                                            <div class="bg-purple-100 text-purple-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
-                                            <span>Klik <b>LionSound</b> -> Tarik: <br><code class="bg-purple-200 px-1 rounded text-xs">call LionSound.Play</code></span>
-                                        </li>
-                                        <li class="flex items-center gap-3">
-                                            <div class="bg-green-100 text-green-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
-                                            <span>Pasangkan sampai bunyi "Klik"!</span>
-                                        </li>
-                                    </ol>
+                                <div class="space-y-6">
+                                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                        <h4 class="font-bold text-lg mb-4 text-slate-800">Misi 1: Singa Mengaum 🦁</h4>
+                                        <ol class="space-y-4 text-slate-700 text-sm">
+                                            <li class="flex items-start gap-3">
+                                                <span class="bg-slate-100 text-slate-600 px-2 rounded font-mono font-bold text-xs mt-0.5">STEP 1</span>
+                                                <span>Klik <b>LionButton</b> (di menu kiri).</span>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <span class="bg-slate-100 text-slate-600 px-2 rounded font-mono font-bold text-xs mt-0.5">STEP 2</span>
+                                                <span>Tarik blok <b class="bg-yellow-100 text-yellow-800 px-1 rounded">when LionButton.Click</b>.</span>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <span class="bg-slate-100 text-slate-600 px-2 rounded font-mono font-bold text-xs mt-0.5">STEP 3</span>
+                                                <span>Klik <b>Lion_Sound</b>.</span>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <span class="bg-slate-100 text-slate-600 px-2 rounded font-mono font-bold text-xs mt-0.5">STEP 4</span>
+                                                <span>Tarik blok <b class="bg-purple-100 text-purple-800 px-1 rounded">call Lion_Sound.Play</b>.</span>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <span class="bg-slate-100 text-slate-600 px-2 rounded font-mono font-bold text-xs mt-0.5">STEP 5</span>
+                                                <span>Pasangkan blok ungu ke dalam blok emas! 🧩</span>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 text-blue-800 text-sm font-bold text-center">
+                                        Lalu lakukan hal yang sama untuk Gajah! 🐘
+                                    </div>
                                 </div>
 
-                                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-xl relative overflow-hidden">
-                                    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
+                                <div class="bg-slate-50 border-2 border-slate-200 rounded-xl p-8 shadow-inner relative overflow-hidden flex flex-col justify-center items-center gap-6">
+                                     <div class="absolute top-0 right-0 bg-slate-200 text-slate-500 px-4 py-1 rounded-bl-xl text-xs font-mono">Blocks Area</div>
                                     
-                                    <!-- Blocks Visualization -->
-                                    <div class="relative z-10 flex flex-col gap-8 items-start">
-                                        <!-- Block 1 -->
-                                        <div class="filter drop-shadow-md cursor-pointer hover:scale-105 transition">
-                                            <div class="bg-yellow-500 text-white px-4 py-2 rounded-t-lg rounded-bl-lg rounded-br-none font-sans text-xs font-bold mb-0">
+                                     <!-- Coding Blocks Visualization -->
+                                     <div class="transform scale-110 origin-center">
+                                        <!-- Lion Block -->
+                                        <div class="relative mb-8 group cursor-grab active:cursor-grabbing">
+                                            <div class="bg-[#B8860B] text-white px-4 py-2 rounded-t rounded-bl font-bold text-xs shadow-md border-l-4 border-[#8B6508]">
                                                 when LionButton .Click do
                                             </div>
-                                            <div class="bg-yellow-500 w-4 h-3 ml-4 rounded-b-lg mb-[-12px] z-20 relative"></div>
-                                            <div class="pl-3 border-l-4 border-yellow-700/20 ml-1">
-                                                <div class="bg-purple-500 text-white px-3 py-2 rounded-lg font-sans text-xs font-bold mt-[2px]">
-                                                    call LionSound .Play
+                                            <div class="ml-4 w-4 h-3 bg-[#B8860B] rounded-b mb-[-10px] relative z-10"></div>
+                                            <div class="pl-3 py-1 ml-[5px] border-l-[3px] border-[#8B6508]/20">
+                                                 <div class="bg-[#800080] text-white px-4 py-2 rounded font-bold text-xs shadow-sm border-l-4 border-[#4B0082]">
+                                                    call Lion_Sound .Play
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Block 2 -->
-                                        <div class="filter drop-shadow-md opacity-80">
-                                            <div class="bg-yellow-500 text-white px-4 py-2 rounded-t-lg rounded-bl-lg rounded-br-none font-sans text-xs font-bold mb-0">
+                                        <!-- Elephant Block -->
+                                        <div class="relative opacity-90 group cursor-grab active:cursor-grabbing">
+                                             <div class="bg-[#B8860B] text-white px-4 py-2 rounded-t rounded-bl font-bold text-xs shadow-md border-l-4 border-[#8B6508]">
                                                 when ElephantButton .Click do
                                             </div>
-                                            <div class="bg-yellow-500 w-4 h-3 ml-4 rounded-b-lg mb-[-12px] z-20 relative"></div>
-                                            <div class="pl-3 border-l-4 border-yellow-700/20 ml-1">
-                                                <div class="bg-purple-500 text-white px-3 py-2 rounded-lg font-sans text-xs font-bold mt-[2px]">
-                                                    call ElephantSound .Play
+                                            <div class="ml-4 w-4 h-3 bg-[#B8860B] rounded-b mb-[-10px] relative z-10"></div>
+                                            <div class="pl-3 py-1 ml-[5px] border-l-[3px] border-[#8B6508]/20">
+                                                 <div class="bg-[#800080] text-white px-4 py-2 rounded font-bold text-xs shadow-sm border-l-4 border-[#4B0082]">
+                                                    call Elephant_Sound .Play
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                     </div>
 
                                 </div>
                             </div>
@@ -1004,37 +1054,207 @@
                     `
                 },
                 {
-                    type: 'step',
-                    step: 4,
-                    title: 'Testing: AI Companion',
+                    type: 'concept',
+                    title: 'Algoritma Komputer',
+                    subtitle: 'Computational Thinking',
                     content: `
-                        <div class="text-center max-w-3xl">
-                             <h3 class="text-2xl font-bold mb-6">Momen Kebenaran! 📱✨</h3>
-                             <div class="flex flex-col md:flex-row gap-8 items-center bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
-                                 <div class="flex-1 space-y-4 text-left">
-                                     <div class="flex items-center gap-3">
-                                         <span class="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</span>
-                                         <p class="text-sm">Menu Atas: <b>Connect</b> -> <b>AI Companion</b>.</p>
+                        <div class="grid md:grid-cols-2 gap-8 max-w-5xl items-center">
+                            
+                            <div class="space-y-6">
+                                <h3 class="text-3xl font-bold text-slate-800">Urutan itu Penting! 🔢</h3>
+                                <p class="text-slate-600 leading-relaxed">
+                                    <b>Algoritma</b> adalah langkah-langkah yang berurutan. 
+                                    Jika urutannya salah, aplikasi tidak jalan!
+                                </p>
+                                
+                                <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                                     <div class="bg-brand-orange px-6 py-3 text-white font-bold flex justify-between items-center">
+                                         <span>Algoritma Animal Sounds</span>
+                                         <i class="fa-solid fa-list-ol"></i>
                                      </div>
-                                      <div class="flex items-center gap-3">
-                                         <span class="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</span>
-                                         <p class="text-sm">Buka App di HP -> Klik <b>Scan QR Code</b>.</p>
-                                     </div>
-                                      <div class="flex items-center gap-3">
-                                         <span class="bg-slate-800 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                                         <p class="text-sm">Arahkan kamera ke layar laptop.</p>
-                                     </div>
-                                 </div>
-                                 
-                                 <div class="w-px h-32 bg-slate-200 hidden md:block"></div>
-
-                                 <div class="flex-1 flex flex-col items-center">
-                                     <div class="bg-white border-2 border-slate-800 p-2 rounded-lg mb-2 shadow-sm">
-                                         <div class="w-32 h-32 bg-slate-900 flex items-center justify-center text-white text-xs text-center p-2">
-                                             [ FAKE QR CODE ]<br>a b c d e f
+                                     <div class="p-6 space-y-4">
+                                         <div class="flex items-center gap-4">
+                                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm">1</div>
+                                             <div class="flex-1 bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm font-medium">Pengguna sentuh <b>Tombol Gajah</b>.</div>
+                                         </div>
+                                         <div class="flex justify-center -my-2"><i class="fa-solid fa-arrow-down text-slate-300"></i></div>
+                                         <div class="flex items-center gap-4">
+                                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm">2</div>
+                                             <div class="flex-1 bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm font-medium">Aplikasi terima sinyal <b>"Klik"</b>.</div>
+                                         </div>
+                                          <div class="flex justify-center -my-2"><i class="fa-solid fa-arrow-down text-slate-300"></i></div>
+                                         <div class="flex items-center gap-4">
+                                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm">3</div>
+                                             <div class="flex-1 bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm font-medium">Cari file <b>elephant.mp3</b>.</div>
+                                         </div>
+                                          <div class="flex justify-center -my-2"><i class="fa-solid fa-arrow-down text-slate-300"></i></div>
+                                         <div class="flex items-center gap-4">
+                                             <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm">4</div>
+                                             <div class="flex-1 bg-green-50 p-3 rounded-lg border border-green-200 text-green-800 text-sm font-bold flex items-center justify-between">
+                                                 <span>Putar Suara! 🔊</span>
+                                                 <i class="fa-solid fa-check"></i>
+                                             </div>
                                          </div>
                                      </div>
-                                     <p class="text-xs text-slate-400">Tunggu loading bar...</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-center justify-center text-center">
+                                <div class="bg-red-50 p-8 rounded-3xl border border-red-100 mb-6 w-full opacity-80 hover:opacity-100 transition">
+                                    <h4 class="font-bold text-red-800 mb-3"><i class="fa-solid fa-bug"></i> BUG ALERT!</h4>
+                                    <p class="text-sm text-red-600">
+                                        "Apa yang terjadi jika langkah nomor 3 hilang?"
+                                    </p>
+                                    <div class="mt-4 bg-white p-3 rounded text-slate-500 text-xs italic">
+                                        Error: File not found. Suara tidak keluar!
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-robot text-[120px] text-slate-200 animate-pulse"></i>
+                            </div>
+
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Testing & See You!',
+                    subtitle: 'Penutup Sesi 2',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl w-full">
+                            <h3 class="text-4xl font-black text-slate-800 mb-8">🎉 IT WORKS! 🎉</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-8 w-full mb-8">
+                                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 relative overflow-hidden">
+                                     <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-400 rounded-bl-[100px] -mr-4 -mt-4 opacity-50"></div>
+                                    <h4 class="font-bold text-xl mb-4 text-slate-700">🔍 Refleksi Hari Ini</h4>
+                                    <div class="text-left space-y-4">
+                                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                            <p class="text-xs text-slate-500 font-bold mb-1">PERTANYAAN 1</p>
+                                            <p class="text-sm text-slate-800">Apa bedanya komponen <b>Button</b> dan <b>Sound</b>?</p>
+                                            <p class="text-xs text-brand-orange mt-1 font-bold">Visible vs Non-visible</p>
+                                        </div>
+                                         <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                            <p class="text-xs text-slate-500 font-bold mb-1">PERTANYAAN 2</p>
+                                            <p class="text-sm text-slate-800">Kenapa kita butuh blok <b>When...Click</b>?</p>
+                                            <p class="text-xs text-brand-orange mt-1 font-bold">Sebagai Pemicu (Event)</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-blue-600 to-cyan-500 p-8 rounded-3xl shadow-xl text-white flex flex-col justify-center relative overflow-hidden group">
+                                    <i class="fa-solid fa-paintbrush text-9xl absolute -bottom-8 -right-8 opacity-20 transform rotate-12 group-hover:rotate-45 transition duration-700"></i>
+                                    <h4 class="font-bold text-2xl mb-2 relative z-10">Minggu Depan:</h4>
+                                    <h2 class="text-3xl font-black text-yellow-300 mb-4 relative z-10">DIGITAL DOODLE 🎨</h2>
+                                    <p class="text-sm relative z-10 opacity-90 mb-6">
+                                        Kita akan mengubah layar HP jadi kanvas lukis! 
+                                        Bisa coret-coret pakai jari warna-warni!
+                                    </p>
+                                    <button class="bg-white text-blue-600 px-6 py-2 rounded-full font-bold text-sm hover:bg-yellow-300 hover:text-blue-800 transition shadow-lg relative z-10">
+                                        Can't Wait! 🚀
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <p class="text-slate-400 text-sm">Jangan lupa Logout & matikan komputernya ya! 👋</p>
+                        </div>
+                    `
+                }
+            ],
+            m3: [
+                {
+                    type: 'intro',
+                    title: 'Digital Doodle',
+                    subtitle: 'Pertemuan 3: Canvas & Warna',
+                    icon: 'fa-paintbrush',
+                    color: 'bg-pink-500',
+                    content: `
+                        <div class="text-center max-w-2xl mx-auto">
+                            <p class="text-xl text-slate-600 mb-8">
+                                Salam, Seniman Digital! 🎨
+                                <br>Hari ini kita akan menyulap HP menjadi <b>Buku Gambar Ajaib</b>.
+                            </p>
+                            <div class="grid grid-cols-2 gap-4 text-left">
+                                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                                    <div class="text-pink-500 text-xl mb-2"><i class="fa-solid fa-palette"></i></div>
+                                    <h4 class="font-bold text-slate-800">Canvas</h4>
+                                    <p class="text-sm text-slate-500">Kertas digital tempat kita menggambar.</p>
+                                </div>
+                                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                                    <div class="text-blue-500 text-xl mb-2"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                    <h4 class="font-bold text-slate-800">Pattern Recognition</h4>
+                                    <p class="text-sm text-slate-500">Mencari pola agar koding lebih cepat!</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Hak Cipta (Copyright)',
+                    subtitle: 'Digital Literacy',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl">
+                            <h3 class="text-3xl font-bold mb-6 text-slate-800">Jangan Asal Comot! 👮‍♂️</h3>
+                            
+                            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 w-full mb-8 relative overflow-hidden">
+                                <div class="absolute -right-10 -top-10 bg-red-500 text-white w-32 h-32 transform rotate-45 flex items-end justify-center pb-2 font-bold shadow-lg">STOP!</div>
+                                <div class="flex flex-col md:flex-row gap-8 items-center">
+                                    <div class="flex-1">
+                                        <i class="fa-solid fa-user-secret text-8xl text-slate-800 mb-4"></i>
+                                        <p class="text-slate-600 font-bold">Maling Gambar?</p>
+                                    </div>
+                                    <div class="w-px h-32 bg-slate-200 hidden md:block"></div>
+                                    <div class="flex-[2] text-left space-y-3">
+                                        <p class="text-lg text-slate-700">Setiap gambar di internet ada <b>pemiliknya</b>.</p>
+                                        <ul class="space-y-2 text-sm text-slate-500">
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Hargai karya orang lain.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Izin dulu atau cari yang GRATIS.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 w-full max-w-2xl">
+                                <a href="https://www.freepik.com" target="_blank" class="bg-blue-50 hover:bg-blue-100 p-4 rounded-xl border border-blue-200 flex items-center justify-center gap-2 transition text-blue-800 font-bold">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Freepik_logo.svg/2560px-Freepik_logo.svg.png" class="h-6 opacity-80" alt="Freepik">
+                                </a>
+                                <a href="https://www.flaticon.com" target="_blank" class="bg-green-50 hover:bg-green-100 p-4 rounded-xl border border-green-200 flex items-center justify-center gap-2 transition text-green-800 font-bold">
+                                    <img src="https://media.flaticon.com/dist/min/img/logo/flaticon-color-positive.svg" class="h-6 opacity-80" alt="Flaticon">
+                                </a>
+                            </div>
+                            <p class="mt-4 text-xs text-slate-400">Gunakan situs di atas untuk cari gambar aman!</p>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Mission Brief: The Artist\'s Tool',
+                    subtitle: 'Transition',
+                    content: `
+                        <div class="text-center max-w-3xl">
+                             <div class="bg-indigo-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+                                 <i class="fa-solid fa-rocket text-9xl absolute -bottom-10 -right-10 opacity-10 transform -rotate-12"></i>
+                                 
+                                 <h3 class="text-2xl font-bold mb-4">🎨 Misi Kita Sekarang</h3>
+                                 <p class="text-lg leading-relaxed mb-8">
+                                     Kita sudah tahu aturan main (Hak Cipta). <br>
+                                     Sekarang, kita butuh alat untuk mereka berkarya!
+                                 </p>
+
+                                 <div class="grid grid-cols-2 gap-4 text-left">
+                                     <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                                         <div class="font-bold text-yellow-300 mb-1">1. Palet Warna</div>
+                                         <p class="text-sm opacity-80">Tempat menaruh tombol warna (Merah, Biru, Hijau).</p>
+                                     </div>
+                                     <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                                         <div class="font-bold text-pink-300 mb-1">2. Canvas</div>
+                                         <p class="text-sm opacity-80">Area kosong untuk mencoret-coret.</p>
+                                     </div>
+                                 </div>
+
+                                 <div class="mt-8">
+                                    <span class="inline-block animate-bounce text-xl">👇</span>
+                                    <p class="text-sm font-bold opacity-75">Switch ke Designer View sekarang!</p>
                                  </div>
                              </div>
                         </div>
@@ -1042,46 +1262,391 @@
                 },
                 {
                     type: 'concept',
-                    title: 'Wrap Up: Algorithm & Footprint',
-                    subtitle: 'Computational Thinking & Digital Literacy',
+                    title: 'Konsep: Tower vs Train',
+                    subtitle: 'Why Horizontal Arrangement?',
                     content: `
-                        <div class="grid md:grid-cols-2 gap-8 max-w-5xl">
+                        <div class="grid md:grid-cols-2 gap-8 items-center max-w-5xl">
+                            <div>
+                                <h3 class="text-3xl font-bold text-slate-800 mb-4">Masalah Susunan</h3>
+                                <p class="text-slate-600 text-lg mb-6">
+                                    Secara default, komponen di App Inventor itu seperti <b>Menara (Tower)</b>. 
+                                    Semua menumpuk ke bawah.
+                                </p>
+                                <p class="text-slate-600 text-lg mb-6">
+                                    Tapi palet warna kita butuh berjejer ke samping seperti <b>Gerbong Kereta (Train)</b>.
+                                </p>
+                            </div>
+
+                            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-200">
+                                <div class="flex justify-around items-end h-40 mb-4">
+                                    <!-- Tower -->
+                                    <div class="flex flex-col gap-1 items-center">
+                                        <div class="w-12 h-8 bg-red-400 rounded"></div>
+                                        <div class="w-12 h-8 bg-blue-400 rounded"></div>
+                                        <div class="w-12 h-8 bg-green-400 rounded"></div>
+                                        <span class="text-sm font-bold text-slate-500 mt-2">Vertical</span>
+                                    </div>
+                                    
+                                    <div class="w-px h-full bg-slate-200"></div>
+
+                                    <!-- Train -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="flex gap-1">
+                                            <div class="w-12 h-12 bg-red-400 rounded"></div>
+                                            <div class="w-12 h-12 bg-blue-400 rounded"></div>
+                                            <div class="w-12 h-12 bg-green-400 rounded"></div>
+                                        </div>
+                                        <span class="text-sm font-bold text-brand-orange mt-2"><i class="fa-solid fa-check"></i> Horizontal</span>
+                                    </div>
+                                </div>
+                                <div class="bg-blue-50 text-blue-800 p-3 rounded-lg text-sm text-center font-bold">
+                                    Solusi: Pakai "Horizontal Arrangement"!
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 1,
+                    title: 'Membuat "Gerbong" Palet',
+                    content: `
+                        <div class="flex flex-col md:flex-row gap-8 w-full max-w-6xl items-center h-[450px]">
+                            <!-- Instruction -->
+                            <div class="w-full md:w-1/3 space-y-6">
+                                <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                                     <p class="text-slate-700 font-bold mb-1">Misi:</p>
+                                     <p class="text-sm text-slate-600">Siapkan wadah agar tombol bisa berbaris rapi.</p>
+                                </div>
+                                <ol class="list-decimal list-inside space-y-4 text-slate-700">
+                                    <li>Buka Palette -> <b>Layout</b>.</li>
+                                    <li>Tarik <span class="bg-slate-200 px-2 rounded font-mono text-sm">HorizontalArrangement</span> ke layar.</li>
+                                    <li>
+                                        <b>Wajib Setting:</b>
+                                        <ul class="list-disc list-inside ml-4 text-sm mt-2 text-slate-600 space-y-1">
+                                            <li>Width: <b class="text-blue-600">Fill Parent</b> (Penuhi lebar layar).</li>
+                                            <li>AlignHorizontal: <b class="text-blue-600">Center</b> (Rata tengah).</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <!-- Visual Simulation -->
+                            <div class="flex-1 bg-slate-800 rounded-3xl p-4 border-4 border-slate-600 relative overflow-hidden shadow-2xl flex flex-col items-center">
+                                <div class="w-full h-8 bg-slate-700 rounded-t-xl mb-4 flex items-center px-4 gap-2">
+                                     <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                                     <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                     <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                </div>
+                                
+                                <div class="bg-white h-full w-[80%] rounded-xl relative p-4 flex flex-col gap-4">
+                                    <!-- The Horizontal Arrangement -->
+                                    <div class="w-full h-24 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg flex items-center justify-center relative shadow-sm">
+                                        <span class="text-blue-300 font-bold text-sm uppercase tracking-widest">Wadah Horizontal</span>
+                                        
+                                        <!-- Arrows indicating Fill Parent -->
+                                        <div class="absolute inset-x-0 top-1/2 -mt-px h-px bg-blue-300 flex justify-between px-2">
+                                            <i class="fa-solid fa-chevron-left text-blue-500"></i>
+                                            <i class="fa-solid fa-chevron-right text-blue-500"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 2,
+                    title: 'Isi Palet Warna',
+                    content: `
+                        <div class="grid md:grid-cols-2 gap-8 w-full max-w-5xl items-center">
+                            <div>
+                                <h3 class="font-bold text-xl mb-4">Tambahkan Tombol Warna! 🔴🔵🟢</h3>
+                                <div class="space-y-6 text-slate-700">
+                                    <p class="text-sm">Masukkan <b class="text-brand-orange">4 Button</b> ke dalam HorizontalArrangement tadi.</p>
+                                    
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                                        <h4 class="font-bold text-sm border-b pb-2">Resep Tombol (Ulangi 4x):</h4>
+                                        <ul class="space-y-3 text-sm">
+                                            <li class="flex justify-between items-center group hover:bg-slate-50 p-1 rounded">
+                                                <span>1. Text</span>
+                                                <span class="text-red-500 font-bold">HAPUS (Kosongkan) 🗑️</span>
+                                            </li>
+                                            <li class="flex justify-between items-center group hover:bg-slate-50 p-1 rounded">
+                                                <span>2. Width</span>
+                                                <span class="font-mono bg-slate-100 px-2 rounded">Fill Parent</span>
+                                            </li>
+                                            <li class="flex justify-between items-center group hover:bg-slate-50 p-1 rounded">
+                                                <span>3. BackgroundColor</span>
+                                                <div class="flex gap-1">
+                                                    <span class="w-4 h-4 bg-green-500 rounded-full border"></span>
+                                                    <span class="w-4 h-4 bg-blue-500 rounded-full border"></span>
+                                                    <span class="w-4 h-4 bg-red-500 rounded-full border"></span>
+                                                    <span class="w-4 h-4 bg-black rounded-full border"></span>
+                                                </div>
+                                            </li>
+                                            <li class="bg-yellow-50 p-2 rounded text-xs border border-yellow-200">
+                                                <i class="fa-solid fa-tag mr-1"></i>
+                                                <b>Rename:</b> GreenButton, BlueButton, RedButton, BlackButton.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-center">
+                                <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-2xl transform rotate-2">
+                                    <div class="flex gap-2 p-2 bg-slate-100 rounded-lg border border-slate-300 w-64 justify-center">
+                                        <div class="flex-1 h-12 bg-green-500 rounded shadow-sm hover:scale-110 transition cursor-pointer" title="GreenButton"></div>
+                                        <div class="flex-1 h-12 bg-blue-600 rounded shadow-sm hover:scale-110 transition cursor-pointer" title="BlueButton"></div>
+                                        <div class="flex-1 h-12 bg-red-500 rounded shadow-sm hover:scale-110 transition cursor-pointer" title="RedButton"></div>
+                                        <div class="flex-1 h-12 bg-black rounded shadow-sm hover:scale-110 transition cursor-pointer" title="BlackButton"></div>
+                                    </div>
+                                    <p class="text-center text-xs text-slate-400 mt-2 font-mono">HorizontalArrangement1</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Apa itu Canvas? 🖼️',
+                    subtitle: 'Understanding Coordinate System',
+                    content: `
+                        <div class="grid md:grid-cols-2 gap-8 items-center max-w-5xl">
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">Lebih dari Sekedar Gambar</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                    Canvas itu spesial. Dia punya sistem <b>Koordinat (X, Y)</b>.
+                                    Dia tahu persis di mana jari kamu menyentuh layar!
+                                </p>
+                                <ul class="space-y-3 text-sm text-slate-700">
+                                    <li class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">X</div>
+                                        <span>Posisi Kiri-Kanan (Horizontal)</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">Y</div>
+                                        <span>Posisi Atas-Bawah (Vertical)</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-slate-900 rounded-2xl p-6 relative aspect-video flex items-center justify-center border-4 border-slate-700 shadow-xl overflow-hidden group">
+                                <!-- Grid Lines -->
+                                <div class="absolute inset-0 grid grid-cols-6 grid-rows-4 opacity-20">
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                    <div class="border border-green-400"></div><div class="border border-green-400"></div>
+                                </div>
+                                
+                                <span class="text-green-400 font-mono text-xs absolute top-2 left-2">x:0, y:0</span>
+                                <div class="absolute top-1/2 left-1/2 w-4 h-4 bg-white rounded-full animate-ping"></div>
+                                <div class="absolute top-1/2 left-1/2 w-32 h-32 border-2 border-white/50 rounded-full transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+                                    <span class="text-white text-xs bg-black/50 px-2 rounded">Touch!</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 3,
+                    title: 'Pasang Kanvas',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl">
                             
-                            <!-- CT -->
-                            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-yellow-400 flex flex-col items-center text-center">
-                                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 text-2xl mb-4">
-                                    <i class="fa-solid fa-list-ol"></i>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full text-left">
+                                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 col-span-1">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold text-xl mb-4">1</div>
+                                    <h4 class="font-bold text-slate-800 mb-2">Ambil Komponen</h4>
+                                    <p class="text-sm text-slate-500 mb-4">
+                                        Palette -> <b>Drawing and Animation</b> -> Tarik <b>Canvas</b> ke bawah tombol.
+                                    </p>
                                 </div>
-                                <h4 class="font-bold text-xl mb-2">Algorithm</h4>
-                                <p class="text-sm text-slate-600 leading-relaxed">
-                                    Urutan logis langkah demi langkah.
-                                </p>
-                                <div class="mt-4 bg-slate-50 p-3 rounded-lg text-xs font-mono text-left w-full">
-                                    1. Klik Tombol<br>
-                                    2. Panggil Suara<br>
-                                    3. Putar Suara
+                                
+                                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 col-span-2">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-brand-orange font-bold text-xl mb-4">2</div>
+                                    <h4 class="font-bold text-slate-800 mb-2">Atur Properties</h4>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-slate-50 p-2 rounded border border-slate-100">
+                                            <span class="text-xs text-slate-400 block">BackgroundColor</span>
+                                            <span class="font-bold text-slate-800">Black</span>
+                                            <span class="text-[10px] text-slate-400 block">(Biar keren!)</span>
+                                        </div>
+                                        <div class="bg-slate-50 p-2 rounded border border-slate-100">
+                                            <span class="text-xs text-slate-400 block">Height</span>
+                                            <span class="font-bold text-slate-800">70%</span>
+                                        </div>
+                                        <div class="bg-slate-50 p-2 rounded border border-slate-100 col-span-2">
+                                            <span class="text-xs text-slate-400 block">Width</span>
+                                            <span class="font-bold text-slate-800">Fill Parent</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 bg-slate-900 w-64 h-40 rounded-lg border-4 border-slate-300 shadow-xl flex items-center justify-center group relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition"></div>
+                                <span class="text-white font-mono opacity-50">Canvas1 (Black)</span>
+                                <!-- Simulated Hand -->
+                                <i class="fa-solid fa-hand-pointer text-white text-4xl absolute -bottom-10 -right-10 group-hover:bottom-4 group-hover:right-4 transition-all duration-500"></i>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'The Body is Ready...',
+                    subtitle: 'Transition',
+                    content: `
+                        <div class="text-center max-w-3xl">
+                             <div class="bg-gradient-to-r from-slate-800 to-slate-900 text-white p-12 rounded-3xl shadow-2xl">
+                                 <h3 class="text-4xl font-black mb-6">Masa Diam Saja? 🤔</h3>
+                                 <p class="text-xl leading-relaxed mb-6">
+                                     Tampilan sudah jadi. Tapi kalau diklik, belum ada reaksi.
+                                     <br><span class="text-yellow-400 font-bold">Aplikasi kita butuh OTAK!</span>
+                                 </p>
+                                 
+                                 <div class="flex justify-center gap-8 mb-8">
+                                     <div class="text-center opacity-50">
+                                         <i class="fa-solid fa-mobile-screen text-4xl mb-2"></i>
+                                         <p class="text-xs">Body (Design)</p>
+                                     </div>
+                                     <i class="fa-solid fa-arrow-right text-2xl self-center animate-pulse"></i>
+                                     <div class="text-center text-yellow-400">
+                                         <i class="fa-solid fa-brain text-4xl mb-2"></i>
+                                         <p class="text-xs">Brain (Blocks)</p>
+                                     </div>
+                                 </div>
+
+                                 <div class="bg-white/10 p-4 rounded-xl border border-white/20 inline-block">
+                                     <p class="font-mono text-sm">Klik tombol <b>Blocks</b> di pojok kanan atas sekarang.</p>
+                                 </div>
+                             </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'step',
+                    step: 4,
+                    title: 'Coding: Pattern Recognition',
+                    content: `
+                        <div class="flex flex-col items-center w-full max-w-6xl">
+                            <div class="flex items-center gap-4 mb-6">
+                                <h3 class="text-2xl font-bold">Cari Polanya! 🔍</h3>
+                                <div class="bg-brand-orange text-white px-4 py-1 rounded-full text-xs font-bold">Computational Thinking</div>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-12 w-full h-[450px]">
+                                <!-- Logic Explanation -->
+                                <div class="space-y-6 overflow-y-auto">
+                                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                        <h4 class="font-bold text-lg mb-2 text-green-700">Kalimat Logika (Mad Libs)</h4>
+                                        <p class="text-sm text-slate-600 mb-4">Isi titik-titik di bawah ini:</p>
+                                        <div class="bg-slate-100 p-4 rounded-lg font-mono text-sm leading-loose border border-slate-300">
+                                            Ketika tombol <span class="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-400">[Warna]</span> diklik,<br>
+                                            Ubah warna cat Canvas jadi <span class="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-400">[Warna]</span>.
+                                        </div>
+                                        <p class="text-xs text-slate-500 mt-2 italic">Kita hanya perlu mengganti [Warna]-nya saja!</p>
+                                    </div>
+                                    
+                                    <div class="relative pl-8">
+                                        <div class="absolute left-3 top-0 bottom-0 w-1 bg-slate-200"></div>
+                                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-4 hover:bg-blue-100 transition cursor-pointer">
+                                            <h4 class="font-bold text-sm text-blue-700"><i class="fa-solid fa-copy"></i> Misi Biru</h4>
+                                            <p class="text-xs text-slate-500">Duplicate blok hijau, ganti jadi Blue.</p>
+                                        </div>
+                                        <div class="bg-red-50 p-4 rounded-xl border border-red-200 hover:bg-red-100 transition cursor-pointer">
+                                            <h4 class="font-bold text-sm text-red-700"><i class="fa-solid fa-copy"></i> Misi Merah</h4>
+                                            <p class="text-xs text-slate-500">Duplicate blok biru, ganti jadi Red.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Blocks Simulation -->
+                                <div class="bg-slate-100 border-2 border-slate-200 rounded-xl p-8 shadow-inner relative overflow-hidden flex flex-col gap-4">
+                                     
+                                     <!-- Green Logic -->
+                                     <div class="transform scale-90 origin-left hover:scale-100 transition duration-300">
+                                        <div class="bg-[#B8860B] text-white px-3 py-1.5 rounded-t rounded-bl font-bold text-xs w-fit">
+                                            when GreenButton.Click
+                                        </div>
+                                        <div class="ml-3 border-l-4 border-[#B8860B] pl-2 py-1">
+                                            <div class="bg-[#006400] text-white px-3 py-1.5 rounded w-fit flex gap-2">
+                                                set Canvas1.PaintColor to <div class="w-4 h-4 bg-green-500 border border-white"></div>
+                                            </div>
+                                        </div>
+                                     </div>
+
+                                     <!-- Blue Logic (Ghost) -->
+                                     <div class="transform scale-90 origin-left opacity-60 hover:opacity-100 transition duration-300">
+                                        <div class="bg-[#B8860B] text-white px-3 py-1.5 rounded-t rounded-bl font-bold text-xs w-fit">
+                                            when BlueButton.Click
+                                        </div>
+                                        <div class="ml-3 border-l-4 border-[#B8860B] pl-2 py-1">
+                                            <div class="bg-[#006400] text-white px-3 py-1.5 rounded w-fit flex gap-2">
+                                                set Canvas1.PaintColor to <div class="w-4 h-4 bg-blue-500 border border-white"></div>
+                                            </div>
+                                        </div>
+                                     </div>
+
+                                     <div class="absolute bottom-4 right-4 bg-white px-3 py-1 rounded shadow text-slate-500 text-xs font-bold animate-bounce border border-slate-200">
+                                         Klik Kanan -> Duplicate
+                                     </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    type: 'concept',
+                    title: 'Wrap Up & Teaser',
+                    subtitle: 'Selesai Bagian 1',
+                    content: `
+                        <div class="flex flex-col items-center text-center max-w-4xl w-full">
+                            <h3 class="text-4xl font-black text-slate-800 mb-8">Palet Siap! 🎨</h3>
+                            
+                            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 w-full mb-8">
+                                <div class="flex items-center justify-center gap-8 mb-6">
+                                     <div class="text-center">
+                                         <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl mb-2 mx-auto"><i class="fa-solid fa-layer-group text-blue-500"></i></div>
+                                         <p class="font-bold text-slate-700">Layout Rapi</p>
+                                     </div>
+                                     <div class="text-center">
+                                         <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl mb-2 mx-auto"><i class="fa-solid fa-wand-magic-sparkles text-purple-500"></i></div>
+                                         <p class="font-bold text-slate-700">Logika Warna</p>
+                                     </div>
+                                </div>
+                                <div class="bg-yellow-50 p-4 rounded-xl text-yellow-800 border border-yellow-200">
+                                    <h4 class="font-bold mb-1">Coba Test di HP!</h4>
+                                    <p class="text-sm">Klik tombol warna. Emang belum bisa gambar, tapi penanya sudah berubah warna lho!</p>
                                 </div>
                             </div>
 
-                            <!-- DL -->
-                            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-red-400 flex flex-col items-center text-center">
-                                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-600 text-2xl mb-4">
-                                    <i class="fa-solid fa-shoe-prints"></i>
-                                </div>
-                                <h4 class="font-bold text-xl mb-2">Jejak Digital</h4>
-                                <p class="text-sm text-slate-600 leading-relaxed">
-                                    Apa yang kita unggah akan membekas selamanya.
-                                    <br>Hati-hati saat upload foto/suara ke internet!
-                                </p>
-                                <div class="mt-4 bg-red-50 p-3 rounded-lg text-xs text-red-800 font-bold">
-                                    Think before you post! 🛑
+                            <div class="relative group cursor-help">
+                                <div class="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                                <div class="relative bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-center justify-center space-x-6">
+                                    <div class="space-y-2 p-6 text-center">
+                                        <p class="text-slate-800 font-bold mb-2">Minggu Depan:</p>
+                                        <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">MAGIC LINES ✨</h2>
+                                        <p class="text-slate-500 text-sm">Kita akan buat kode agar jari kalian bisa meninggalkan jejak!</p>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
                     `
                 }
-            ]
+            ],
         };
 
         function renderSlide(index) {
@@ -1147,7 +1712,10 @@
         });
 
         function updateMeetingContext() {
-            const title = currentMeeting === 'm1' ? 'Pertemuan 1: Designer View' : 'Pertemuan 2: Logic blocks';
+            let title = '';
+            if (currentMeeting === 'm1') title = 'Pertemuan 1: Designer View';
+            else if (currentMeeting === 'm2') title = 'Pertemuan 2: Logic & Blocks';
+            else if (currentMeeting === 'm3') title = 'Pertemuan 3: Canvas & Colors';
             meetingTitleEl.textContent = title;
         }
 
