@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUANGGURU CODING</title>
+    <link rel="icon" href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Fredoka', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#F97316',
+                            blue: '#3B82F6',
+                            purple: '#8B5CF6',
+                            green: '#10B981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Fredoka', sans-serif; overflow: hidden; background-color: #f8fafc; }
+        .slide-container { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; }
+        .slide { display: none; opacity: 0; transition: opacity 0.4s ease; padding: 2rem 0; width: 100%; min-height: 100%; }
+        .slide.active { display: flex; opacity: 1; animation: fadeIn 0.4s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-7px); } 100% { transform: translateY(0); } }
+        @keyframes wobble { 0%,100% { transform: rotate(0deg) scale(1); } 20% { transform: rotate(-8deg) scale(1.08); } 40% { transform: rotate(8deg) scale(1.13); } 60% { transform: rotate(-5deg) scale(1.1); } 80% { transform: rotate(5deg) scale(1.06); } }
+        @keyframes pulseStar { from { opacity: .35; transform: scale(.85); } to { opacity: 1; transform: scale(1.2); } }
+        @keyframes floatSprite { 0% { transform: translateY(0) rotate(2deg); } 50% { transform: translateY(-10px) rotate(-2deg); } 100% { transform: translateY(0) rotate(2deg); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .feedback-wobble { animation: wobble .9s ease-in-out infinite; }
+        .sort-over { border-color: #10B981 !important; background-color: #ecfdf5 !important; border-style: dashed !important; }
+        .sort-correct { border-color: #10B981 !important; background-color: #ecfdf5 !important; }
+        .sort-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; }
+        .scratch-block {
+            min-height: 58px;
+            padding: 10px 18px;
+            border-radius: 14px;
+            color: white;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: inset 0 -5px 0 rgba(0,0,0,.12), 0 4px 10px rgba(15,23,42,.12);
+            cursor: grab;
+            user-select: none;
+        }
+        .scratch-block:active { cursor: grabbing; transform: translateY(2px); }
+        .block-motion { background: #4C97FF; }
+        .block-control { background: #FFAB19; }
+        .program-zone { min-height: 116px; }
+        .puzzle-board { display: grid; gap: 8px; padding: 12px; background: #dbeafe; border: 4px solid #93c5fd; border-radius: 24px; box-shadow: 0 10px 24px rgba(15,23,42,.12); }
+        .puzzle-cell { width: 64px; height: 64px; border-radius: 14px; background: white; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: inset 0 -4px 0 rgba(148,163,184,.22); }
+        .puzzle-cell.obstacle { background: #fee2e2; border: 2px dashed #f87171; }
+        .puzzle-cell.path { background: #f8fafc; }
+        .puzzle-cell.goal { background: #dcfce7; border: 2px solid #4ade80; }
+        .puzzle-cell.start { background: #fef3c7; border: 2px solid #fbbf24; }
+        .logo-card img { height: 92px; max-width: 160px; object-fit: contain; }
+        .media-frame { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 22px; }
+        .media-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+        @media (max-width: 900px) {
+            .puzzle-cell { width: 52px; height: 52px; font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="fixed top-0 left-0 right-0 h-20 bg-white border-b border-slate-200 z-50 px-8 flex items-center justify-between shadow-sm">
+        <div class="flex items-center">
+            <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png" alt="Kalananti" class="h-10 object-contain">
+            <div class="h-8 border-l-2 border-slate-200 mx-5"></div>
+            <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png" alt="Ruangguru Coding" class="h-10 object-contain">
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="relative">
+                <select id="meetingSelector" class="appearance-none bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 py-2 px-4 pr-8 rounded-xl font-bold cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-brand-orange text-lg">
+                    <option value="1">Session 1: Device and App Introduction</option>
+                    <option value="2">Session 2: App and Device Exploration</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                    <i class="fa-solid fa-chevron-down text-sm"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="mt-20 w-full h-[calc(100vh-144px)] relative overflow-y-auto overflow-x-hidden p-8 flex justify-center">
+        <div id="slideContent" class="slide-container w-full h-full max-w-6xl">
+
+            <!-- ============================== SESSION 1 ============================== -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-orange rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <h2 class="text-slate-400 font-bold tracking-widest uppercase mb-3 text-xl">Digital Class Preparation</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Device and App<br><span class="text-4xl text-brand-blue font-medium mt-3 inline-block">Introduction</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">Kenali perangkat, belajar memakai digital tools dengan aman, lalu temukan bagaimana coding bekerja. 🚀</p>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-9 text-center">
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800">Today’s Mission 🗺️</h1>
+                    <p class="text-2xl text-slate-500 mt-4 font-medium">Hari ini kita akan melakukan empat misi utama.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold">
+                    <div class="bg-blue-100 p-8 rounded-[2.5rem] border-2 border-blue-200 flex items-center gap-6"><div class="text-6xl">📝</div><div>Pre-Test</div></div>
+                    <div class="bg-green-100 p-8 rounded-[2.5rem] border-2 border-green-200 flex items-center gap-6"><div class="text-6xl">🖥️</div><div>Know Your Device</div></div>
+                    <div class="bg-orange-100 p-8 rounded-[2.5rem] border-2 border-orange-200 flex items-center gap-6"><div class="text-6xl">🧠</div><div>Coding & Algorithm</div></div>
+                    <div class="bg-purple-100 p-8 rounded-[2.5rem] border-2 border-purple-200 flex items-center gap-6"><div class="text-6xl">🐱</div><div>Meet Scratch</div></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="bg-indigo-50 p-14 rounded-[3rem] border-4 border-indigo-200 text-center max-w-4xl w-full shadow-lg">
+                    <div class="text-8xl mb-6 animate-float">📝</div>
+                    <h1 class="text-5xl font-extrabold text-indigo-900 mb-6">Penilaian Awal (Pre-Test)</h1>
+                    <p class="text-2xl text-indigo-700 font-medium mb-8 leading-relaxed">Kerjakan secara mandiri dan jujur. Tidak perlu takut salah—ini hanya untuk melihat pengetahuan awalmu.</p>
+                    <div class="inline-flex items-center gap-3 bg-white px-7 py-4 rounded-2xl text-xl font-bold text-indigo-700 border-2 border-indigo-200">👀 Ikuti arahan guru untuk membuka menu Tes.</div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center">
+                    <h2 class="text-brand-orange font-bold tracking-widest uppercase text-lg mb-2">Know Your Device</h2>
+                    <h1 class="text-5xl font-extrabold text-slate-800">Computer Parts 🖥️</h1>
+                    <p class="text-2xl text-slate-500 mt-3 font-medium">Empat bagian utama yang sering kita gunakan.</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+                    <div class="bg-white p-6 rounded-[2rem] shadow-md border-t-8 border-blue-500 text-center">
+                        <img src="https://images.vexels.com/media/users/3/127665/isolated/preview/004abf8b7946c4ed5605806fa445c476-flat-desktop-monitor.png" alt="Monitor" class="h-28 mx-auto mb-4 object-contain">
+                        <h4 class="font-bold text-2xl">Monitor</h4><p class="text-lg text-slate-600 mt-2">Menampilkan gambar, tulisan, dan video.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[2rem] shadow-md border-t-8 border-purple-500 text-center">
+                        <img src="https://png.pngtree.com/png-clipart/20220909/original/pngtree-central-processing-unit-cpu-vector-illustration-png-image_8518469.png" alt="CPU" class="h-28 mx-auto mb-4 object-contain">
+                        <h4 class="font-bold text-2xl">CPU</h4><p class="text-lg text-slate-600 mt-2">Memproses instruksi dari program.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[2rem] shadow-md border-t-8 border-green-500 text-center">
+                        <img src="https://png.pngtree.com/png-clipart/20240617/original/pngtree-yellow-keyboard-illustration-isolated-at-transparent-background-png-image_15349809.png" alt="Keyboard" class="h-28 mx-auto mb-4 object-contain">
+                        <h4 class="font-bold text-2xl">Keyboard</h4><p class="text-lg text-slate-600 mt-2">Untuk mengetik huruf, angka, dan perintah.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-[2rem] shadow-md border-t-8 border-pink-500 text-center">
+                        <img src="https://png.pngtree.com/png-clipart/20230401/original/pngtree-beautiful-computer-mouse-of-various-colors-png-image_9016745.png" alt="Mouse" class="h-28 mx-auto mb-4 object-contain">
+                        <h4 class="font-bold text-2xl">Mouse</h4><p class="text-lg text-slate-600 mt-2">Untuk menggerakkan pointer dan memilih menu.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-9 text-center">
+                    <h2 class="text-brand-orange font-bold tracking-widest uppercase text-lg mb-2">Use It Safely</h2>
+                    <h1 class="text-5xl font-extrabold text-slate-800">Digital Tools Safety 🛡️</h1>
+                    <p class="text-2xl text-slate-500 mt-3 font-medium">Gunakan perangkat dengan aman dan hati-hati.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-7 w-full text-center">
+                    <div class="bg-blue-50 p-8 rounded-[2.5rem] border-2 border-blue-100"><div class="text-7xl mb-5">💧🚫</div><h3 class="font-bold text-3xl mb-3">Keep It Dry</h3><p class="text-xl text-slate-600">Jauhkan minuman dari komputer.</p></div>
+                    <div class="bg-green-50 p-8 rounded-[2.5rem] border-2 border-green-100"><div class="text-7xl mb-5">🪑✨</div><h3 class="font-bold text-3xl mb-3">Sit Properly</h3><p class="text-xl text-slate-600">Duduk tegak dan atur jarak mata dari layar.</p></div>
+                    <div class="bg-orange-50 p-8 rounded-[2.5rem] border-2 border-orange-100"><div class="text-7xl mb-5">🔌🙋</div><h3 class="font-bold text-3xl mb-3">Ask for Help</h3><p class="text-xl text-slate-600">Minta bantuan guru saat ada masalah kabel atau perangkat.</p></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5 animate-float">💻✨</div>
+                <h1 class="text-6xl font-extrabold text-slate-800 mb-5">What Can a Computer Do?</h1>
+                <p class="text-3xl text-slate-600 font-medium">Komputer bisa membantu kita melakukan banyak hal.</p>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Banyak Hal Bisa Dilakukan! 🌈</h1><p class="text-2xl text-slate-500 mt-3">Coba lihat kegiatan yang bisa dilakukan di komputer.</p></div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-5 w-full">
+                    <div class="bg-blue-50 p-7 rounded-3xl text-center border-2 border-blue-200"><div class="text-6xl mb-4">📚</div><h3 class="text-2xl font-bold">Belajar</h3></div>
+                    <div class="bg-red-50 p-7 rounded-3xl text-center border-2 border-red-200"><div class="text-6xl mb-4">🎬</div><h3 class="text-2xl font-bold">Nonton</h3></div>
+                    <div class="bg-purple-50 p-7 rounded-3xl text-center border-2 border-purple-200"><div class="text-6xl mb-4">🎮</div><h3 class="text-2xl font-bold">Main Game</h3></div>
+                    <div class="bg-yellow-50 p-7 rounded-3xl text-center border-2 border-yellow-200"><div class="text-6xl mb-4">🛒</div><h3 class="text-2xl font-bold">Buka App</h3></div>
+                    <div class="bg-green-50 p-7 rounded-3xl text-center border-2 border-green-200 col-span-2 md:col-span-1"><div class="text-6xl mb-4">👩‍💻</div><h3 class="text-2xl font-bold">Coding</h3></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Game Apa yang Kamu Suka? 🎮</h1><p class="text-2xl text-slate-500 mt-3">Pernah memainkan atau melihat platform berikut?</p></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-5xl">
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Roblox_Logo_2022.jpg" alt="Roblox"><h3 class="text-2xl font-bold mt-4">Roblox</h3></div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center"><img src="https://thumbs.dreamstime.com/b/minecraft-logo-online-game-dirt-block-illustrations-concept-design-isolated-186775550.jpg" alt="Minecraft"><h3 class="text-2xl font-bold mt-4">Minecraft</h3></div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center"><img src="https://static.vecteezy.com/system/resources/previews/020/975/557/non_2x/steam-logo-steam-icon-transparent-free-png.png" alt="Steam"><h3 class="text-2xl font-bold mt-4">Steam</h3></div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/960px-Epic_Games_logo.svg.png" alt="Epic Games"><h3 class="text-2xl font-bold mt-4">Epic Games</h3></div>
+                </div>
+                <div class="mt-7 bg-brand-purple text-white px-8 py-4 rounded-2xl text-xl font-bold">🙋 Share your favorite game!</div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5">🕹️❓</div>
+                <h1 class="text-6xl font-extrabold mb-5">How Are Games Made?</h1>
+                <p class="text-3xl text-slate-600 max-w-3xl">Game tidak muncul begitu saja. Ada orang yang merancang gambar, aturan, suara, dan perintah di dalamnya.</p>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-12 rounded-[3rem] border-4 border-blue-200 max-w-5xl w-full text-center shadow-lg">
+                    <div class="text-8xl mb-6">👩‍💻🧩</div>
+                    <h1 class="text-6xl font-extrabold mb-5">What Is Coding?</h1>
+                    <p class="text-3xl text-slate-700 font-medium leading-relaxed"><b>Coding</b> adalah kegiatan menyusun instruksi untuk membuat program, game, aplikasi, atau karya digital lainnya.</p>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Bagaimana Membuat Game? 🎮</h1><p class="text-2xl text-slate-500 mt-3">Kita memberi instruksi kepada komputer.</p></div>
+                <div class="grid md:grid-cols-[1fr_1.3fr] gap-8 items-center w-full max-w-5xl">
+                    <div class="bg-slate-800 text-white rounded-[2.5rem] p-9 text-center"><div class="text-8xl mb-4">💻</div><div class="bg-white text-slate-800 rounded-2xl p-5 text-xl font-bold">“Tell me what to do!”</div></div>
+                    <div class="bg-white rounded-[2.5rem] p-9 border-2 border-slate-200 shadow-md">
+                        <p class="text-2xl font-bold text-brand-blue mb-5">Contoh instruksi:</p>
+                        <div class="space-y-4 text-xl font-medium">
+                            <div class="bg-blue-50 border-l-8 border-blue-400 p-4 rounded-xl">1️⃣ Buat karakter berjalan ke kanan.</div>
+                            <div class="bg-orange-50 border-l-8 border-orange-400 p-4 rounded-xl">2️⃣ Saat ada obstacle, karakter melompat.</div>
+                            <div class="bg-green-50 border-l-8 border-green-400 p-4 rounded-xl">3️⃣ Setelah aman, karakter lanjut berjalan.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5">🧱➡️🧱➡️🧱</div>
+                <h1 class="text-5xl font-extrabold mb-5">Instruksi Harus Jelas</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Komputer membutuhkan instruksi yang <b>detail</b>, <b>berurutan</b>, dan <b>tersusun rapi</b>. Urutan instruksi inilah yang disebut <span class="text-brand-purple font-bold">algoritma</span>.</p>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="max-w-5xl w-full bg-white rounded-[3rem] p-10 shadow-lg border-2 border-slate-200">
+                    <div class="grid md:grid-cols-[.8fr_1.2fr] gap-8 items-center">
+                        <div class="text-center"><div class="text-[9rem]">📝</div></div>
+                        <div><h1 class="text-5xl font-extrabold mb-5">Apa Itu Algoritma? 🤔</h1><p class="text-2xl text-slate-700 leading-relaxed mb-5"><b>Algoritma</b> adalah urutan langkah untuk menyelesaikan sebuah tugas.</p><div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-5 text-xl font-medium">Contoh: memakai sepatu juga punya urutan—pakai kaus kaki, masukkan kaki, lalu ikat tali sepatu. 👟</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Menyusun Algoritma 🥞</h1><p class="text-slate-600 mt-3 text-2xl font-medium">Tahan dan geser kotak menjadi urutan sarapan yang logis!</p></div>
+                <div class="bg-slate-100 p-8 rounded-[3rem] w-full max-w-3xl border-2 border-slate-200">
+                    <div id="sortPool" class="flex flex-col gap-3 mb-6">
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="1"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 🍽️ Menyiapkan piring</div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="2"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 🍚 Mengambil makanan</div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="4"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 🧼 Membersihkan piring</div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="3"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 😋 Makan sarapan</div>
+                    </div>
+                    <button onclick="checkSortOrder()" class="w-full py-4 bg-brand-green text-white font-bold rounded-2xl shadow-lg hover:bg-emerald-600 transition text-xl">Cek Urutan ✅</button>
+                    <div id="sortFeedback" class="mt-5 text-center font-bold hidden text-xl"></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="rabbit">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Tantangan Program 🧩</h1><p class="text-slate-600 mt-3 text-xl font-medium">Susun blok agar kelinci mencapai wortel tanpa masuk genangan air.</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="rabbit">
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-5 rounded-2xl border-2 border-blue-200"><div class="font-bold text-blue-800 mb-3 text-xl">Blocks</div><div class="block-pool flex gap-3 flex-wrap"></div></div>
+                        <div class="bg-green-50 p-5 rounded-2xl border-2 border-green-200"><div class="font-bold text-green-700 mb-3 text-xl">Program Area</div><div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-green-200"></div></div>
+                        <div class="grid grid-cols-2 gap-3"><button class="run-puzzle py-4 bg-brand-blue text-white font-bold rounded-2xl text-xl">▶ Run</button><button class="reset-puzzle py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">↻ Reset</button></div>
+                        <div class="puzzle-feedback hidden text-center font-bold text-xl"></div>
+                    </div>
+                    <div class="puzzle-board"></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="goat">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Puzzle 2: Goat Adventure 🐐</h1><p class="text-slate-600 mt-3 text-xl font-medium">Bantu kambing menuju rumput. Hindari pagar dan batu!</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="goat">
+                    <div class="space-y-4"><div class="bg-blue-50 p-5 rounded-2xl border-2 border-blue-200"><div class="font-bold text-blue-800 mb-3 text-xl">Blocks</div><div class="block-pool flex gap-3 flex-wrap"></div></div><div class="bg-green-50 p-5 rounded-2xl border-2 border-green-200"><div class="font-bold text-green-700 mb-3 text-xl">Program Area</div><div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-green-200"></div></div><div class="grid grid-cols-2 gap-3"><button class="run-puzzle py-4 bg-brand-purple text-white font-bold rounded-2xl text-xl">▶ Run</button><button class="reset-puzzle py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">↻ Reset</button></div><div class="puzzle-feedback hidden text-center font-bold text-xl"></div></div>
+                    <div class="puzzle-board"></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="spaceship">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Puzzle 3: Moon Mission 🚀</h1><p class="text-slate-600 mt-3 text-xl font-medium">Arahkan spaceship ke bulan. Jangan menabrak asteroid!</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="spaceship">
+                    <div class="space-y-4"><div class="bg-blue-50 p-5 rounded-2xl border-2 border-blue-200"><div class="font-bold text-blue-800 mb-3 text-xl">Blocks</div><div class="block-pool flex gap-3 flex-wrap"></div></div><div class="bg-green-50 p-5 rounded-2xl border-2 border-green-200"><div class="font-bold text-green-700 mb-3 text-xl">Program Area</div><div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-green-200"></div></div><div class="grid grid-cols-2 gap-3"><button class="run-puzzle py-4 bg-brand-orange text-white font-bold rounded-2xl text-xl">▶ Run</button><button class="reset-puzzle py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">↻ Reset</button></div><div class="puzzle-feedback hidden text-center font-bold text-xl"></div></div>
+                    <div class="puzzle-board bg-indigo-950 border-indigo-500"></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="submarine">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Puzzle 4: Ocean Quest 🌊</h1><p class="text-slate-600 mt-3 text-xl font-medium">Bantu kapal selam menuju mutiara. Hindari ubur-ubur!</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="submarine">
+                    <div class="space-y-4"><div class="bg-blue-50 p-5 rounded-2xl border-2 border-blue-200"><div class="font-bold text-blue-800 mb-3 text-xl">Blocks</div><div class="block-pool flex gap-3 flex-wrap"></div></div><div class="bg-green-50 p-5 rounded-2xl border-2 border-green-200"><div class="font-bold text-green-700 mb-3 text-xl">Program Area</div><div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-green-200"></div></div><div class="grid grid-cols-2 gap-3"><button class="run-puzzle py-4 bg-cyan-600 text-white font-bold rounded-2xl text-xl">▶ Run</button><button class="reset-puzzle py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">↻ Reset</button></div><div class="puzzle-feedback hidden text-center font-bold text-xl"></div></div>
+                    <div class="puzzle-board bg-cyan-100 border-cyan-400"></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="grid md:grid-cols-[.8fr_1.2fr] gap-8 items-center bg-white p-10 rounded-[3rem] border-2 border-slate-200 shadow-lg max-w-5xl w-full">
+                    <div class="text-center text-[10rem] animate-float">🐱</div>
+                    <div><h1 class="text-6xl font-extrabold mb-5 text-brand-orange">Have You Heard of Scratch?</h1><p class="text-2xl text-slate-700 leading-relaxed">Scratch adalah tempat kita menyusun program dan melakukan coding untuk membuat game, animasi, cerita, dan berbagai digital product.</p></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">This Is Scratch! 🐱</h1><p class="text-2xl text-slate-500 mt-3">Di sinilah kita akan menyusun blok coding.</p></div>
+                <img src="https://i0.wp.com/teachingforward.net/wp-content/uploads/2018/10/interface-overview.png?resize=620%2C379&ssl=1" alt="Scratch interface" class="w-full max-w-4xl rounded-3xl shadow-xl border-4 border-slate-200">
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Scratch Project Gallery ✨</h1><p class="text-xl text-slate-500 mt-3">Berikut contoh project yang bisa dibuat di Scratch.</p></div>
+                <div class="grid grid-cols-2 gap-5 w-full max-w-5xl">
+                    <img src="https://www.cyjsproutlake.org/wp-content/uploads/2020/06/Scratch-gif.gif" alt="Scratch project example 1" class="w-full h-56 object-cover rounded-2xl border-4 border-blue-200 shadow-md">
+                    <img src="https://codingireland.blob.core.windows.net/images/steps%5Cflan%20cat%20run.gif" alt="Scratch project example 2" class="w-full h-56 object-cover rounded-2xl border-4 border-green-200 shadow-md">
+                    <img src="https://d1ng1bucl7w66k.cloudfront.net/ghost-blog/2021/06/geometry-dash.gif" alt="Scratch project example 3" class="w-full h-56 object-cover rounded-2xl border-4 border-orange-200 shadow-md">
+                    <img src="https://miro.medium.com/1*qLBxLqmMP0IM-fymkgy8mA.gif" alt="Scratch project example 4" class="w-full h-56 object-cover rounded-2xl border-4 border-purple-200 shadow-md">
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[9rem] mb-5 animate-float">🐱💻</div>
+                <h1 class="text-6xl font-extrabold mb-5">Next Week: Let’s Use Scratch!</h1>
+                <p class="text-3xl text-slate-600 max-w-3xl">Minggu depan kita akan membuka Scratch, memilih karakter, dan mulai membuat project pertama.</p>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-2xl text-slate-500 mt-3">Pilih jawaban yang paling tepat.</p></div>
+                <div class="bg-white p-10 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl">
+                    <div class="quiz-q" id="s1-q1"><h2 class="text-3xl font-bold mb-6">1. Coding adalah kegiatan untuk...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q1')">A. Menyalakan komputer saja</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s1-q1')">B. Menyusun instruksi untuk membuat program</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q1')">C. Menggambar tanpa aturan</button></div><button id="s1-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s1-q1','s1-q2')">Next ➡️</button></div>
+                    <div class="quiz-q hidden" id="s1-q2"><h2 class="text-3xl font-bold mb-6">2. Urutan instruksi yang jelas disebut...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q2')">A. Monitor</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s1-q2')">B. Algoritma</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q2')">C. Password</button></div><button id="s1-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s1-q2','s1-q3')">Next ➡️</button></div>
+                    <div class="quiz-q hidden" id="s1-q3"><h2 class="text-3xl font-bold mb-6">3. Platform yang akan kita gunakan untuk coding adalah...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q3')">A. Calculator</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s1-q3')">B. Scratch</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q3')">C. Camera</button></div><button id="s1-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s1-q3','s1-done')">Finish ✅</button></div>
+                    <div class="quiz-q hidden text-center py-8" id="s1-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Great Job!</h2></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat hal penting dari Session 1.</p></div>
+                <div class="grid grid-cols-2 gap-6 w-full max-w-5xl">
+                    <div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">🖥️</div><h3 class="text-2xl font-bold">Computer Parts</h3><p class="text-lg mt-2">Monitor, CPU, keyboard, dan mouse punya fungsi berbeda.</p></div>
+                    <div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">🛡️</div><h3 class="text-2xl font-bold">Digital Safety</h3><p class="text-lg mt-2">Gunakan perangkat dengan aman dan hati-hati.</p></div>
+                    <div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">👩‍💻</div><h3 class="text-2xl font-bold">Coding</h3><p class="text-lg mt-2">Coding berarti memberi instruksi kepada komputer.</p></div>
+                    <div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">🧩</div><h3 class="text-2xl font-bold">Algorithm</h3><p class="text-lg mt-2">Algoritma adalah urutan langkah yang jelas.</p></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center feedback-slide">
+                <h1 class="text-5xl font-extrabold mb-12 text-center">How Do You Feel Today? 💖</h1>
+                <div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">😍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">😊</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">😴</button></div>
+                <div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Terima kasih sudah berbagi! 🌟</div></div>
+            </div>
+
+            <!-- ============================== SESSION 2 ============================== -->
+            <div class="slide s2 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-purple rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto"><i class="fa-solid fa-rocket"></i></div>
+                <h2 class="text-slate-400 font-bold tracking-widest uppercase mb-3 text-xl">Digital Class Preparation</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">App and Device<br><span class="text-4xl text-brand-orange font-medium mt-3 inline-block">Exploration</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">Hari ini kita akan membuka Scratch, menjelajahi fiturnya, dan membuat project sederhana. 🐱</p>
+            </div>
+
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-9 text-center"><h1 class="text-5xl md:text-6xl font-extrabold">Today’s Mission 📋</h1><p class="text-2xl text-slate-500 mt-4">Ikuti langkahnya bersama guru.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold">
+                    <div class="bg-blue-100 p-8 rounded-[2.5rem] border-2 border-blue-200 flex items-center gap-6"><div class="text-6xl">🔑</div><div>Sign In to Scratch</div></div>
+                    <div class="bg-green-100 p-8 rounded-[2.5rem] border-2 border-green-200 flex items-center gap-6"><div class="text-6xl">🔍</div><div>Explore the Workspace</div></div>
+                    <div class="bg-orange-100 p-8 rounded-[2.5rem] border-2 border-orange-200 flex items-center gap-6"><div class="text-6xl">🎭</div><div>Choose Sprite & Backdrop</div></div>
+                    <div class="bg-purple-100 p-8 rounded-[2.5rem] border-2 border-purple-200 flex items-center gap-6"><div class="text-6xl">💾</div><div>Share Your Project</div></div>
+                </div>
+            </div>
+
+            <div class="slide s2 flex-col items-center justify-center text-center">
+                <div class="text-[9rem] mb-5">🧩</div><h1 class="text-6xl font-extrabold mb-5">Masih Ingat Algoritma?</h1>
+                <div class="bg-yellow-50 border-2 border-yellow-300 rounded-2xl px-8 py-5 text-2xl max-w-4xl"><b>Hint:</b> urutan langkah yang jelas, rapi, dan digunakan untuk menyelesaikan tugas.</div>
+            </div>
+
+            <div class="slide s2 flex-col items-center justify-center text-center">
+                <div class="text-[9rem] mb-5">👩‍💻🐱</div><h1 class="text-6xl font-extrabold mb-5">Masih Ingat Coding?</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl">Coding adalah menyusun instruksi untuk komputer. Hari ini kita mulai coding di <span class="text-brand-orange font-bold">Scratch</span>!</p>
+            </div>
+
+            <div class="slide s2 flex-col items-center">
+                <h1 class="text-5xl font-extrabold text-center mb-10">Waktunya Buka <span class="text-brand-orange">Scratch</span></h1>
+                <div class="grid md:grid-cols-3 gap-6 w-full max-w-6xl">
+                    <div class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 text-center"><div class="bg-teal-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto -mt-12 mb-4 border-4 border-white">1</div><h3 class="text-2xl font-bold mb-4">Buka Situsnya</h3><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/278526dd-7ac6-489c-9167-ffd5ef8b4b66.png" alt="Buka scratch.mit.edu" class="w-full h-44 object-cover rounded-xl mb-4 border"><p class="text-xl text-slate-600">Ketik <strong>scratch.mit.edu</strong> di browsermu.</p></div>
+                    <div class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 text-center"><div class="bg-lime-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto -mt-12 mb-4 border-4 border-white">2</div><h3 class="text-2xl font-bold mb-4">Klik Sign In</h3><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/164de3cf-bf89-4167-95ff-1ab1ec2d4496.png" alt="Klik Sign In" class="w-full h-44 object-cover rounded-xl mb-4 border"><p class="text-xl text-slate-600">Temukan dan klik tombol biru <strong>Sign In</strong>.</p></div>
+                    <div class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 text-center"><div class="bg-yellow-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto -mt-12 mb-4 border-4 border-white">3</div><h3 class="text-2xl font-bold mb-4">Akses Akun</h3><div class="w-full h-44 rounded-xl mb-4 bg-yellow-50 border-2 border-dashed border-yellow-400 flex flex-col items-center justify-center gap-3"><div class="bg-white px-4 py-2 rounded-full border w-4/5 text-left">👤 Username...</div><div class="bg-white px-4 py-2 rounded-full border w-4/5 text-left">🔒 Password...</div><div class="bg-teal-600 text-white px-4 py-2 rounded-full w-4/5 font-bold">Sign in</div></div><p class="text-xl text-slate-600">Masukkan <strong>Username</strong> & <strong>Password</strong>.</p></div>
+                </div>
+            </div>
+
+            <div class="slide s2 flex-col items-center justify-center">
+                <div class="w-full max-w-4xl"><img src="https://i0.wp.com/teachingforward.net/wp-content/uploads/2018/10/interface-overview.png?resize=620%2C379&ssl=1" alt="Area kerja Scratch" class="w-full rounded-2xl shadow-xl border-4 border-slate-200"></div>
+                <p class="text-2xl mt-6 max-w-4xl text-center">Berikut area kerja tempat kita akan berkreasi!</p>
+            </div>
+
+            <div class="slide s2 flex-col items-center justify-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">1. Mengatur Lembar Kerja</h1>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgTBrc_3RvzybwJZ93X_wJEzofe-BYkbii-Q60ZuVe0IuyGc-XV8V6nc8&s=10" alt="Menghapus sprite" class="w-full max-w-xl rounded-2xl shadow-lg border-4 border-slate-200">
+                <p class="text-2xl mt-6 max-w-4xl text-center">Hapus karakter kucing dengan mengklik ikon tempat sampah (X) agar panggung bersih.</p>
+            </div>
+
+            <div class="slide s2 flex-col items-center justify-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">2. Memilih Karakter</h1>
+                <div class="w-full max-w-2xl rounded-2xl shadow-lg overflow-hidden border-4 border-slate-200"><div class="media-frame"><iframe id="js_video_iframe_13" src="https://jumpshare.com/embed/r6Vcq0arPI15UiJqS7DQ" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div></div>
+                <p class="text-2xl mt-6 max-w-4xl text-center">Klik tombol biru <strong>Choose a Sprite</strong>. Pilih karakter yang kamu sukai!</p>
+            </div>
+
+            <div class="slide s2 flex-col items-center justify-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">3. Memilih Tempat</h1>
+                <div class="w-full max-w-2xl rounded-2xl shadow-lg overflow-hidden border-4 border-slate-200"><div class="media-frame"><iframe id="js_video_iframe" src="https://jumpshare.com/embed/f3btNglHQgxAvdMIvVKp" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div></div>
+                <p class="text-2xl mt-6 max-w-4xl text-center">Klik tombol <strong>Choose a Backdrop</strong> di pojok kanan bawah untuk suasana baru.</p>
+            </div>
+
+            <div class="slide s2 flex-col items-center">
+                <h1 class="text-5xl font-extrabold text-center mb-4">Tantangan Inovasi 🚀</h1>
+                <p class="text-xl text-center max-w-4xl mb-5 leading-relaxed">Saatnya berkreasi! Pilih satu atau lebih <strong>Sprite</strong> (karakter) dan sebuah <strong>Backdrop</strong> (tempat) yang cocok sehingga mereka memiliki sebuah cerita yang seru.</p>
+                <div class="bg-white rounded-3xl p-5 shadow-lg w-full max-w-2xl border-2 border-slate-200"><h3 class="text-teal-700 text-center text-xl font-bold mb-4">Contoh Cerita: Penyihir Malam di Hutan Ajaib 🧙‍♀️✨</h3><div class="w-full h-72 rounded-xl bg-gradient-to-b from-[#190a42] to-[#4b0082] border-2 border-slate-800 relative overflow-hidden"><div class="absolute top-3 right-6 text-5xl">🌕</div><div class="absolute top-10 left-12 text-2xl" style="animation:pulseStar 2s infinite alternate">✨</div><div class="absolute top-20 right-24 text-xl" style="animation:pulseStar 1.5s infinite alternate">✨</div><div class="absolute bottom-0 left-0 w-full h-14 bg-[#0b2210] border-t-2 border-green-900"></div><div class="absolute bottom-8 left-5 text-5xl">🌲</div><div class="absolute bottom-7 right-6 text-6xl">🌲</div><div class="absolute top-16 left-36 text-[7rem] z-10" style="animation:floatSprite 3s infinite ease-in-out">🧙‍♀️</div><div class="absolute top-12 right-40 text-5xl z-10" style="animation:floatSprite 2.5s infinite ease-in-out reverse">🦇</div></div></div>
+            </div>
+
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Menyimpan Karyamu 💾</h1><p class="text-2xl text-slate-500 mt-3">Saat project selesai, klik <strong>Share</strong> agar project tersimpan dan bisa dibuka kembali.</p></div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Tombol Share Scratch" class="w-full max-w-4xl rounded-3xl border-4 border-green-300 shadow-xl">
+                <div class="mt-5 bg-green-50 border-2 border-green-200 px-7 py-4 rounded-2xl text-xl font-bold text-green-800">✅ Before you leave: Share your project!</div>
+            </div>
+
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat hal penting dari Session 2.</p></div>
+                <div class="grid grid-cols-2 gap-6 w-full max-w-5xl">
+                    <div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">🔑</div><h3 class="text-2xl font-bold">Sign In</h3><p class="text-lg mt-2">Buka scratch.mit.edu dan masuk dengan akun.</p></div>
+                    <div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">🖥️</div><h3 class="text-2xl font-bold">Workspace</h3><p class="text-lg mt-2">Kenali area tempat kita berkreasi.</p></div>
+                    <div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">🎭</div><h3 class="text-2xl font-bold">Sprite & Backdrop</h3><p class="text-lg mt-2">Pilih karakter dan tempat untuk ceritamu.</p></div>
+                    <div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">💾</div><h3 class="text-2xl font-bold">Share</h3><p class="text-lg mt-2">Bagikan project agar tersimpan dan bisa dibuka lagi.</p></div>
+                </div>
+            </div>
+
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-2xl text-slate-500 mt-3">Coba jawab pertanyaan tentang Scratch.</p></div>
+                <div class="bg-white p-10 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl">
+                    <div class="quiz-q" id="s2-q1"><h2 class="text-3xl font-bold mb-6">1. Alamat website Scratch adalah...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s2-q1')">A. scratch.mit.edu</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q1')">B. scratch.com</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q1')">C. coding.edu</button></div><button id="s2-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s2-q1','s2-q2')">Next ➡️</button></div>
+                    <div class="quiz-q hidden" id="s2-q2"><h2 class="text-3xl font-bold mb-6">2. Tombol untuk memilih karakter adalah...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s2-q2')">A. Choose a Sprite</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q2')">B. Choose a Backdrop</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q2')">C. Sign Out</button></div><button id="s2-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s2-q2','s2-q3')">Next ➡️</button></div>
+                    <div class="quiz-q hidden" id="s2-q3"><h2 class="text-3xl font-bold mb-6">3. Agar project tersimpan dan dapat dibuka lagi, kita perlu...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q3')">A. Menutup browser langsung</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s2-q3')">B. Klik Share</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q3')">C. Menghapus sprite</button></div><button id="s2-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s2-q3','s2-done')">Finish ✅</button></div>
+                    <div class="quiz-q hidden text-center py-8" id="s2-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Great Job!</h2></div>
+                </div>
+            </div>
+
+            <div class="slide s2 flex-col items-center justify-center feedback-slide">
+                <h1 class="text-5xl font-extrabold mb-12 text-center">How Do You Feel Today? 💖</h1>
+                <div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">😍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">😊</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">😴</button></div>
+                <div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Terima kasih sudah berbagi! 🌟</div></div>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 h-20 bg-white/90 backdrop-blur border-t border-slate-200 flex items-center justify-between px-10 z-50">
+        <div class="text-lg font-bold text-slate-400"><span id="meetingTitle">Session 1: Device and App Introduction</span></div>
+        <div class="flex items-center gap-6">
+            <button id="prevBtn" class="w-14 h-14 rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition disabled:opacity-50 disabled:cursor-not-allowed text-xl"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="font-mono font-bold text-slate-600 min-w-[5rem] px-2 text-center text-2xl"><span id="currentSlide">1</span> / <span id="totalSlides">0</span></div>
+            <button id="nextBtn" class="w-14 h-14 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg shadow-orange-500/30 hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed text-xl"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        let currentSession = '1';
+        let currentSlideIndex = 0;
+        let activeSlides = [];
+
+        function updateView() {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            activeSlides = [...document.querySelectorAll(`.slide.s${currentSession}`)];
+            if (currentSlideIndex >= activeSlides.length) currentSlideIndex = activeSlides.length - 1;
+            if (activeSlides[currentSlideIndex]) activeSlides[currentSlideIndex].classList.add('active');
+            document.getElementById('currentSlide').innerText = currentSlideIndex + 1;
+            document.getElementById('totalSlides').innerText = activeSlides.length;
+            document.getElementById('prevBtn').disabled = currentSlideIndex === 0;
+            document.getElementById('nextBtn').disabled = currentSlideIndex === activeSlides.length - 1;
+        }
+
+        document.getElementById('meetingSelector').addEventListener('change', e => {
+            currentSession = e.target.value;
+            currentSlideIndex = 0;
+            document.getElementById('meetingTitle').innerText = e.target.options[e.target.selectedIndex].text;
+            updateView();
+        });
+        document.getElementById('prevBtn').addEventListener('click', () => { if (currentSlideIndex > 0) { currentSlideIndex--; updateView(); } });
+        document.getElementById('nextBtn').addEventListener('click', () => { if (currentSlideIndex < activeSlides.length - 1) { currentSlideIndex++; updateView(); } });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' && currentSlideIndex < activeSlides.length - 1) { currentSlideIndex++; updateView(); }
+            if (e.key === 'ArrowLeft' && currentSlideIndex > 0) { currentSlideIndex--; updateView(); }
+        });
+
+        function checkQuiz(btn, isCorrect, qId) {
+            const buttons = btn.parentElement.querySelectorAll('.quiz-btn');
+            buttons.forEach(b => b.disabled = true);
+            if (isCorrect) {
+                btn.classList.add('bg-green-100','border-green-400','text-green-900');
+                btn.innerHTML += ' <span class="float-right">✅ Benar!</span>';
+            } else {
+                btn.classList.add('bg-red-100','border-red-400','text-red-900');
+                btn.innerHTML += ' <span class="float-right">❌ Coba ingat lagi</span>';
+                buttons.forEach(b => { if (b.dataset.correct === 'true') { b.classList.add('bg-green-100','border-green-400','text-green-900'); b.innerHTML += ' <span class="float-right">👈 Jawaban</span>'; } });
+            }
+            document.getElementById(qId + '-next')?.classList.remove('hidden');
+        }
+        function nextQuiz(currentQ, nextQ) { document.getElementById(currentQ).classList.add('hidden'); document.getElementById(nextQ).classList.remove('hidden'); }
+
+        function submitFeedback(btn) {
+            const slide = btn.closest('.feedback-slide');
+            slide.querySelector('.feedback-options').classList.add('hidden');
+            const result = slide.querySelector('.feedback-result');
+            result.classList.remove('hidden');
+            result.classList.add('flex');
+            result.querySelector('.selected-emoji').textContent = btn.textContent.trim();
+        }
+
+        function initSortable() {
+            const pool = document.getElementById('sortPool');
+            let dragSrc = null;
+            pool.querySelectorAll('.sort-item').forEach(item => {
+                item.addEventListener('dragstart', function(e) { dragSrc = this; e.dataTransfer.effectAllowed = 'move'; setTimeout(() => this.style.opacity = '.4', 0); });
+                item.addEventListener('dragend', function() { this.style.opacity = '1'; pool.querySelectorAll('.sort-item').forEach(i => i.classList.remove('sort-over')); });
+                item.addEventListener('dragover', function(e) { e.preventDefault(); pool.querySelectorAll('.sort-item').forEach(i => i.classList.remove('sort-over')); if (this !== dragSrc) this.classList.add('sort-over'); });
+                item.addEventListener('drop', function(e) { e.preventDefault(); if (dragSrc !== this) { const items = [...pool.querySelectorAll('.sort-item')]; const a = items.indexOf(dragSrc); const b = items.indexOf(this); pool.insertBefore(dragSrc, a < b ? this.nextSibling : this); pool.querySelectorAll('.sort-item').forEach(i => { i.classList.remove('sort-correct','sort-wrong'); i.querySelector('.sort-num').textContent='?'; }); document.getElementById('sortFeedback').classList.add('hidden'); } });
+            });
+        }
+        function checkSortOrder() {
+            const items = [...document.querySelectorAll('#sortPool .sort-item')];
+            let correct = true;
+            items.forEach((item, idx) => { const pos = idx + 1; item.querySelector('.sort-num').textContent = pos; item.classList.remove('sort-correct','sort-wrong'); if (+item.dataset.order === pos) item.classList.add('sort-correct'); else { item.classList.add('sort-wrong'); correct = false; } });
+            const fb = document.getElementById('sortFeedback'); fb.classList.remove('hidden','text-green-600','text-red-500'); fb.textContent = correct ? 'Kerja bagus! Urutannya sudah logis. ✅' : 'Masih ada langkah yang tertukar. Coba lagi! 🤔'; fb.classList.add(correct ? 'text-green-600' : 'text-red-500');
+        }
+
+        const puzzleData = {
+            rabbit: { rows:4, cols:4, actor:'🐰', goal:'🥕', start:[0,3], end:[3,3], obstacles:[[1,3]], obstacleEmoji:'💧', available:['up','right','right','right','down','left'] },
+            goat: { rows:4, cols:5, actor:'🐐', goal:'🌿', start:[0,0], end:[4,3], obstacles:[[1,0],[1,1],[3,2]], obstacleEmoji:'🪨', available:['down','down','right','right','down','right','right','up','left'] },
+            spaceship: { rows:5, cols:5, actor:'🚀', goal:'🌕', start:[0,4], end:[4,0], obstacles:[[1,4],[1,3],[3,2],[3,1]], obstacleEmoji:'☄️', available:['up','up','right','right','up','up','right','right','down','left'] },
+            submarine: { rows:5, cols:5, actor:'🚤', goal:'🦪', start:[0,0], end:[4,4], obstacles:[[2,0],[2,1],[1,3],[3,3]], obstacleEmoji:'🪼', available:['down','down','right','right','down','right','right','down','up','left'] }
+        };
+        const puzzleStates = {};
+        const labels = { up:'⬆️ move up', down:'⬇️ move down', left:'⬅️ move left', right:'➡️ move right' };
+
+        function createBlock(dir) {
+            const block = document.createElement('div');
+            block.className = 'scratch-block block-motion';
+            block.draggable = true;
+            block.dataset.dir = dir;
+            block.textContent = labels[dir];
+            block.addEventListener('dragstart', e => { window.draggedPuzzleBlock = block; e.dataTransfer.effectAllowed = 'move'; });
+            block.addEventListener('click', () => {
+                const shell = block.closest('.puzzle-shell');
+                const zone = shell.querySelector('.program-zone');
+                if (block.parentElement === zone) shell.querySelector('.block-pool').appendChild(block); else zone.appendChild(block);
+            });
+            return block;
+        }
+
+        function renderPuzzle(name) {
+            const data = puzzleData[name];
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            const board = shell.querySelector('.puzzle-board');
+            const pos = puzzleStates[name].pos;
+            board.style.gridTemplateColumns = `repeat(${data.cols}, 64px)`;
+            board.innerHTML = '';
+            for (let y=0; y<data.rows; y++) {
+                for (let x=0; x<data.cols; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'puzzle-cell path';
+                    const isObstacle = data.obstacles.some(([ox,oy]) => ox===x && oy===y);
+                    if (isObstacle) { cell.classList.add('obstacle'); cell.textContent = data.obstacleEmoji; }
+                    if (x===data.end[0] && y===data.end[1]) { cell.classList.add('goal'); cell.textContent = data.goal; }
+                    if (x===pos[0] && y===pos[1]) { cell.classList.add('start'); cell.textContent = data.actor; }
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function initPuzzle(name) {
+            const data = puzzleData[name];
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            puzzleStates[name] = { pos:[...data.start], running:false };
+            const pool = shell.querySelector('.block-pool');
+            const zone = shell.querySelector('.program-zone');
+            data.available.forEach(dir => pool.appendChild(createBlock(dir)));
+            [pool, zone].forEach(area => {
+                area.addEventListener('dragover', e => e.preventDefault());
+                area.addEventListener('drop', e => { e.preventDefault(); if (window.draggedPuzzleBlock && window.draggedPuzzleBlock.closest('.puzzle-shell')===shell) area.appendChild(window.draggedPuzzleBlock); });
+            });
+            shell.querySelector('.run-puzzle').addEventListener('click', () => runPuzzle(name));
+            shell.querySelector('.reset-puzzle').addEventListener('click', () => resetPuzzle(name));
+            renderPuzzle(name);
+        }
+
+        function resetPuzzle(name) {
+            const data = puzzleData[name];
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            puzzleStates[name].pos = [...data.start];
+            const pool = shell.querySelector('.block-pool');
+            const zone = shell.querySelector('.program-zone');
+            [...zone.children].forEach(block => pool.appendChild(block));
+            shell.querySelector('.puzzle-feedback').classList.add('hidden');
+            renderPuzzle(name);
+        }
+
+        function runPuzzle(name) {
+            const data = puzzleData[name];
+            const state = puzzleStates[name];
+            if (state.running) return;
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            const blocks = [...shell.querySelectorAll('.program-zone .scratch-block')];
+            const feedback = shell.querySelector('.puzzle-feedback');
+            feedback.classList.add('hidden');
+            if (!blocks.length) { feedback.textContent = 'Masukkan blok ke Program Area dulu. 👆'; feedback.className = 'puzzle-feedback text-center font-bold text-xl text-red-500'; return; }
+            state.running = true;
+            state.pos = [...data.start];
+            renderPuzzle(name);
+            let failed = false;
+            blocks.forEach((block, index) => {
+                setTimeout(() => {
+                    if (failed) return;
+                    const [x,y] = state.pos;
+                    const dir = block.dataset.dir;
+                    let nx=x, ny=y;
+                    if (dir==='up') ny--; if (dir==='down') ny++; if (dir==='left') nx--; if (dir==='right') nx++;
+                    const outside = nx<0 || ny<0 || nx>=data.cols || ny>=data.rows;
+                    const hitObstacle = data.obstacles.some(([ox,oy]) => ox===nx && oy===ny);
+                    if (outside || hitObstacle) { failed = true; }
+                    else state.pos = [nx,ny];
+                    renderPuzzle(name);
+                    block.classList.add('ring-4','ring-yellow-300');
+                    setTimeout(() => block.classList.remove('ring-4','ring-yellow-300'), 350);
+                    if (index===blocks.length-1 || failed) {
+                        setTimeout(() => {
+                            state.running = false;
+                            const success = !failed && state.pos[0]===data.end[0] && state.pos[1]===data.end[1];
+                            feedback.className = `puzzle-feedback text-center font-bold text-xl ${success ? 'text-green-600' : 'text-red-500'}`;
+                            feedback.textContent = success ? 'Program berhasil! 🎉' : failed ? 'Oops! Karakter menabrak rintangan. Susun ulang bloknya. 🚧' : 'Belum sampai tujuan. Coba cek urutannya lagi. 🤔';
+                        }, 450);
+                    }
+                }, index * 550);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateView();
+            initSortable();
+            Object.keys(puzzleData).forEach(initPuzzle);
+        });
+    </script>
+</body>
+</html>
