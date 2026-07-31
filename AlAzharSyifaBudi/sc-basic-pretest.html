@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pre-Test Scratch SD | Ruangguru Coding</title>
+<link rel="icon" href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --purple:#7c3aed;
+    --purple2:#9333ea;
+    --orange:#f59e0b;
+    --orange2:#ff8c1a;
+    --blue:#3b82f6;
+    --cyan:#06b6d4;
+    --green:#22c55e;
+    --red:#ef4444;
+    --yellow:#facc15;
+    --ink:#273449;
+    --muted:#64748b;
+    --card:#ffffff;
+    --border:#e2e8f0;
+    --input:#f8fafc;
+    --hover:#fff7ed;
+    --shadow:0 18px 46px rgba(67, 34, 117, .10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+    font-family:'Fredoka',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 86% 12%,rgba(245,158,11,.14) 0 10%,transparent 11%),
+      radial-gradient(circle at 12% 82%,rgba(124,58,237,.10) 0 15%,transparent 16%),
+      linear-gradient(135deg,#fff7ed,#f5f3ff 55%,#eff6ff);
+    background-attachment:fixed;
+    line-height:1.5;
+}
+.brand{
+    position:fixed;left:22px;top:18px;z-index:1000;
+    display:flex;align-items:center;gap:14px;padding:9px 15px;
+    background:rgba(255,255,255,.97);border-radius:20px;
+    box-shadow:0 10px 28px rgba(61,30,105,.13);
+}
+.brand img{object-fit:contain;width:auto}
+.brand .k{height:45px;max-width:170px}.brand .r{height:38px;max-width:145px}
+.brand i{width:2px;height:34px;background:#e2e8f0;border-radius:10px}
+.container{max-width:860px;margin:100px auto 60px;padding:0 20px}
+.card{background:var(--card);border:2px solid var(--border);border-radius:26px;padding:34px;box-shadow:var(--shadow);margin-bottom:24px}
+.header-card{
+    background:linear-gradient(135deg,#6d28d9,#9333ea 52%,#f59e0b);
+    color:#fff;text-align:center;position:relative;overflow:hidden;
+}
+.header-card::before{content:"";position:absolute;width:220px;height:220px;border:28px solid rgba(255,255,255,.08);border-radius:50%;right:-70px;top:-80px}
+.header-card::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-32px;height:48px;background:#ffb31a;transform:rotate(-2deg);opacity:.95}
+.header-logo{height:120px;max-width:260px;object-fit:contain;margin:0 auto 10px;display:block;position:relative;z-index:2;filter:drop-shadow(0 8px 10px rgba(0,0,0,.18));animation:float 3.2s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.header-card h1{color:#fff;font-size:clamp(2rem,4vw,3rem);line-height:1.1;margin-bottom:12px;position:relative;z-index:2}
+.header-card p{color:rgba(255,255,255,.93);font-size:1.13rem;max-width:640px;margin:0 auto 20px;position:relative;z-index:2}
+.meta-chips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:2;margin-bottom:8px}
+.meta-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);padding:8px 14px;border-radius:999px;font-weight:700}
+.form-group{display:flex;flex-direction:column;margin-bottom:22px}.form-group:last-child{margin-bottom:0}
+.form-group label{font-weight:700;color:var(--purple);margin-bottom:8px;font-size:1.07rem}
+.form-group input{font-family:'Fredoka',sans-serif;font-size:1.05rem;padding:14px 18px;border-radius:16px;border:2px solid var(--border);background:var(--input);color:var(--ink);outline:none;transition:.2s}
+.form-group input:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(124,58,237,.14)}
+.form-group input::placeholder{color:#94a3b8}.note{font-size:.86rem;color:var(--muted);margin-top:6px}
+.progress-wrap{display:none;position:sticky;top:12px;z-index:900;background:rgba(255,255,255,.96);border:2px solid #ede9fe;border-radius:18px;padding:12px 16px;margin-bottom:18px;box-shadow:0 8px 22px rgba(76,29,149,.12);backdrop-filter:blur(8px)}
+.progress-head{display:flex;justify-content:space-between;font-weight:700;color:#6d28d9;margin-bottom:8px}.progress-track{height:12px;background:#ede9fe;border-radius:999px;overflow:hidden}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#8b5cf6,#f59e0b);transition:.25s}
+.question-number{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:white;font-weight:700;margin-right:10px;box-shadow:0 6px 12px rgba(124,58,237,.22)}
+.question-title{font-size:1.28rem;font-weight:600;color:#5b21b6;margin-bottom:18px;line-height:1.45}
+.q-image{max-width:100%;max-height:320px;border-radius:18px;margin:0 auto 20px;display:block;border:2px solid #e9d5ff;background:#fff;padding:8px;object-fit:contain}
+.options{display:flex;flex-direction:column;gap:12px}.grid-options{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.option-label{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:17px;border:2px solid var(--border);background:var(--input);color:var(--ink);cursor:pointer;font-weight:500;font-size:1.05rem;transition:.2s}
+.option-label:hover{border-color:#a78bfa;transform:translateY(-2px);background:#faf5ff}.option-label.selected{border-color:#8b5cf6;background:#f5f3ff;box-shadow:0 0 0 4px rgba(139,92,246,.12)}
+.option-label input[type=radio]{display:none}.radio-custom{width:22px;height:22px;border:2px solid #cbd5e1;border-radius:50%;position:relative;flex-shrink:0;transition:.2s}
+.option-label.selected .radio-custom{border-color:#8b5cf6}.option-label.selected .radio-custom::after{content:"";position:absolute;left:4px;top:4px;width:10px;height:10px;background:#8b5cf6;border-radius:50%}
+.grid-options .option-label{flex-direction:column;align-items:flex-start;padding:18px;min-height:160px}.option-head{display:flex;gap:10px;align-items:center;font-weight:700;color:#5b21b6}.option-img{width:100%;height:120px;object-fit:contain;margin-top:10px;border-radius:10px;align-self:center;background:#fff;padding:8px}
+.btn{border:0;padding:16px 32px;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#f59e0b);color:#fff;box-shadow:0 9px 18px rgba(124,58,237,.24);font-size:1.2rem;font-family:'Fredoka',sans-serif;font-weight:700;cursor:pointer;transition:.2s;display:inline-block;text-align:center;width:100%}
+.btn:hover{transform:translateY(-3px) scale(1.01)}.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn2{border:0;padding:14px 24px;border-radius:16px;background:#e2e8f0;color:#5b21b6;font-size:1.1rem;font-family:'Fredoka',sans-serif;font-weight:700;cursor:pointer;transition:.2s;flex:1;text-align:center}.btn2:hover{background:#cbd5e1}
+.error-msg{color:var(--red);font-size:.92rem;font-weight:600;margin-top:8px;display:none}.config-warning{display:none;background:#fff7ed;border:2px solid #fdba74;color:#9a3412;padding:14px 16px;border-radius:16px;margin-top:16px;font-weight:600}
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(31,18,53,.72);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.3s ease}.modal-overlay.show{opacity:1;visibility:visible}
+.modal-content{background:var(--card);border-radius:28px;padding:38px;width:min(90vw,460px);text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35);transform:translateY(20px) scale(.95);transition:.3s ease;border:1px solid var(--border)}.modal-overlay.show .modal-content{transform:none}.modal-content h2{color:#6d28d9;font-size:1.9rem;margin-bottom:12px}.modal-content p{color:var(--ink);line-height:1.5;margin-bottom:20px;font-size:1.05rem}.modal-actions{display:flex;gap:14px}.modal-actions .btn{flex:1;padding:14px 24px;font-size:1.08rem}
+.loader{width:24px;height:24px;border:4px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;display:none;margin:0 auto}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:760px){.brand{left:12px;top:12px;padding:8px 12px}.brand .k{height:32px}.brand .r{height:28px}.container{margin-top:85px}.grid-options{grid-template-columns:1fr}.card{padding:24px}.modal-actions{flex-direction:column-reverse}.modal-actions .btn,.modal-actions .btn2{width:100%;flex:none}.header-logo{height:92px}.grid-options .option-label{min-height:140px}}
+</style>
+</head>
+<body>
+<div class="brand">
+  <img class="k" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png" alt="Kalananti">
+  <i></i>
+  <img class="r" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png" alt="Ruangguru Coding">
+</div>
+
+<main class="container">
+  <div class="card header-card">
+    <img class="header-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Scratchlogo.svg/960px-Scratchlogo.svg.png?_=20210622065930" alt="Scratch">
+    <h1>Pre-Test: Scratch Basic</h1>
+    <p>Mari uji pengetahuan awalmu mengenai Scratch dan pemrograman block! Kerjakan dengan jujur ya.</p>
+    <!-- <div class="meta-chips"><span class="meta-chip">Jenjang SD</span><span class="meta-chip">10 Soal</span><span class="meta-chip">Skor Maksimal 100</span></div> -->
+  </div>
+
+  <form id="quizForm" novalidate>
+    <input type="hidden" id="jenjang" value="SD">
+    <input type="hidden" id="program" value="Scratch">
+    <input type="hidden" id="prePost" value="Pre-Test">
+    <input type="hidden" id="dayKe" value="1">
+
+    <div class="card" id="studentDataCard">
+      <h2 style="color:#6d28d9;margin-bottom:20px;font-size:1.5rem">Data Diri Siswa</h2>
+      <div class="form-group">
+        <label for="studentName">Nama Lengkap</label>
+        <input type="text" id="studentName" placeholder="Ketik nama lengkapmu..." autocomplete="off" maxlength="100" required>
+        <div class="error-msg" id="nameError">Silakan isi nama lengkapmu.</div>
+      </div>
+      <div class="form-group">
+        <label for="studentClass">Kelas</label>
+        <input type="text" id="studentClass" placeholder="Contoh: 4A, 5B, atau 6C" autocomplete="off" maxlength="30" required>
+        <div class="note">Gunakan penulisan kelas yang diberikan oleh guru.</div>
+        <div class="error-msg" id="classError">Silakan isi kelasmu.</div>
+      </div>
+      <button type="button" class="btn" id="nextToQuestionsBtn" style="margin-top:15px">Mulai Mengerjakan 🚀</button>
+    </div>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-head"><span>Progress Jawaban</span><span id="progressText">0 / 10</span></div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+
+    <div id="questionsContainer" style="display:none">
+      <div class="card">
+        <div class="question-title"><span class="question-number">1</span>Karakter atau gambar yang bisa dipakai di Scratch disebut?</div>
+        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/68e6fe70-d310-4939-a158-dc6fa79a7c64.png" alt="Tampilan karakter Scratch" class="q-image">
+        <div class="options">
+          <label class="option-label"><input type="radio" name="ans1" value="A"><span class="radio-custom"></span>A. 🖼️ Backdrop</label>
+          <label class="option-label"><input type="radio" name="ans1" value="B"><span class="radio-custom"></span>B. 🧩 Sprite</label>
+          <label class="option-label"><input type="radio" name="ans1" value="C"><span class="radio-custom"></span>C. 🔊 Sound</label>
+          <label class="option-label"><input type="radio" name="ans1" value="D"><span class="radio-custom"></span>D. 🌐 Browser</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">2</span>Gambar manakah yang menunjukkan kegiatan seorang coder?</div>
+        <div class="options grid-options">
+          <label class="option-label"><input type="radio" name="ans2" value="A"><div class="option-head"><span class="radio-custom"></span>A</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/de6061f7-2d4c-44ae-a3b0-a97248dbb9d2.png" alt="Pilihan A" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans2" value="B"><div class="option-head"><span class="radio-custom"></span>B</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/c5452bba-4722-40de-8cd8-ef43bfcc3b4c.png" alt="Pilihan B" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans2" value="C"><div class="option-head"><span class="radio-custom"></span>C</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/1793e1f0-d9b6-4022-9f3a-3173366f077e.png" alt="Pilihan C" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans2" value="D"><div class="option-head"><span class="radio-custom"></span>D</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/9bd5c969-2b95-41ff-809b-4793d97616d1.png" alt="Pilihan D" class="option-img"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">3</span>Dengan susunan block berikut, Sprite akan bergerak sejauh berapa langkah?</div>
+        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/10404d69-2649-429b-a277-7d5020e00b97.png" alt="Susunan block gerak Scratch" class="q-image">
+        <div class="options">
+          <label class="option-label"><input type="radio" name="ans3" value="A"><span class="radio-custom"></span>A. 10 steps</label>
+          <label class="option-label"><input type="radio" name="ans3" value="B"><span class="radio-custom"></span>B. 20 steps</label>
+          <label class="option-label"><input type="radio" name="ans3" value="C"><span class="radio-custom"></span>C. 30 steps</label>
+          <label class="option-label"><input type="radio" name="ans3" value="D"><span class="radio-custom"></span>D. 40 steps</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">4</span>Block manakah yang dapat menyembunyikan Sprite?</div>
+        <div class="options grid-options">
+          <label class="option-label"><input type="radio" name="ans4" value="A"><div class="option-head"><span class="radio-custom"></span>A</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/9dc6a86c-27ad-4a66-a1e6-790554d5df5c.png" alt="Block A" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans4" value="B"><div class="option-head"><span class="radio-custom"></span>B</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/d1f4a093-0c52-4253-ae4c-257926f2b36d.png" alt="Block B" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans4" value="C"><div class="option-head"><span class="radio-custom"></span>C</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/a81f2d54-f870-433d-aa46-c0624bc8d919.png" alt="Block C" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans4" value="D"><div class="option-head"><span class="radio-custom"></span>D</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/afbf350d-ee7d-4c94-b9be-ea62d582628e.png" alt="Block D" class="option-img"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">5</span>Saat Sprite diklik, warnanya berubah. Susunan block mana yang paling cocok?</div>
+        <img src="https://cdn-web.ruangguru.com/file-uploader/e61bc0d6-19a0-4a31-896a-a39437715752.gif" alt="Contoh Sprite berubah warna" class="q-image">
+        <div class="options grid-options">
+          <label class="option-label"><input type="radio" name="ans5" value="A"><div class="option-head"><span class="radio-custom"></span>A</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/15a42d58-8849-4797-b133-475fa76ed49f.png" alt="Program A" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans5" value="B"><div class="option-head"><span class="radio-custom"></span>B</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/cffa8250-7ae4-4346-8f88-9fc94b931f9f.png" alt="Program B" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans5" value="C"><div class="option-head"><span class="radio-custom"></span>C</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/9129e375-c0b5-4334-a5c3-8f490fac604a.png" alt="Program C" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans5" value="D"><div class="option-head"><span class="radio-custom"></span>D</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/27f8354d-99a3-4fb1-b7ae-43106eede7e5.png" alt="Program D" class="option-img"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">6</span>Manakah yang bisa digunakan untuk membuat aplikasi atau project dengan coding?</div>
+        <div class="options grid-options">
+          <label class="option-label"><input type="radio" name="ans6" value="A"><div class="option-head"><span class="radio-custom"></span>A</div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Scratchlogo.svg/960px-Scratchlogo.svg.png?_=20210622065930" alt="Scratch" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans6" value="B"><div class="option-head"><span class="radio-custom"></span>B</div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Duolingo_logo.svg/960px-Duolingo_logo.svg.png" alt="Duolingo" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans6" value="C"><div class="option-head"><span class="radio-custom"></span>C</div><img src="https://1000logos.net/wp-content/uploads/2021/05/Google-logo.png" alt="Google" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans6" value="D"><div class="option-head"><span class="radio-custom"></span>D</div><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1280px-YouTube_Logo_2017.svg.png" alt="YouTube" class="option-img"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">7</span>Backdrop adalah...</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="ans7" value="A"><span class="radio-custom"></span>A. Tombol app</label>
+          <label class="option-label"><input type="radio" name="ans7" value="B"><span class="radio-custom"></span>B. Suara app</label>
+          <label class="option-label"><input type="radio" name="ans7" value="C"><span class="radio-custom"></span>C. Nilai progress</label>
+          <label class="option-label"><input type="radio" name="ans7" value="D"><span class="radio-custom"></span>D. Latar belakang app</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">8</span>Tombol manakah yang digunakan untuk menambahkan sound?</div>
+        <div class="options grid-options">
+          <label class="option-label"><input type="radio" name="ans8" value="A"><div class="option-head"><span class="radio-custom"></span>A</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/4c497df6-c710-4cbf-b389-37933d96f245.png" alt="Tombol A" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans8" value="B"><div class="option-head"><span class="radio-custom"></span>B</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/ba3a8f9a-e410-4f2a-b310-4889ff2db241.png" alt="Tombol B" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans8" value="C"><div class="option-head"><span class="radio-custom"></span>C</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/38083e58-69f6-4bb1-bd9a-a796d2ca4c5a.png" alt="Tombol C" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans8" value="D"><div class="option-head"><span class="radio-custom"></span>D</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/ead1ec10-938d-464e-90fd-c4e2c24897c8.png" alt="Tombol D" class="option-img"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">9</span>Block manakah yang digunakan untuk mengganti Backdrop?</div>
+        <div class="options grid-options">
+          <label class="option-label"><input type="radio" name="ans9" value="A"><div class="option-head"><span class="radio-custom"></span>A</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/3bd7a30f-a637-4245-afc0-9e08dc5c89fe.png" alt="Block A" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans9" value="B"><div class="option-head"><span class="radio-custom"></span>B</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/3d235389-e4a5-4523-9f3c-a2567023c676.png" alt="Block B" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans9" value="C"><div class="option-head"><span class="radio-custom"></span>C</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/d3882429-879a-4469-a21b-6dd34d3ee33b.png" alt="Block C" class="option-img"></label>
+          <label class="option-label"><input type="radio" name="ans9" value="D"><div class="option-head"><span class="radio-custom"></span>D</div><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/4e15b5b5-2add-4f28-b889-0a161c938f88.png" alt="Block D" class="option-img"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="question-title"><span class="question-number">10</span>Costume digunakan untuk...</div>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="ans10" value="A"><span class="radio-custom"></span>A. Menghapus project</label>
+          <label class="option-label"><input type="radio" name="ans10" value="B"><span class="radio-custom"></span>B. Mengubah tampilan Sprite</label>
+          <label class="option-label"><input type="radio" name="ans10" value="C"><span class="radio-custom"></span>C. Membuat akun</label>
+          <label class="option-label"><input type="radio" name="ans10" value="D"><span class="radio-custom"></span>D. Mengganti internet</label>
+        </div>
+      </div>
+
+      <div class="error-msg" id="formGlobalError" style="text-align:center;margin-bottom:16px;font-size:1.08rem">Harap jawab semua pertanyaan sebelum mengirim.</div>
+      <button type="button" class="btn" id="previewSubmitBtn">Submit Answers ✅</button>
+      <div class="config-warning" id="configWarning">URL Web App Google Apps Script masih kosong. Isi konstanta <strong>GOOGLE_SCRIPT_URL</strong> terlebih dahulu agar data bisa dikirim ke Spreadsheet.</div>
+    </div>
+  </form>
+</main>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-content">
+    <h2>Periksa Jawabanmu</h2>
+    <p>Apakah kamu yakin ingin mengirim jawaban? Setelah dikirim, jawaban tidak dapat diubah lagi.</p>
+    <div class="modal-actions"><button class="btn2" id="cancelSubmitBtn">Cek Lagi</button><button class="btn" id="finalSubmitBtn"><span id="btnText">Ya, Kirim</span><div class="loader" id="submitLoader"></div></button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="thankYouModal">
+  <div class="modal-content">
+    <h2 style="font-size:2.2rem">🎉 Jawaban Terkirim!</h2>
+    <p style="font-size:1.15rem;font-weight:500">Data pre-test kamu sudah berhasil disimpan.</p>
+    <p>Terima kasih sudah mengerjakan dengan jujur. Sampai jumpa di kelas Scratch!</p>
+    <button class="btn" id="doneBtn" style="margin-top:10px">Selesai</button>
+  </div>
+</div>
+
+<script>
+// Tempel URL deployment Web App Apps Script di antara tanda kutip.
+// Contoh: const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfy.../exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu0yCndeaxSk9xj_-zcPu4ZAOI-SS6XfBb68nuVCwFxuczVqZkI2c4Xr0csBtXccUauQ/exec';
+
+const correctAnswers={ans1:'B',ans2:'C',ans3:'D',ans4:'A',ans5:'D',ans6:'A',ans7:'D',ans8:'B',ans9:'D',ans10:'B'};
+const form=document.getElementById('quizForm');
+const nameInput=document.getElementById('studentName');
+const classInput=document.getElementById('studentClass');
+const nameError=document.getElementById('nameError');
+const classError=document.getElementById('classError');
+const globalError=document.getElementById('formGlobalError');
+const nextBtn=document.getElementById('nextToQuestionsBtn');
+const questions=document.getElementById('questionsContainer');
+const progressWrap=document.getElementById('progressWrap');
+const progressBar=document.getElementById('progressBar');
+const progressText=document.getElementById('progressText');
+const confirmModal=document.getElementById('confirmModal');
+const thankYouModal=document.getElementById('thankYouModal');
+const cancelSubmitBtn=document.getElementById('cancelSubmitBtn');
+const finalSubmitBtn=document.getElementById('finalSubmitBtn');
+const previewSubmitBtn=document.getElementById('previewSubmitBtn');
+const doneBtn=document.getElementById('doneBtn');
+const btnText=document.getElementById('btnText');
+const submitLoader=document.getElementById('submitLoader');
+const configWarning=document.getElementById('configWarning');
+
+function getAnswer(index){return form.querySelector(`input[name="ans${index}"]:checked`)?.value||'';}
+function updateProgress(){let answered=0;for(let i=1;i<=10;i++)if(getAnswer(i))answered++;progressText.textContent=`${answered} / 10`;progressBar.style.width=`${answered*10}%`;}
+
+document.querySelectorAll('.option-label input[type="radio"]').forEach(radio=>{
+  radio.addEventListener('change',function(){
+    document.querySelectorAll(`input[name="${this.name}"]`).forEach(item=>item.closest('.option-label').classList.remove('selected'));
+    this.closest('.option-label').classList.add('selected');
+    updateProgress();
+    globalError.style.display='none';
+  });
+});
+
+nameInput.addEventListener('input',()=>{if(nameInput.value.trim())nameError.style.display='none'});
+classInput.addEventListener('input',()=>{if(classInput.value.trim())classError.style.display='none'});
+function validateStudentInfo(){let valid=true;if(!nameInput.value.trim()){nameError.style.display='block';valid=false}else nameError.style.display='none';if(!classInput.value.trim()){classError.style.display='block';valid=false}else classError.style.display='none';return valid;}
+nextBtn.addEventListener('click',()=>{if(!validateStudentInfo())return;nameInput.disabled=true;classInput.disabled=true;nextBtn.style.display='none';questions.style.display='block';progressWrap.style.display='block';window.scrollTo({top:questions.offsetTop-90,behavior:'smooth'});});
+function validateForm(){if(!validateStudentInfo())return false;for(let i=1;i<=10;i++){if(!getAnswer(i)){globalError.style.display='block';document.querySelector(`input[name="ans${i}"]`).closest('.card')?.scrollIntoView({behavior:'smooth',block:'center'});return false;}}globalError.style.display='none';return true;}
+function calculateScore(){let score=0;for(let i=1;i<=10;i++)if(getAnswer(i)===correctAnswers[`ans${i}`])score+=10;return score;}
+previewSubmitBtn.addEventListener('click',()=>{if(validateForm())confirmModal.classList.add('show')});
+cancelSubmitBtn.addEventListener('click',()=>confirmModal.classList.remove('show'));
+
+finalSubmitBtn.addEventListener('click',async()=>{
+  if(!GOOGLE_SCRIPT_URL.trim()){
+    confirmModal.classList.remove('show');
+    configWarning.style.display='block';
+    configWarning.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  const now=new Date();
+  const payload={
+    timeline:now.toISOString(),
+    'Student Name':nameInput.value.trim(),
+    Kelas:classInput.value.trim(),
+    Jenjang:document.getElementById('jenjang').value,
+    Program:document.getElementById('program').value,
+    'Pre/Post':document.getElementById('prePost').value,
+    'Day-ke':document.getElementById('dayKe').value,
+    Ans1:getAnswer(1),Ans2:getAnswer(2),Ans3:getAnswer(3),Ans4:getAnswer(4),Ans5:getAnswer(5),
+    Ans6:getAnswer(6),Ans7:getAnswer(7),Ans8:getAnswer(8),Ans9:getAnswer(9),Ans10:getAnswer(10),
+    Score:calculateScore()
+  };
+  finalSubmitBtn.disabled=true;cancelSubmitBtn.disabled=true;btnText.style.display='none';submitLoader.style.display='block';
+  try{
+    await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',cache:'no-cache',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    confirmModal.classList.remove('show');resetSubmitBtn();setTimeout(()=>thankYouModal.classList.add('show'),250);
+  }catch(error){console.error(error);alert('Data belum berhasil dikirim. Periksa koneksi internet dan URL Web App.');resetSubmitBtn();}
+});
+function resetSubmitBtn(){finalSubmitBtn.disabled=false;cancelSubmitBtn.disabled=false;btnText.style.display='block';submitLoader.style.display='none';}
+doneBtn.addEventListener('click',()=>location.reload());
+</script>
+</body>
+</html>
