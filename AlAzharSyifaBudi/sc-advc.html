@@ -201,6 +201,106 @@
                 <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Hari ini kita tidak hanya memakai aplikasi. Kita mulai memahami cara memberi instruksi agar komputer menghasilkan sesuatu.</p>
             </div>
 
+            <!-- 6A. WHAT CAN COMPUTER DO -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center">
+                    <h1 class="text-5xl font-extrabold">More Than Just Browsing 🌐</h1>
+                    <p class="text-2xl text-slate-500 mt-3">Komputer membuka banyak peluang. Apa kegiatan yang sering kamu lakukan?</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-5 w-full">
+                    <div class="bg-blue-50 p-7 rounded-3xl text-center border-2 border-blue-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">📚</div>
+                        <h3 class="text-2xl font-bold">Riset/Tugas</h3>
+                    </div>
+                    <div class="bg-red-50 p-7 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">🎬</div>
+                        <h3 class="text-2xl font-bold">Streaming</h3>
+                    </div>
+                    <div class="bg-purple-50 p-7 rounded-3xl text-center border-2 border-purple-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">🎮</div>
+                        <h3 class="text-2xl font-bold">Gaming</h3>
+                    </div>
+                    <div class="bg-yellow-50 p-7 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">🎨</div>
+                        <h3 class="text-2xl font-bold">Design/Edit</h3>
+                    </div>
+                    <div class="bg-green-50 p-7 rounded-3xl text-center border-2 border-green-200 col-span-2 md:col-span-1 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">👩‍💻</div>
+                        <h3 class="text-2xl font-bold">Coding</h3>
+                    </div>
+                </div>
+                
+                <div class="mt-10 bg-white p-6 rounded-2xl shadow-md border-2 border-slate-200 w-full max-w-2xl text-center">
+                    <p class="text-xl font-bold text-slate-700 mb-4">Apa kegiatan favorit yang paling sering kamu lakukan di komputer?</p>
+                    <div class="flex gap-4">
+                        <input type="text" id="fav-activity-input" class="flex-1 bg-slate-100 border-2 border-slate-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-brand-blue" placeholder="Ketik kegiatan favoritmu di sini...">
+                        <button onclick="submitActivity()" class="bg-brand-blue text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-600 transition">OK</button>
+                    </div>
+                    <p id="fav-activity-response" class="text-xl text-brand-orange font-bold mt-4 hidden"></p>
+                </div>
+                <script>
+                    function submitActivity() {
+                        const input = document.getElementById('fav-activity-input').value;
+                        const response = document.getElementById('fav-activity-response');
+                        if (input.trim() !== '') {
+                            response.textContent = 'Menarik! Kegiatan ' + input + ' itu bisa sangat bermanfaat.';
+                            response.classList.remove('hidden');
+                        }
+                    }
+                </script>
+            </div>
+
+            <!-- 6B. FAVORITE GAME -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center">
+                    <h1 class="text-5xl font-extrabold">Game Apa yang Kamu Suka? 🎮</h1>
+                    <p class="text-2xl text-slate-500 mt-3">Dunia game sangat luas. Platform atau game apa yang jadi favoritmu?</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-5xl">
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://static.vecteezy.com/system/resources/previews/020/975/557/non_2x/steam-logo-steam-icon-transparent-free-png.png" alt="Steam">
+                        <h3 class="text-2xl font-bold mt-4">Steam</h3>
+                    </div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Roblox_Logo_2022.jpg" alt="Roblox">
+                        <h3 class="text-2xl font-bold mt-4">Roblox</h3>
+                    </div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://thumbs.dreamstime.com/b/minecraft-logo-online-game-dirt-block-illustrations-concept-design-isolated-186775550.jpg" alt="Valorant">
+                        <h3 class="text-2xl font-bold mt-4">Minecraft</h3>
+                    </div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/960px-Epic_Games_logo.svg.png" alt="Epic Games">
+                        <h3 class="text-2xl font-bold mt-4">Epic Games</h3>
+                    </div>
+                </div>
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border-2 border-slate-200 w-full max-w-3xl text-center">
+                    <p class="text-xl font-bold text-slate-700 mb-4">Ketik game yang paling sering kamu mainkan saat ini:</p>
+                    <div class="flex gap-4">
+                        <input type="text" id="fav-game-input" class="flex-1 bg-slate-100 border-2 border-slate-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-brand-purple" placeholder="Contoh: Valorant, Mobile Legends, Minecraft...">
+                        <button onclick="submitGame()" class="bg-brand-purple text-white font-bold px-6 py-3 rounded-xl hover:bg-purple-600 transition">Kirim</button>
+                    </div>
+                    <p id="fav-game-response" class="text-xl text-brand-green font-bold mt-4 hidden"></p>
+                </div>
+                <script>
+                    function submitGame() {
+                        const input = document.getElementById('fav-game-input').value;
+                        const response = document.getElementById('fav-game-response');
+                        if (input.trim() !== '') {
+                            response.textContent = 'Wah, ' + input + ' itu seru! Butuh strategi dan kecepatan, ya.';
+                            response.classList.remove('hidden');
+                        }
+                    }
+                </script>
+            </div>
+
+            <!-- 6C. HOW GAMES ARE MADE -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5">⚙️🖥️</div>
+                <h1 class="text-6xl font-extrabold mb-5">How Are They Made?</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Game dan aplikasi tidak muncul begitu saja. Ada tim engineer, designer, dan artist yang menyusun <b>instruksi</b> di balik layar.</p>
+            </div>
+
             <!-- 7. CODING & ALGORITHM -->
             <div class="slide s1 flex-col items-center">
                 <div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Coding Starts with Clear Instructions</h1><p class="text-2xl text-slate-500 mt-3">Komputer menjalankan instruksi, bukan menebak maksud kita.</p></div>
@@ -208,6 +308,13 @@
                     <div class="bg-blue-50 rounded-[2.5rem] p-9 border-2 border-blue-200"><div class="text-6xl mb-5">🧩</div><h2 class="text-3xl font-bold mb-3">Coding</h2><p class="text-xl leading-relaxed">Menyusun instruksi untuk membuat program, animasi, game, atau produk digital.</p></div>
                     <div class="bg-purple-50 rounded-[2.5rem] p-9 border-2 border-purple-200"><div class="text-6xl mb-5">🗂️</div><h2 class="text-3xl font-bold mb-3">Algorithm</h2><p class="text-xl leading-relaxed">Urutan langkah yang jelas dan logis untuk mencapai sebuah tujuan.</p></div>
                 </div>
+            </div>
+
+            <!-- 7B. EFFICIENT PROBLEM SOLVING -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5 animate-wobble">⏱️💡</div>
+                <h1 class="text-6xl font-extrabold mb-5">Why Algorithms Matter?</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Programming mengajarkan kita untuk menyelesaikan masalah dengan cara yang <b>paling efisien</b>. Semakin baik algoritmamu, semakin cepat dan cerdas program bekerja.</p>
             </div>
 
             <!-- 8. SORTING CHALLENGE -->
@@ -226,7 +333,7 @@
                 </div>
             </div>
 
-            <!-- 9. ADVANCED PUZZLE -->
+            <!-- 9A. ADVANCED PUZZLE 1 -->
             <div class="slide s1 flex-col items-center" data-puzzle-slide="drone">
                 <div class="mb-5 text-center"><p class="text-brand-blue font-bold uppercase tracking-widest">Algorithm Challenge 2</p><h1 class="text-5xl font-extrabold mt-2">Autonomous Delivery Drone 🚁</h1><p class="text-xl text-slate-500 mt-3">Susun blok agar drone mengirim paket tanpa menabrak gedung.</p></div>
                 <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="drone">
@@ -247,6 +354,59 @@
                     </div>
                     <div class="puzzle-board"></div>
                 </div>
+            </div>
+
+            <!-- 9B. ADVANCED PUZZLE 2 -->
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="rover">
+                <div class="mb-5 text-center"><p class="text-brand-orange font-bold uppercase tracking-widest">Algorithm Challenge 3</p><h1 class="text-5xl font-extrabold mt-2">Mars Rover 🪐</h1><p class="text-xl text-slate-500 mt-3">Navigasikan Rover melewati kawah berbatu menuju sampel penelitian.</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="rover">
+                    <div class="space-y-5">
+                        <div class="bg-slate-100 border-2 border-slate-200 rounded-2xl p-5">
+                            <div class="font-bold text-slate-600 mb-3 text-xl">Available Blocks</div>
+                            <div class="block-pool flex gap-3 flex-wrap min-h-[64px]"></div>
+                        </div>
+                        <div class="bg-orange-50 border-4 border-orange-200 rounded-2xl p-5">
+                            <div class="font-bold text-brand-orange mb-3 text-xl">Program Area</div>
+                            <div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-orange-100 shadow-inner"></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="run-puzzle flex-1 py-4 bg-brand-orange text-white font-bold rounded-2xl text-xl shadow-lg">▶ Run Program</button>
+                            <button class="reset-puzzle px-6 py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">Reset</button>
+                        </div>
+                        <div class="puzzle-feedback hidden text-center font-bold text-xl"></div>
+                    </div>
+                    <div class="puzzle-board"></div>
+                </div>
+            </div>
+
+            <!-- 9C. ADVANCED PUZZLE 3 -->
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="sub">
+                <div class="mb-5 text-center"><p class="text-brand-purple font-bold uppercase tracking-widest">Algorithm Challenge 4</p><h1 class="text-5xl font-extrabold mt-2">Deep Sea Submarine 🌊</h1><p class="text-xl text-slate-500 mt-3">Pandu kapal selam mencari harta karun tanpa tersesat di palung.</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="sub">
+                    <div class="space-y-5">
+                        <div class="bg-slate-100 border-2 border-slate-200 rounded-2xl p-5">
+                            <div class="font-bold text-slate-600 mb-3 text-xl">Available Blocks</div>
+                            <div class="block-pool flex gap-3 flex-wrap min-h-[64px]"></div>
+                        </div>
+                        <div class="bg-purple-50 border-4 border-purple-200 rounded-2xl p-5">
+                            <div class="font-bold text-brand-purple mb-3 text-xl">Program Area</div>
+                            <div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-purple-100 shadow-inner"></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="run-puzzle flex-1 py-4 bg-brand-purple text-white font-bold rounded-2xl text-xl shadow-lg">▶ Run Program</button>
+                            <button class="reset-puzzle px-6 py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">Reset</button>
+                        </div>
+                        <div class="puzzle-feedback hidden text-center font-bold text-xl"></div>
+                    </div>
+                    <div class="puzzle-board"></div>
+                </div>
+            </div>
+
+            <!-- 9D. WHY ALGORITHM -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5">🤔🎮</div>
+                <h1 class="text-6xl font-extrabold mb-5">Kenapa Kita Belajar Ini?</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Karena algoritma yang efisien dan instruksi yang akurat adalah kunci utama untuk <b>membuat game dan animasimu sendiri</b> di platform coding kita selanjutnya!</p>
             </div>
 
             <!-- 10. SCRATCH INTRO -->
@@ -547,15 +707,19 @@
 
         const puzzleData = {
             drone: {
-                rows: 5,
-                cols: 6,
-                actor: '🚁',
-                goal: '📦',
-                start: [0, 4],
-                end: [5, 0],
-                obstacles: [[1,4], [1,3], [3,2], [3,1], [4,1]],
-                obstacleEmoji: '🏢',
-                available: ['up','up','right','right','up','up','right','right','right','down','left']
+                rows: 5, cols: 6, actor: '🚁', goal: '📦', start: [0, 4], end: [5, 0],
+                obstacles: [[1,4], [1,3], [1,2], [1,1], [3,0], [3,1], [3,2], [3,3]], obstacleEmoji: '🏢',
+                available: ['up','up','up','up','up','up','up','up','right','right','right','right','right','down','down','down','down']
+            },
+            rover: {
+                rows: 6, cols: 7, actor: '🚙', goal: '💎', start: [0, 5], end: [6, 0],
+                obstacles: [[1,1], [1,2], [1,3], [1,4], [1,5], [3,0], [3,1], [3,2], [3,3], [3,4], [5,1], [5,2], [5,3], [5,4], [5,5]], obstacleEmoji: '🌋',
+                available: ['up','up','up','up','up','up','up','up','up','up','down','down','down','down','down','right','right','right','right','right','right']
+            },
+            sub: {
+                rows: 7, cols: 7, actor: '🚤', goal: '⚓', start: [3, 3], end: [6, 6],
+                obstacles: [[2,2], [3,2], [4,2], [2,3], [4,3], [4,4], [3,5], [2,5], [1,5], [0,4], [0,3], [0,2], [0,1], [1,0], [2,0], [3,0], [4,0], [5,0], [6,1], [6,2], [6,3], [6,4], [6,5], [4,5], [4,6]], obstacleEmoji: '🦈',
+                available: ['down','down','down','down','down','down','down','left','left','up','up','up','up','right','right','right','right','right']
             }
         };
 

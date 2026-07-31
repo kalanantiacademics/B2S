@@ -549,27 +549,131 @@
                 </div>
             </div>
 
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="mb-5 text-center">
+                    <h1 class="text-5xl font-extrabold text-slate-800">Latihan Menggunakan Mouse 🖱️</h1>
+                    <p class="text-2xl text-slate-500 mt-2 font-medium">Arahkan mouse ke dalam kotak di bawah dan coba lakukan aksinya!</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8 mt-4 w-full max-w-5xl items-stretch min-h-[300px]">
+                    <div class="flex-1 bg-white rounded-3xl shadow-md border-4 border-dashed border-blue-300 flex items-center justify-center relative overflow-hidden cursor-crosshair"
+                         id="mouse-practice-canvas" 
+                         onmousemove="checkMouseAction('move')" 
+                         onclick="checkMouseAction('left')" 
+                         oncontextmenu="checkMouseAction('right'); return false;" 
+                         onwheel="checkMouseAction('scroll')">
+                        <p class="text-3xl text-slate-400 font-bold text-center pointer-events-none" id="mouse-canvas-text">Arahkan Mouse ke Sini</p>
+                    </div>
+                    <div class="w-full md:w-1/3 flex flex-col gap-4 justify-center">
+                        <div class="bg-blue-50 p-4 rounded-2xl border-2 border-blue-200 flex items-center justify-between" id="task-mouse-move">
+                            <span class="text-xl font-bold text-blue-800">Gerakkan Mouse</span>
+                            <span class="text-3xl opacity-20 transition-all duration-300">✅</span>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-2xl border-2 border-green-200 flex items-center justify-between" id="task-mouse-left">
+                            <span class="text-xl font-bold text-green-800">Klik Kiri</span>
+                            <span class="text-3xl opacity-20 transition-all duration-300">✅</span>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-2xl border-2 border-purple-200 flex items-center justify-between" id="task-mouse-right">
+                            <span class="text-xl font-bold text-purple-800">Klik Kanan</span>
+                            <span class="text-3xl opacity-20 transition-all duration-300">✅</span>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-2xl border-2 border-orange-200 flex items-center justify-between" id="task-mouse-scroll">
+                            <span class="text-xl font-bold text-orange-800">Scroll Atas/Bawah</span>
+                            <span class="text-3xl opacity-20 transition-all duration-300">✅</span>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function checkMouseAction(action) {
+                        const taskEl = document.getElementById('task-mouse-' + action);
+                        if (taskEl) {
+                            const checkmark = taskEl.querySelector('span:last-child');
+                            checkmark.classList.remove('opacity-20');
+                            checkmark.classList.add('text-green-500', 'scale-125');
+                        }
+                    }
+                </script>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="mb-5 text-center">
+                    <h1 class="text-5xl font-extrabold text-slate-800">Latihan Mengetik ⌨️</h1>
+                    <p class="text-2xl text-slate-500 mt-2 font-medium">Ketik kata di bawah ini dengan tepat!</p>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-lg border-2 border-slate-200 w-full max-w-4xl flex flex-col items-center text-center mt-4">
+                    <img src="https://cdn.sanity.io/images/do2rqv0h/production/3356021b2d743e60cb89b0b97196fb2b2b0b44a0-800x800.gif?w=1116&fit=max&auto=format" alt="Typing Animation" class="h-48 rounded-2xl mb-6 object-cover w-full max-w-md mx-auto">
+                    
+                    <p class="text-3xl font-bold text-slate-600 mb-2">Coba ketik:</p>
+                    <div class="text-5xl font-mono font-extrabold text-brand-purple mb-8 select-none">programming is fun</div>
+                    
+                    <input type="text" id="typing-practice-input" oninput="checkTyping()" class="w-full max-w-2xl bg-slate-100 border-4 border-slate-300 rounded-2xl px-6 py-4 text-3xl font-mono focus:outline-none focus:border-brand-blue text-center" placeholder="Ketik di sini...">
+                    <p id="typing-success-msg" class="text-3xl font-bold text-brand-green mt-6 hidden animate-bounce">🎉 Hebat! Ketikanmu benar! 🎉</p>
+                </div>
+                <script>
+                    function checkTyping() {
+                        const input = document.getElementById('typing-practice-input');
+                        const msg = document.getElementById('typing-success-msg');
+                        if (input.value.toLowerCase() === 'programming is fun') {
+                            input.classList.remove('border-slate-300', 'focus:border-brand-blue');
+                            input.classList.add('border-brand-green', 'bg-green-50', 'text-brand-green');
+                            msg.classList.remove('hidden');
+                        } else {
+                            input.classList.remove('border-brand-green', 'bg-green-50', 'text-brand-green');
+                            input.classList.add('border-slate-300', 'focus:border-brand-blue');
+                            msg.classList.add('hidden');
+                        }
+                    }
+                </script>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="mb-9 text-center">
+                    <h1 class="text-5xl font-extrabold text-slate-800">Komputer vs Laptop 💻</h1>
+                    <p class="text-2xl text-slate-500 mt-3 font-medium">Ada yang tahu bedanya? Coba sebutkan perbedaannya!</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8 mt-4 w-full max-w-5xl justify-center items-center">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-md border-t-8 border-purple-500 text-center flex-1">
+                        <img src="https://img.pikbest.com/png-images/20251030/retro-computer-illustration-digital-workspace-concept_11981045.jpg!w700wp" alt="Komputer PC" class="h-40 mx-auto mb-4 rounded-xl object-cover">
+                        <h3 class="text-3xl font-bold text-purple-700 mb-4">Komputer (PC)</h3>
+                        <ul class="text-left text-lg text-slate-700 list-disc list-inside space-y-2">
+                            <li>Ukurannya lebih besar</li>
+                            <li>Bagian-bagiannya terpisah (Monitor, CPU, Keyboard, Mouse)</li>
+                            <li>Harus selalu dicolok listrik</li>
+                        </ul>
+                    </div>
+                    <div class="text-5xl font-bold text-slate-300">VS</div>
+                    <div class="bg-white p-8 rounded-[2rem] shadow-md border-t-8 border-brand-orange text-center flex-1">
+                        <img src="https://images.vexels.com/media/users/3/157318/isolated/preview/2782b0b66efa5815b12c9c637322aff3-desktop-laptop-icon.png" alt="Laptop" class="h-40 mx-auto mb-4 object-contain">
+                        <h3 class="text-3xl font-bold text-brand-orange mb-4">Laptop</h3>
+                        <ul class="text-left text-lg text-slate-700 list-disc list-inside space-y-2">
+                            <li>Ukurannya lebih kecil dan tipis</li>
+                            <li>Semua bagian menyatu jadi satu</li>
+                            <li>Ada baterainya, bisa dibawa kemana-mana</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="slide s1 flex-col items-center">
                 <div class="mb-9 text-center">
                     <h2 class="text-brand-orange font-bold tracking-widest uppercase text-lg mb-2">Use It Safely</h2>
                     <h1 class="text-5xl font-extrabold text-slate-800">Digital Tools Safety 🛡️</h1>
-                    <p class="text-2xl text-slate-500 mt-3 font-medium">Gunakan perangkat dengan aman dan hati-hati.</p>
+                    <p class="text-2xl text-slate-500 mt-3 font-medium">Gunakan komputer dengan aman!</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-7 w-full text-center">
-                    <div class="bg-blue-50 p-8 rounded-[2.5rem] border-2 border-blue-100">
-                        <div class="text-7xl mb-5">💧🚫</div>
-                        <h3 class="font-bold text-3xl mb-3">Keep It Dry</h3>
-                        <p class="text-xl text-slate-600">Jauhkan minuman dari komputer.</p>
+                    <div class="bg-blue-50 p-8 rounded-[2.5rem] border-2 border-blue-100 flex flex-col items-center justify-center hover:scale-105 transition-transform">
+                        <div class="text-7xl mb-4">💧🚫</div>
+                        <h3 class="font-bold text-3xl mb-3 text-blue-900">Air = Musuh!</h3>
+                        <p class="text-xl text-slate-600 font-medium">Jauhkan minuman dari komputermu.</p>
                     </div>
-                    <div class="bg-green-50 p-8 rounded-[2.5rem] border-2 border-green-100">
-                        <div class="text-7xl mb-5">🪑✨</div>
-                        <h3 class="font-bold text-3xl mb-3">Sit Properly</h3>
-                        <p class="text-xl text-slate-600">Duduk tegak dan atur jarak mata dari layar.</p>
+                    <div class="bg-green-50 p-8 rounded-[2.5rem] border-2 border-green-100 flex flex-col items-center justify-center hover:scale-105 transition-transform">
+                        <div class="text-7xl mb-4">🪑✨</div>
+                        <h3 class="font-bold text-3xl mb-3 text-green-900">Duduk Tegak</h3>
+                        <p class="text-xl text-slate-600 font-medium">Jaga jarak mata dari layar.</p>
                     </div>
-                    <div class="bg-orange-50 p-8 rounded-[2.5rem] border-2 border-orange-100">
-                        <div class="text-7xl mb-5">🔌🙋</div>
-                        <h3 class="font-bold text-3xl mb-3">Ask for Help</h3>
-                        <p class="text-xl text-slate-600">Minta bantuan guru saat ada masalah kabel atau perangkat.</p>
+                    <div class="bg-orange-50 p-8 rounded-[2.5rem] border-2 border-orange-100 flex flex-col items-center justify-center hover:scale-105 transition-transform">
+                        <div class="text-7xl mb-4">🔌🙋</div>
+                        <h3 class="font-bold text-3xl mb-3 text-orange-900">Tanya Guru</h3>
+                        <p class="text-xl text-slate-600 font-medium">Bingung soal kabel? Angkat tanganmu!</p>
                     </div>
                 </div>
             </div>
@@ -608,6 +712,25 @@
                         <h3 class="text-2xl font-bold">Coding</h3>
                     </div>
                 </div>
+                
+                <div class="mt-10 bg-white p-6 rounded-2xl shadow-md border-2 border-slate-200 w-full max-w-2xl text-center">
+                    <p class="text-xl font-bold text-slate-700 mb-4">Apa kegiatan favorit yang kamu lakukan di komputer?</p>
+                    <div class="flex gap-4">
+                        <input type="text" id="fav-activity-input" class="flex-1 bg-slate-100 border-2 border-slate-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-brand-blue" placeholder="Ketik kegiatan favoritmu di sini...">
+                        <button onclick="submitActivity()" class="bg-brand-blue text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-600 transition">OK</button>
+                    </div>
+                    <p id="fav-activity-response" class="text-xl text-brand-orange font-bold mt-4 hidden"></p>
+                </div>
+                <script>
+                    function submitActivity() {
+                        const input = document.getElementById('fav-activity-input').value;
+                        const response = document.getElementById('fav-activity-response');
+                        if (input.trim() !== '') {
+                            response.textContent = 'Wah kegiatannya menarik ya... ' + input + ' itu!';
+                            response.classList.remove('hidden');
+                        }
+                    }
+                </script>
             </div>
 
             <div class="slide s1 flex-col items-center">
@@ -641,8 +764,24 @@
                         <h3 class="text-2xl font-bold mt-4">Epic Games</h3>
                     </div>
                 </div>
-                <div class="mt-7 bg-brand-purple text-white px-8 py-4 rounded-2xl text-xl font-bold">🙋 Share your
-                    favorite game!</div>
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border-2 border-slate-200 w-full max-w-3xl text-center">
+                    <p class="text-xl font-bold text-slate-700 mb-4">Ketik game favorit kamu di bawah ini:</p>
+                    <div class="flex gap-4">
+                        <input type="text" id="fav-game-input" class="flex-1 bg-slate-100 border-2 border-slate-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-brand-purple" placeholder="Contoh: Minecraft, Roblox...">
+                        <button onclick="submitGame()" class="bg-brand-purple text-white font-bold px-6 py-3 rounded-xl hover:bg-purple-600 transition">Kirim</button>
+                    </div>
+                    <p id="fav-game-response" class="text-xl text-brand-green font-bold mt-4 hidden"></p>
+                </div>
+                <script>
+                    function submitGame() {
+                        const input = document.getElementById('fav-game-input').value;
+                        const response = document.getElementById('fav-game-response');
+                        if (input.trim() !== '') {
+                            response.textContent = 'Wah menarik, coba ceritakan lebih lanjut game ' + input + ' itu!';
+                            response.classList.remove('hidden');
+                        }
+                    }
+                </script>
             </div>
 
             <div class="slide s1 flex-col items-center justify-center text-center">
@@ -742,6 +881,98 @@
                         class="w-full py-4 bg-brand-green text-white font-bold rounded-2xl shadow-lg hover:bg-emerald-600 transition text-xl">Cek
                         Urutan ✅</button>
                     <div id="sortFeedback" class="mt-5 text-center font-bold hidden text-xl"></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center">
+                    <h1 class="text-5xl font-extrabold text-slate-800">Menyusun Algoritma Menyikat Gigi 🪥</h1>
+                    <p class="text-slate-600 mt-3 text-2xl font-medium">Tahan dan geser kotak menjadi urutan yang logis!</p>
+                </div>
+                <div class="bg-slate-100 p-8 rounded-[3rem] w-full max-w-4xl border-2 border-slate-200">
+                    <div id="teethPool" class="flex flex-col gap-3 mb-6">
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-id="4">
+                            <span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span>
+                            😬 Menggosok gigi
+                        </div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-id="1">
+                            <span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span>
+                            🪥 Menyiapkan pasta gigi & sikat gigi
+                        </div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-id="5">
+                            <span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span>
+                            🚰 Berkumur & bersihkan mulut
+                        </div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-id="2">
+                            <span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span>
+                            💧 Membasahi sikat gigi
+                        </div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-id="3">
+                            <span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span>
+                            🧴 Meletakkan pasta gigi di atas sikat
+                        </div>
+                    </div>
+                    <button onclick="checkTeethSortOrder()" class="w-full py-4 bg-brand-green text-white font-bold rounded-2xl shadow-lg hover:bg-emerald-600 transition text-xl">Cek Urutan ✅</button>
+                    <div id="teethFeedback" class="mt-5 text-center font-bold hidden text-xl"></div>
+                    <div id="teethPeerFeedback" class="mt-6 bg-yellow-50 border-2 border-yellow-200 p-6 rounded-2xl text-center hidden">
+                        <p class="text-xl font-bold text-slate-700">👀 Coba cek layar teman di sebelahmu, apakah urutannya 100% sama denganmu?</p>
+                        <p class="text-lg text-slate-600 mt-2">Mungkin ada yang membasahi sikat dulu, ada yang menaruh pasta gigi dulu. Dua-duanya benar! Itulah algoritma—berbeda langkah, tapi tujuannya sama-sama tercapai!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="mb-7 text-center">
+                    <h1 class="text-5xl font-extrabold text-slate-800">Algoritma Makan Sereal 🥣</h1>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8 w-full max-w-5xl">
+                    <div class="bg-white p-8 rounded-[2rem] border-2 border-purple-200 shadow-md flex-1">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4 text-center">Tim Susu Dulu</h3>
+                        <ol class="list-decimal list-inside text-xl space-y-3 text-slate-700 font-medium">
+                            <li>Siapkan mangkuk, susu, & sereal</li>
+                            <li>Tuangkan susu ke mangkuk</li>
+                            <li>Tuangkan sereal ke mangkuk</li>
+                            <li>Makan</li>
+                            <li>Bersihkan mangkuk</li>
+                        </ol>
+                    </div>
+                    <div class="bg-white p-8 rounded-[2rem] border-2 border-brand-orange shadow-md flex-1">
+                        <h3 class="text-2xl font-bold text-brand-orange mb-4 text-center">Tim Sereal Dulu</h3>
+                        <ol class="list-decimal list-inside text-xl space-y-3 text-slate-700 font-medium">
+                            <li>Siapkan mangkuk, susu, & sereal</li>
+                            <li>Tuangkan sereal ke mangkuk</li>
+                            <li>Tuangkan susu ke mangkuk</li>
+                            <li>Makan</li>
+                            <li>Bersihkan mangkuk</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="mt-8 bg-blue-50 border-2 border-blue-200 p-6 rounded-2xl max-w-4xl text-center">
+                    <p class="text-xl font-bold text-slate-700">Setiap orang beda-beda stepnya. Tapi yang penting tujuannya tercapai kan? Itu goals dari algoritma juga!</p>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="mb-7 text-center">
+                    <h1 class="text-5xl font-extrabold text-slate-800">Memilih Cara Terbaik 🛤️</h1>
+                </div>
+                <div class="bg-white p-8 rounded-[2rem] border-2 border-slate-200 shadow-md max-w-5xl w-full flex flex-col md:flex-row items-center gap-8">
+                    <div class="flex-1">
+                        <p class="text-2xl text-slate-700 mb-6 leading-relaxed">
+                            Setiap orang bisa punya cara masing-masing untuk menyelesaikan masalah mereka. Namun, <b>Programming</b> mengajarkan kita untuk selalu memilih cara yang paling <b>mudah dan tersingkat</b> untuk menyelesaikan sesuatu.
+                        </p>
+                        <div class="bg-green-50 p-4 rounded-xl border-l-8 border-green-500 mb-4">
+                            <p class="text-lg font-bold">Jalan Lurus</p>
+                            <p class="text-slate-600">Lebih cepat sampai, hemat waktu.</p>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-xl border-l-8 border-brand-orange">
+                            <p class="text-lg font-bold">Jalan Muter-Muter</p>
+                            <p class="text-slate-600">Lama sampainya, tapi mungkin ada hal menarik buat dipikirin di jalan.</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex justify-center">
+                        <div class="text-[8rem]">🛣️🚶‍♂️</div>
+                    </div>
                 </div>
             </div>
 
@@ -862,6 +1093,18 @@
                         <div class="puzzle-feedback hidden text-center font-bold text-xl"></div>
                     </div>
                     <div class="puzzle-board bg-cyan-100 border-cyan-400"></div>
+                </div>
+            </div>
+
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5">⚙️💻</div>
+                <h1 class="text-5xl font-extrabold text-slate-800 mb-6">Membuat Program dengan Algoritma</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">
+                    Program komputer disusun menggunakan <span class="text-brand-purple font-bold">algoritma yang baik, cepat, dan benar</span>.
+                </p>
+                <div class="mt-8 bg-blue-50 border-2 border-blue-200 p-6 rounded-3xl max-w-4xl text-center shadow-sm">
+                    <p class="text-2xl font-bold text-slate-700">Kenapa kita belajar cara menyusun algoritma barusan?</p>
+                    <p class="text-xl text-slate-600 mt-2">Karena setelah ini, kita akan menyusun algoritmanya secara langsung untuk membuat sebuah program!</p>
                 </div>
             </div>
 
@@ -3883,9 +4126,68 @@
             });
         }
 
+        function initTeethSortable() {
+            const pool = document.getElementById('teethPool');
+            let dragSrc = null;
+            pool.querySelectorAll('.sort-item').forEach(item => {
+                item.addEventListener('dragstart', function (e) { dragSrc = this; e.dataTransfer.effectAllowed = 'move'; setTimeout(() => this.style.opacity = '.4', 0); });
+                item.addEventListener('dragend', function () { this.style.opacity = '1'; pool.querySelectorAll('.sort-item').forEach(i => i.classList.remove('sort-over')); });
+                item.addEventListener('dragover', function (e) { e.preventDefault(); pool.querySelectorAll('.sort-item').forEach(i => i.classList.remove('sort-over')); if (this !== dragSrc) this.classList.add('sort-over'); });
+                item.addEventListener('drop', function (e) { 
+                    e.preventDefault(); 
+                    if (dragSrc !== this) { 
+                        const items = [...pool.querySelectorAll('.sort-item')]; 
+                        const a = items.indexOf(dragSrc); 
+                        const b = items.indexOf(this); 
+                        pool.insertBefore(dragSrc, a < b ? this.nextSibling : this); 
+                        pool.querySelectorAll('.sort-item').forEach(i => { i.classList.remove('sort-correct', 'sort-wrong'); i.querySelector('.sort-num').textContent = '?'; }); 
+                        document.getElementById('teethFeedback').classList.add('hidden'); 
+                        document.getElementById('teethPeerFeedback').classList.add('hidden');
+                    } 
+                });
+            });
+        }
+
+        function checkTeethSortOrder() {
+            const items = [...document.querySelectorAll('#teethPool .sort-item')];
+            let correct = true;
+            items.forEach((item, idx) => {
+                const id = +item.dataset.id;
+                let isRightPos = false;
+                if (idx === 0 && id === 1) isRightPos = true;
+                if ((idx === 1 || idx === 2) && (id === 2 || id === 3)) isRightPos = true;
+                if (idx === 3 && id === 4) isRightPos = true;
+                if (idx === 4 && id === 5) isRightPos = true;
+                
+                item.querySelector('.sort-num').textContent = idx + 1;
+                item.classList.remove('sort-correct', 'sort-wrong');
+                if (isRightPos) {
+                    item.classList.add('sort-correct');
+                } else {
+                    item.classList.add('sort-wrong');
+                    correct = false;
+                }
+            });
+            
+            const fb = document.getElementById('teethFeedback');
+            const peerFb = document.getElementById('teethPeerFeedback');
+            
+            fb.classList.remove('hidden', 'text-green-600', 'text-red-500');
+            if (correct) {
+                fb.textContent = 'Benar sekali! Urutannya sudah logis. ✅';
+                fb.classList.add('text-green-600');
+                peerFb.classList.remove('hidden');
+            } else {
+                fb.textContent = 'Masih ada langkah yang kurang tepat posisinya. Coba lagi! 🤔';
+                fb.classList.add('text-red-500');
+                peerFb.classList.add('hidden');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             updateView();
             initSortable();
+            initTeethSortable();
             Object.keys(puzzleData).forEach(initPuzzle);
         });
 
