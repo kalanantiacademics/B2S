@@ -104,7 +104,7 @@ body{
 <!-- <div class="meta-chips"><span class="meta-chip">Jenjang SD</span><span class="meta-chip">10 Soal</span><span class="meta-chip">Skor Maksimal 100</span></div> -->
 </div>
 <form id="quizForm" novalidate="">
-<input id="jenjang" type="hidden" value="SMP"/>
+<input id="jenjang" type="hidden" value="UpperPrimary"/>
 <input id="program" type="hidden" value="Scratch"/>
 <input id="prePost" type="hidden" value="Pre-Test"/>
 <input id="dayKe" type="hidden" value="1"/>
@@ -117,7 +117,7 @@ body{
 </div>
 <div class="form-group">
 <label for="studentClass">Kelas</label>
-<input autocomplete="off" id="studentClass" maxlength="30" placeholder="Contoh: 7A, 8B, atau 9C" required="" type="text"/>
+<input autocomplete="off" id="studentClass" maxlength="30" placeholder="Contoh: 4A, 5B, atau 6C" required="" type="text"/>
 <div class="note">Gunakan penulisan kelas yang diberikan oleh guru.</div>
 <div class="error-msg" id="classError">Silakan isi kelasmu.</div>
 </div>
@@ -162,7 +162,7 @@ body{
 <script>
 // Tempel URL deployment Web App Apps Script di antara tanda kutip.
 // Contoh: const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfy.../exec';
-const GOOGLE_SCRIPT_URL = '';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcEwK39oM4rcgFNwmOJQuCh-fFiajB7LCnxMielOFoK_BJLs5Getz4KYSNrR7ODDe9vQ/exec';
 
 const correctAnswers={ans1:'C',ans2:'A',ans3:'C',ans4:'B',ans5:'D',ans6:'B',ans7:'D',ans8:'B',ans9:'C',ans10:'B'};
 const form=document.getElementById('quizForm');

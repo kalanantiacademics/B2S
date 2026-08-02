@@ -104,7 +104,7 @@ body{
   </div>
 
   <form id="quizForm" novalidate>
-    <input type="hidden" id="jenjang" value="SD">
+    <input type="hidden" id="jenjang" value="LowerPrimary">
     <input type="hidden" id="program" value="Scratch">
     <input type="hidden" id="prePost" value="Pre-Test">
     <input type="hidden" id="dayKe" value="1">
@@ -118,7 +118,7 @@ body{
       </div>
       <div class="form-group">
         <label for="studentClass">Kelas</label>
-        <input type="text" id="studentClass" placeholder="Contoh: 4A, 5B, atau 6C" autocomplete="off" maxlength="30" required>
+        <input type="text" id="studentClass" placeholder="Contoh: 1A, 2B, atau 3C" autocomplete="off" maxlength="30" required>
         <div class="note">Gunakan penulisan kelas yang diberikan oleh guru.</div>
         <div class="error-msg" id="classError">Silakan isi kelasmu.</div>
       </div>
@@ -261,7 +261,7 @@ body{
 <script>
 // Tempel URL deployment Web App Apps Script di antara tanda kutip.
 // Contoh: const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfy.../exec';
-const GOOGLE_SCRIPT_URL = '';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSNDTm3MrP9NPSBknlf8_VQW_YCYleeSkBiLSBKDe16mQf2DuGskl7vKUys0uesTwH/exec';
 
 const correctAnswers={ans1:'B',ans2:'C',ans3:'D',ans4:'A',ans5:'D',ans6:'A',ans7:'D',ans8:'B',ans9:'D',ans10:'B'};
 const form=document.getElementById('quizForm');
