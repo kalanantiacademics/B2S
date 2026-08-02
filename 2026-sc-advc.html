@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUANGGURU CODING</title>
+    <link rel="icon" href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Fredoka', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#F97316',
+                            blue: '#3B82F6',
+                            purple: '#8B5CF6',
+                            green: '#10B981',
+                            navy: '#172554'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Fredoka', sans-serif; overflow: hidden; background-color: #f8fafc; }
+        .slide-container { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; }
+        .slide { display: none; opacity: 0; transition: opacity .4s ease; padding: 2rem 0; width: 100%; min-height: 100%; }
+        .slide.active { display: flex; opacity: 1; animation: fadeIn .4s forwards; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-7px); } 100% { transform: translateY(0); } }
+        @keyframes wobble { 0%,100% { transform: rotate(0deg) scale(1); } 20% { transform: rotate(-8deg) scale(1.08); } 40% { transform: rotate(8deg) scale(1.13); } 60% { transform: rotate(-5deg) scale(1.1); } 80% { transform: rotate(5deg) scale(1.06); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .feedback-wobble { animation: wobble .9s ease-in-out infinite; }
+
+        .sort-over { border-color: #10B981 !important; background-color: #ecfdf5 !important; border-style: dashed !important; }
+        .sort-correct { border-color: #10B981 !important; background-color: #ecfdf5 !important; }
+        .sort-wrong { border-color: #ef4444 !important; background-color: #fef2f2 !important; }
+
+        .scratch-block {
+            min-height: 56px;
+            padding: 10px 17px;
+            border-radius: 13px;
+            color: white;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            box-shadow: inset 0 -5px 0 rgba(0,0,0,.14), 0 4px 10px rgba(15,23,42,.12);
+            cursor: grab;
+            user-select: none;
+        }
+        .scratch-block:active { cursor: grabbing; transform: translateY(2px); }
+        .block-motion { background: #4C97FF; }
+        .program-zone { min-height: 132px; }
+
+        .puzzle-board {
+            display: grid;
+            gap: 7px;
+            padding: 12px;
+            background: #dbeafe;
+            border: 4px solid #93c5fd;
+            border-radius: 24px;
+            box-shadow: 0 10px 24px rgba(15,23,42,.12);
+        }
+        .puzzle-cell {
+            width: 61px;
+            height: 61px;
+            border-radius: 13px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: inset 0 -4px 0 rgba(148,163,184,.22);
+        }
+        .puzzle-cell.obstacle { background: #fee2e2; border: 2px dashed #f87171; }
+        .puzzle-cell.goal { background: #dcfce7; border: 2px solid #4ade80; }
+        .puzzle-cell.start { background: #fef3c7; border: 2px solid #fbbf24; }
+        .media-frame { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 22px; }
+        .media-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .choice-selected { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(15,23,42,.15); }
+
+        @media (max-width: 900px) {
+            .puzzle-cell { width: 49px; height: 49px; font-size: 1.6rem; }
+            .puzzle-board { gap: 5px; padding: 8px; }
+        }
+
+
+        /* SESSION 2–7 VISUAL COMPONENTS */
+        .lesson-hero {
+            position: relative;
+            min-height: 330px;
+            overflow: hidden;
+            border-radius: 32px;
+            border: 3px solid rgba(148,163,184,.35);
+            box-shadow: 0 16px 34px rgba(15,23,42,.13);
+        }
+        .lesson-hero .label {
+            position: absolute;
+            top: 20px;
+            left: 22px;
+            z-index: 8;
+            background: rgba(255,255,255,.94);
+            border: 2px solid rgba(148,163,184,.35);
+            border-radius: 14px;
+            padding: 10px 15px;
+            font-weight: 700;
+            color: #334155;
+        }
+        .farm-scene { background: linear-gradient(#8ed3ff 0 57%, #8fcf69 57% 100%); }
+        .farm-scene::before { content:''; position:absolute; right:60px; top:34px; width:88px; height:88px; background:#fde047; border-radius:50%; box-shadow:0 0 0 18px rgba(253,224,71,.18); }
+        .farm-scene .barn { position:absolute; left:70px; bottom:48px; font-size:8rem; }
+        .farm-scene .hen { position:absolute; left:43%; bottom:52px; font-size:7rem; }
+        .farm-scene .eggs { position:absolute; right:75px; bottom:60px; font-size:4rem; letter-spacing:8px; }
+        .farm-scene .cloud { position:absolute; top:55px; font-size:4.5rem; opacity:.9; }
+        .farm-scene .cloud.a { left:27%; } .farm-scene .cloud.b { right:27%; top:94px; font-size:3.5rem; }
+
+        .map-scene { background: linear-gradient(135deg,#dbeafe,#eef2ff); }
+        .map-scene::before { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(59,130,246,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.12) 1px,transparent 1px); background-size:42px 42px; }
+        .route-line { position:absolute; height:8px; background:#8b5cf6; border-radius:999px; transform-origin:left center; box-shadow:0 0 0 4px rgba(139,92,246,.14); }
+        .map-pin { position:absolute; width:62px; height:62px; border-radius:50%; background:white; border:4px solid #3b82f6; display:flex; align-items:center; justify-content:center; font-size:2rem; box-shadow:0 10px 18px rgba(15,23,42,.15); z-index:4; }
+        .drone-badge { position:absolute; width:90px; height:90px; border-radius:24px; background:white; border:4px solid #8b5cf6; display:flex; align-items:center; justify-content:center; font-size:3.5rem; box-shadow:0 12px 24px rgba(15,23,42,.16); z-index:6; }
+
+        .pirate-scene { background: linear-gradient(#75c8f7 0 58%, #155e75 58% 100%); }
+        .pirate-scene::before { content:''; position:absolute; left:-10%; right:-10%; bottom:0; height:120px; background:repeating-radial-gradient(ellipse at 50% 110%,#0e7490 0 20px,#0891b2 21px 40px); opacity:.8; }
+        .pirate-ship { position:absolute; left:9%; bottom:35px; font-size:10rem; z-index:4; }
+        .pirate-team { position:absolute; left:43%; bottom:48px; font-size:7rem; z-index:4; }
+        .treasure-pile { position:absolute; right:8%; bottom:54px; font-size:6rem; z-index:4; }
+        .island { position:absolute; right:4%; bottom:18px; width:255px; height:86px; border-radius:50%; background:#d9a441; z-index:2; }
+
+        .debug-console { background:linear-gradient(145deg,#0f172a,#1e293b); color:white; border-radius:30px; border:3px solid #334155; box-shadow:0 16px 34px rgba(15,23,42,.2); }
+        .bug-card { background:#fff; border:2px solid #fecaca; border-left:10px solid #ef4444; border-radius:18px; padding:18px; box-shadow:0 8px 18px rgba(15,23,42,.08); }
+        .fix-card { background:#fff; border:2px solid #bbf7d0; border-left:10px solid #22c55e; border-radius:18px; padding:18px; box-shadow:0 8px 18px rgba(15,23,42,.08); }
+
+        .firework-scene { background:radial-gradient(circle at 50% 100%,#1e3a8a,#111827 58%,#020617 100%); }
+        .firework-burst { position:absolute; font-size:6rem; filter:drop-shadow(0 0 12px rgba(255,255,255,.45)); animation:float 3s ease-in-out infinite; }
+        .firework-burst.a { left:15%; top:65px; } .firework-burst.b { left:43%; top:105px; animation-delay:.7s; } .firework-burst.c { right:13%; top:55px; animation-delay:1.3s; }
+        .cityline { position:absolute; left:0; right:0; bottom:0; height:90px; background:linear-gradient(90deg,#0f172a 0 10%,#1e293b 10% 20%,#0f172a 20% 30%,#334155 30% 44%,#0f172a 44% 57%,#1e293b 57% 70%,#0f172a 70% 82%,#334155 82% 100%); clip-path:polygon(0 35%,8% 35%,8% 5%,15% 5%,15% 50%,23% 50%,23% 18%,31% 18%,31% 58%,43% 58%,43% 8%,53% 8%,53% 42%,62% 42%,62% 15%,72% 15%,72% 55%,82% 55%,82% 25%,91% 25%,91% 45%,100% 45%,100% 100%,0 100%); }
+
+        .block-chip { color:white; font-weight:700; border-radius:14px; padding:12px 18px; box-shadow:inset 0 -5px 0 rgba(0,0,0,.13),0 5px 12px rgba(15,23,42,.12); }
+        .event-chip { background:#ffbf00; color:#473500; }
+        .motion-chip { background:#4c97ff; }
+        .looks-chip { background:#9966ff; }
+        .sound-chip { background:#cf63cf; }
+        .control-chip { background:#ffab19; color:#513400; }
+        .sensing-chip { background:#5cb1d6; }
+        .variable-chip { background:#ff8c1a; }
+        .operator-chip { background:#59c059; }
+        .stage-card { background:white; border:2px solid #e2e8f0; border-radius:26px; box-shadow:0 12px 26px rgba(15,23,42,.1); }
+
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="fixed top-0 left-0 right-0 h-20 bg-white border-b border-slate-200 z-50 px-8 flex items-center justify-between shadow-sm">
+        <div class="flex items-center">
+            <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png" alt="Kalananti" class="h-10 object-contain">
+            <div class="h-8 border-l-2 border-slate-200 mx-5"></div>
+            <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png" alt="Ruangguru Coding" class="h-10 object-contain">
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="relative">
+                <!-- Tambahkan option Session 2, 3, dan seterusnya di sini. -->
+                <select id="meetingSelector" class="appearance-none bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 py-2 px-4 pr-8 rounded-xl font-bold cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-brand-orange text-lg">
+                    <option value="1">Session 1: Account Setup & First Project</option>
+                    <option value="2">Session 2: Sequence & Dialogue</option>
+                    <option value="3">Session 3: Motion & Spatial Logic</option>
+                    <option value="4">Session 4: Event-Driven Triggers</option>
+                    <option value="5">Session 5: Systematic Debugging</option>
+                    <option value="6">Session 6: Intro to Loops</option>
+                    <option value="7">Session 7: Loop Variations</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                    <i class="fa-solid fa-chevron-down text-sm"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="mt-20 w-full h-[calc(100vh-144px)] relative overflow-y-auto overflow-x-hidden p-8 flex justify-center">
+        <div id="slideContent" class="slide-container w-full h-full max-w-6xl">
+
+            <!-- ============================== SESSION 1 ============================== -->
+
+            <!-- 1. COVER -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-navy rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-4 text-xl">Class & Platform Preparation</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Account Setup<br><span class="text-4xl text-brand-blue font-medium inline-block mt-3">& First Scratch Project</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl leading-relaxed">Siapkan akun, kenali platform, lalu buat project Scratch pertamamu.</p>
+            </div>
+
+            <!-- 2. AGENDA -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-10 text-center">
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800">Today’s Agenda 📋</h1>
+                    <p class="text-2xl text-slate-500 mt-4 font-medium">Empat tahap untuk mulai belajar sebagai digital creator.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold">
+                    <div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-7"><div class="text-5xl">01</div><div>Device & Account Check</div></div>
+                    <div class="bg-purple-50 p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-7"><div class="text-5xl">02</div><div>Algorithm Challenge</div></div>
+                    <div class="bg-orange-50 p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-7"><div class="text-5xl">03</div><div>Explore Scratch</div></div>
+                    <div class="bg-green-50 p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-7"><div class="text-5xl">04</div><div>Create, Save & Share</div></div>
+                </div>
+            </div>
+
+            <!-- 3. LEARNING TARGET -->
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="bg-white p-10 rounded-[3rem] shadow-lg border-2 border-slate-200 w-full max-w-5xl">
+                    <div class="flex items-center gap-6 mb-8">
+                        <div class="w-20 h-20 rounded-2xl bg-brand-blue text-white flex items-center justify-center text-4xl">🎯</div>
+                        <div><p class="font-bold uppercase tracking-widest text-brand-blue">Session Target</p><h1 class="text-4xl font-extrabold">At the end of this session...</h1></div>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-blue-50 rounded-2xl p-6 border-2 border-blue-100"><div class="text-4xl mb-3">🔐</div><h3 class="text-2xl font-bold">Access</h3><p class="text-lg mt-2">Bisa Sign Up atau Log In dengan akun Scratch.</p></div>
+                        <div class="bg-purple-50 rounded-2xl p-6 border-2 border-purple-100"><div class="text-4xl mb-3">🧭</div><h3 class="text-2xl font-bold">Navigate</h3><p class="text-lg mt-2">Mengenali menu dan area kerja utama.</p></div>
+                        <div class="bg-green-50 rounded-2xl p-6 border-2 border-green-100"><div class="text-4xl mb-3">🛠️</div><h3 class="text-2xl font-bold">Create</h3><p class="text-lg mt-2">Membuat project dengan satu sprite dan backdrop.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. PRE CHECK -->
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="bg-slate-900 text-white p-12 rounded-[3rem] max-w-5xl w-full shadow-xl text-center">
+                    <div class="text-7xl mb-5">⚡</div>
+                    <h1 class="text-5xl font-extrabold mb-5">Quick Pre-Check</h1>
+                    <p class="text-2xl text-slate-300 mb-9">Tunjukkan dengan jari: berapa hal yang sudah siap?</p>
+                    <div class="grid md:grid-cols-3 gap-5 text-left">
+                        <div class="bg-white/10 border border-white/20 p-6 rounded-2xl text-xl">💻 Laptop dan browser siap</div>
+                        <div class="bg-white/10 border border-white/20 p-6 rounded-2xl text-xl">🌐 Internet terhubung</div>
+                        <div class="bg-white/10 border border-white/20 p-6 rounded-2xl text-xl">🔑 Username dan password siap</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. DEVICE AND ACCOUNT SAFETY -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center"><p class="text-brand-orange font-bold uppercase tracking-widest">Before We Start</p><h1 class="text-5xl font-extrabold mt-2">Device & Account Safety 🛡️</h1></div>
+                <div class="grid md:grid-cols-2 gap-7 w-full max-w-5xl">
+                    <div class="bg-white rounded-[2rem] p-8 border-2 border-slate-200 shadow-sm">
+                        <div class="flex gap-5 items-start"><div class="text-6xl">💻</div><div><h3 class="text-3xl font-bold mb-4">Protect the Device</h3><div class="space-y-3 text-xl text-slate-600"><p>• Jauhkan minuman dari laptop.</p><p>• Jangan menutup atau mematikan perangkat saat proses save.</p><p>• Minta bantuan saat ada error perangkat.</p></div></div></div>
+                    </div>
+                    <div class="bg-white rounded-[2rem] p-8 border-2 border-slate-200 shadow-sm">
+                        <div class="flex gap-5 items-start"><div class="text-6xl">🔐</div><div><h3 class="text-3xl font-bold mb-4">Protect the Account</h3><div class="space-y-3 text-xl text-slate-600"><p>• Jangan membagikan password.</p><p>• Hindari memakai nama lengkap pada username publik.</p><p>• Sign Out setelah memakai perangkat bersama.</p></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. CREATOR MINDSET -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-4 animate-float">🎮 → 🧑‍💻</div>
+                <h1 class="text-6xl font-extrabold mb-5">From User to Creator</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Hari ini kita tidak hanya memakai aplikasi. Kita mulai memahami cara memberi instruksi agar komputer menghasilkan sesuatu.</p>
+            </div>
+
+            <!-- 6A. WHAT CAN COMPUTER DO -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center">
+                    <h1 class="text-5xl font-extrabold">More Than Just Browsing 🌐</h1>
+                    <p class="text-2xl text-slate-500 mt-3">Komputer membuka banyak peluang. Apa kegiatan yang sering kamu lakukan?</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-5 w-full">
+                    <div class="bg-blue-50 p-7 rounded-3xl text-center border-2 border-blue-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">📚</div>
+                        <h3 class="text-2xl font-bold">Riset/Tugas</h3>
+                    </div>
+                    <div class="bg-red-50 p-7 rounded-3xl text-center border-2 border-red-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">🎬</div>
+                        <h3 class="text-2xl font-bold">Streaming</h3>
+                    </div>
+                    <div class="bg-purple-50 p-7 rounded-3xl text-center border-2 border-purple-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">🎮</div>
+                        <h3 class="text-2xl font-bold">Gaming</h3>
+                    </div>
+                    <div class="bg-yellow-50 p-7 rounded-3xl text-center border-2 border-yellow-200 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">🎨</div>
+                        <h3 class="text-2xl font-bold">Design/Edit</h3>
+                    </div>
+                    <div class="bg-green-50 p-7 rounded-3xl text-center border-2 border-green-200 col-span-2 md:col-span-1 hover:scale-105 transition">
+                        <div class="text-6xl mb-4">👩‍💻</div>
+                        <h3 class="text-2xl font-bold">Coding</h3>
+                    </div>
+                </div>
+                
+                <div class="mt-10 bg-white p-6 rounded-2xl shadow-md border-2 border-slate-200 w-full max-w-2xl text-center">
+                    <p class="text-xl font-bold text-slate-700 mb-4">Apa kegiatan favorit yang paling sering kamu lakukan di komputer?</p>
+                    <div class="flex gap-4">
+                        <input type="text" id="fav-activity-input" class="flex-1 bg-slate-100 border-2 border-slate-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-brand-blue" placeholder="Ketik kegiatan favoritmu di sini...">
+                        <button onclick="submitActivity()" class="bg-brand-blue text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-600 transition">OK</button>
+                    </div>
+                    <p id="fav-activity-response" class="text-xl text-brand-orange font-bold mt-4 hidden"></p>
+                </div>
+                <script>
+                    function submitActivity() {
+                        const input = document.getElementById('fav-activity-input').value;
+                        const response = document.getElementById('fav-activity-response');
+                        if (input.trim() !== '') {
+                            response.textContent = 'Menarik! Kegiatan ' + input + ' itu bisa sangat bermanfaat.';
+                            response.classList.remove('hidden');
+                        }
+                    }
+                </script>
+            </div>
+
+            <!-- 6B. FAVORITE GAME -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center">
+                    <h1 class="text-5xl font-extrabold">Game Apa yang Kamu Suka? 🎮</h1>
+                    <p class="text-2xl text-slate-500 mt-3">Dunia game sangat luas. Platform atau game apa yang jadi favoritmu?</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-5xl">
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://static.vecteezy.com/system/resources/previews/020/975/557/non_2x/steam-logo-steam-icon-transparent-free-png.png" alt="Steam">
+                        <h3 class="text-2xl font-bold mt-4">Steam</h3>
+                    </div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Roblox_Logo_2022.jpg" alt="Roblox">
+                        <h3 class="text-2xl font-bold mt-4">Roblox</h3>
+                    </div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://thumbs.dreamstime.com/b/minecraft-logo-online-game-dirt-block-illustrations-concept-design-isolated-186775550.jpg" alt="Valorant">
+                        <h3 class="text-2xl font-bold mt-4">Minecraft</h3>
+                    </div>
+                    <div class="logo-card bg-white p-7 rounded-3xl shadow-md border-2 border-slate-200 flex flex-col items-center justify-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/960px-Epic_Games_logo.svg.png" alt="Epic Games">
+                        <h3 class="text-2xl font-bold mt-4">Epic Games</h3>
+                    </div>
+                </div>
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-md border-2 border-slate-200 w-full max-w-3xl text-center">
+                    <p class="text-xl font-bold text-slate-700 mb-4">Ketik game yang paling sering kamu mainkan saat ini:</p>
+                    <div class="flex gap-4">
+                        <input type="text" id="fav-game-input" class="flex-1 bg-slate-100 border-2 border-slate-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-brand-purple" placeholder="Contoh: Valorant, Mobile Legends, Minecraft...">
+                        <button onclick="submitGame()" class="bg-brand-purple text-white font-bold px-6 py-3 rounded-xl hover:bg-purple-600 transition">Kirim</button>
+                    </div>
+                    <p id="fav-game-response" class="text-xl text-brand-green font-bold mt-4 hidden"></p>
+                </div>
+                <script>
+                    function submitGame() {
+                        const input = document.getElementById('fav-game-input').value;
+                        const response = document.getElementById('fav-game-response');
+                        if (input.trim() !== '') {
+                            response.textContent = 'Wah, ' + input + ' itu seru! Butuh strategi dan kecepatan, ya.';
+                            response.classList.remove('hidden');
+                        }
+                    }
+                </script>
+            </div>
+
+            <!-- 6C. HOW GAMES ARE MADE -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5">⚙️🖥️</div>
+                <h1 class="text-6xl font-extrabold mb-5">How Are They Made?</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Game dan aplikasi tidak muncul begitu saja. Ada tim engineer, designer, dan artist yang menyusun <b>instruksi</b> di balik layar.</p>
+            </div>
+
+            <!-- 7. CODING & ALGORITHM -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Coding Starts with Clear Instructions</h1><p class="text-2xl text-slate-500 mt-3">Komputer menjalankan instruksi, bukan menebak maksud kita.</p></div>
+                <div class="grid md:grid-cols-2 gap-7 w-full max-w-5xl">
+                    <div class="bg-blue-50 rounded-[2.5rem] p-9 border-2 border-blue-200"><div class="text-6xl mb-5">🧩</div><h2 class="text-3xl font-bold mb-3">Coding</h2><p class="text-xl leading-relaxed">Menyusun instruksi untuk membuat program, animasi, game, atau produk digital.</p></div>
+                    <div class="bg-purple-50 rounded-[2.5rem] p-9 border-2 border-purple-200"><div class="text-6xl mb-5">🗂️</div><h2 class="text-3xl font-bold mb-3">Algorithm</h2><p class="text-xl leading-relaxed">Urutan langkah yang jelas dan logis untuk mencapai sebuah tujuan.</p></div>
+                </div>
+            </div>
+
+            <!-- 7B. EFFICIENT PROBLEM SOLVING -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5 animate-wobble">⏱️💡</div>
+                <h1 class="text-6xl font-extrabold mb-5">Why Algorithms Matter?</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Programming mengajarkan kita untuk menyelesaikan masalah dengan cara yang <b>paling efisien</b>. Semakin baik algoritmamu, semakin cepat dan cerdas program bekerja.</p>
+            </div>
+
+            <!-- 8. SORTING CHALLENGE -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center"><p class="text-brand-purple font-bold uppercase tracking-widest">Algorithm Challenge 1</p><h1 class="text-5xl font-extrabold mt-2">Build Process: Put It in Order</h1><p class="text-xl text-slate-500 mt-3">Drag langkah berikut menjadi alur pembuatan project yang masuk akal.</p></div>
+                <div class="bg-slate-100 p-7 rounded-[2.5rem] w-full max-w-4xl border-2 border-slate-200">
+                    <div id="sortPool" class="flex flex-col gap-3 mb-5">
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="3"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 🧪 Test project dan cek hasilnya</div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="1"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 🎯 Tentukan tujuan project</div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="5"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 💾 Save dan share saat project siap</div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="2"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 🧱 Susun elemen dan instruksi</div>
+                        <div class="sort-item bg-white p-4 rounded-2xl border-2 border-slate-300 font-bold cursor-move flex items-center shadow-sm text-xl" draggable="true" data-order="4"><span class="sort-num w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mr-5 text-slate-500">?</span> 🐞 Perbaiki bagian yang belum bekerja</div>
+                    </div>
+                    <button onclick="checkSortOrder()" class="w-full py-4 bg-brand-purple text-white font-bold rounded-2xl shadow-lg hover:bg-violet-600 transition text-xl">Check Algorithm ✅</button>
+                    <div id="sortFeedback" class="mt-5 text-center font-bold hidden text-xl"></div>
+                </div>
+            </div>
+
+            <!-- 9A. ADVANCED PUZZLE 1 -->
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="drone">
+                <div class="mb-5 text-center"><p class="text-brand-blue font-bold uppercase tracking-widest">Algorithm Challenge 2</p><h1 class="text-5xl font-extrabold mt-2">Autonomous Delivery Drone 🚁</h1><p class="text-xl text-slate-500 mt-3">Susun blok agar drone mengirim paket tanpa menabrak gedung.</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="drone">
+                    <div class="space-y-5">
+                        <div class="bg-slate-100 border-2 border-slate-200 rounded-2xl p-5">
+                            <div class="font-bold text-slate-600 mb-3 text-xl">Available Blocks</div>
+                            <div class="block-pool flex gap-3 flex-wrap min-h-[64px]"></div>
+                        </div>
+                        <div class="bg-blue-50 border-4 border-blue-200 rounded-2xl p-5">
+                            <div class="font-bold text-blue-700 mb-3 text-xl">Program Area</div>
+                            <div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-blue-100 shadow-inner"></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="run-puzzle flex-1 py-4 bg-brand-blue text-white font-bold rounded-2xl text-xl shadow-lg">▶ Run Program</button>
+                            <button class="reset-puzzle px-6 py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">Reset</button>
+                        </div>
+                        <div class="puzzle-feedback hidden text-center font-bold text-xl"></div>
+                    </div>
+                    <div class="puzzle-board"></div>
+                </div>
+            </div>
+
+            <!-- 9B. ADVANCED PUZZLE 2 -->
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="rover">
+                <div class="mb-5 text-center"><p class="text-brand-orange font-bold uppercase tracking-widest">Algorithm Challenge 3</p><h1 class="text-5xl font-extrabold mt-2">Mars Rover 🪐</h1><p class="text-xl text-slate-500 mt-3">Navigasikan Rover melewati kawah berbatu menuju sampel penelitian.</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="rover">
+                    <div class="space-y-5">
+                        <div class="bg-slate-100 border-2 border-slate-200 rounded-2xl p-5">
+                            <div class="font-bold text-slate-600 mb-3 text-xl">Available Blocks</div>
+                            <div class="block-pool flex gap-3 flex-wrap min-h-[64px]"></div>
+                        </div>
+                        <div class="bg-orange-50 border-4 border-orange-200 rounded-2xl p-5">
+                            <div class="font-bold text-brand-orange mb-3 text-xl">Program Area</div>
+                            <div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-orange-100 shadow-inner"></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="run-puzzle flex-1 py-4 bg-brand-orange text-white font-bold rounded-2xl text-xl shadow-lg">▶ Run Program</button>
+                            <button class="reset-puzzle px-6 py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">Reset</button>
+                        </div>
+                        <div class="puzzle-feedback hidden text-center font-bold text-xl"></div>
+                    </div>
+                    <div class="puzzle-board"></div>
+                </div>
+            </div>
+
+            <!-- 9C. ADVANCED PUZZLE 3 -->
+            <div class="slide s1 flex-col items-center" data-puzzle-slide="sub">
+                <div class="mb-5 text-center"><p class="text-brand-purple font-bold uppercase tracking-widest">Algorithm Challenge 4</p><h1 class="text-5xl font-extrabold mt-2">Deep Sea Submarine 🌊</h1><p class="text-xl text-slate-500 mt-3">Pandu kapal selam mencari harta karun tanpa tersesat di palung.</p></div>
+                <div class="puzzle-shell w-full max-w-6xl grid md:grid-cols-[1fr_auto] gap-7 items-start" data-puzzle="sub">
+                    <div class="space-y-5">
+                        <div class="bg-slate-100 border-2 border-slate-200 rounded-2xl p-5">
+                            <div class="font-bold text-slate-600 mb-3 text-xl">Available Blocks</div>
+                            <div class="block-pool flex gap-3 flex-wrap min-h-[64px]"></div>
+                        </div>
+                        <div class="bg-purple-50 border-4 border-purple-200 rounded-2xl p-5">
+                            <div class="font-bold text-brand-purple mb-3 text-xl">Program Area</div>
+                            <div class="program-zone flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-purple-100 shadow-inner"></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="run-puzzle flex-1 py-4 bg-brand-purple text-white font-bold rounded-2xl text-xl shadow-lg">▶ Run Program</button>
+                            <button class="reset-puzzle px-6 py-4 bg-slate-200 text-slate-700 font-bold rounded-2xl text-xl">Reset</button>
+                        </div>
+                        <div class="puzzle-feedback hidden text-center font-bold text-xl"></div>
+                    </div>
+                    <div class="puzzle-board"></div>
+                </div>
+            </div>
+
+            <!-- 9D. WHY ALGORITHM -->
+            <div class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-5">🤔🎮</div>
+                <h1 class="text-6xl font-extrabold mb-5">Kenapa Kita Belajar Ini?</h1>
+                <p class="text-3xl text-slate-600 max-w-4xl leading-relaxed">Karena algoritma yang efisien dan instruksi yang akurat adalah kunci utama untuk <b>membuat game dan animasimu sendiri</b> di platform coding kita selanjutnya!</p>
+            </div>
+
+            <!-- 10. SCRATCH INTRO -->
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="max-w-5xl w-full bg-gradient-to-br from-orange-50 to-yellow-50 border-4 border-orange-200 rounded-[3rem] p-11 shadow-lg">
+                    <div class="grid md:grid-cols-[.75fr_1.25fr] gap-9 items-center">
+                        <div class="text-center text-[10rem]">🐱</div>
+                        <div><p class="text-brand-orange font-bold tracking-widest uppercase">Meet the Platform</p><h1 class="text-6xl font-extrabold mt-2 mb-5">What Is Scratch?</h1><p class="text-2xl text-slate-700 leading-relaxed">Scratch adalah platform block coding untuk membuat interactive stories, animations, games, dan berbagai project digital.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. OPEN SCRATCH -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-9 text-center"><h1 class="text-5xl font-extrabold">Open Scratch & Access Your Account</h1><p class="text-xl text-slate-500 mt-3">Pilih Sign In jika sudah punya akun, atau Join Scratch jika belum.</p></div>
+                <div class="grid md:grid-cols-3 gap-6 w-full max-w-6xl">
+                    <div class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 text-center"><div class="w-12 h-12 rounded-full bg-brand-blue text-white font-bold text-xl flex items-center justify-center mx-auto -mt-11 mb-4 border-4 border-white">1</div><h3 class="text-2xl font-bold mb-4">Open Website</h3><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/278526dd-7ac6-489c-9167-ffd5ef8b4b66.png" alt="Scratch website" class="w-full h-44 object-cover rounded-xl border mb-4"><p class="text-lg">Ketik <strong>scratch.mit.edu</strong> pada browser.</p></div>
+                    <div class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 text-center"><div class="w-12 h-12 rounded-full bg-brand-purple text-white font-bold text-xl flex items-center justify-center mx-auto -mt-11 mb-4 border-4 border-white">2</div><h3 class="text-2xl font-bold mb-4">Choose Access</h3><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/164de3cf-bf89-4167-95ff-1ab1ec2d4496.png" alt="Scratch Sign In" class="w-full h-44 object-cover rounded-xl border mb-4"><p class="text-lg">Klik <strong>Sign In</strong> atau <strong>Join Scratch</strong>.</p></div>
+                    <div class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 text-center"><div class="w-12 h-12 rounded-full bg-brand-green text-white font-bold text-xl flex items-center justify-center mx-auto -mt-11 mb-4 border-4 border-white">3</div><h3 class="text-2xl font-bold mb-4">Enter Account</h3><div class="w-full h-44 rounded-xl mb-4 bg-green-50 border-2 border-dashed border-green-300 flex flex-col justify-center gap-3 p-5"><div class="bg-white rounded-lg border px-4 py-2 text-left">👤 Username</div><div class="bg-white rounded-lg border px-4 py-2 text-left">🔒 Password</div><div class="bg-green-600 text-white rounded-lg px-4 py-2 font-bold">Sign in</div></div><p class="text-lg">Masukkan data akun dengan teliti.</p></div>
+                </div>
+            </div>
+
+            <!-- 12. ACCOUNT PATH -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Sign Up or Log In?</h1><p class="text-2xl text-slate-500 mt-3">Ikuti jalur yang sesuai dengan kondisi akunmu.</p></div>
+                <div class="grid md:grid-cols-2 gap-7 w-full max-w-5xl">
+                    <div class="bg-blue-50 p-9 rounded-[2.5rem] border-2 border-blue-200"><div class="text-6xl mb-4">🆕</div><h2 class="text-3xl font-bold mb-4">New Account</h2><div class="space-y-3 text-xl"><p>1. Klik <strong>Join Scratch</strong>.</p><p>2. Buat username yang aman.</p><p>3. Buat password dan simpan secara pribadi.</p><p>4. Ikuti data setup sampai selesai.</p></div></div>
+                    <div class="bg-purple-50 p-9 rounded-[2.5rem] border-2 border-purple-200"><div class="text-6xl mb-4">🔑</div><h2 class="text-3xl font-bold mb-4">Existing Account</h2><div class="space-y-3 text-xl"><p>1. Klik <strong>Sign In</strong>.</p><p>2. Masukkan username.</p><p>3. Masukkan password.</p><p>4. Pastikan nama akun muncul di bagian atas.</p></div></div>
+                </div>
+            </div>
+
+            <!-- 13. WORKSPACE OVERVIEW -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Scratch Workspace Overview 🔍</h1><p class="text-xl text-slate-500 mt-3">Kenali area yang akan sering dipakai selama course.</p></div>
+                <img src="https://i0.wp.com/teachingforward.net/wp-content/uploads/2018/10/interface-overview.png?resize=620%2C379&ssl=1" alt="Scratch workspace" class="w-full max-w-4xl rounded-3xl shadow-lg border-4 border-slate-200 mb-7">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl text-center">
+                    <div class="bg-blue-50 p-5 rounded-2xl border-2 border-blue-200"><h3 class="text-xl font-bold">Block Palette</h3><p class="mt-2">Kumpulan blok kode.</p></div>
+                    <div class="bg-green-50 p-5 rounded-2xl border-2 border-green-200"><h3 class="text-xl font-bold">Code Area</h3><p class="mt-2">Tempat menyusun blok.</p></div>
+                    <div class="bg-purple-50 p-5 rounded-2xl border-2 border-purple-200"><h3 class="text-xl font-bold">Stage</h3><p class="mt-2">Tampilan hasil project.</p></div>
+                    <div class="bg-orange-50 p-5 rounded-2xl border-2 border-orange-200"><h3 class="text-xl font-bold">Sprite List</h3><p class="mt-2">Daftar objek project.</p></div>
+                </div>
+            </div>
+
+            <!-- 14. CREATE PROJECT -->
+            <div class="slide s1 flex-col items-center">
+                <div class="w-full max-w-5xl flex items-center gap-6 mb-8 border-b-2 border-slate-200 pb-5"><div class="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-bold text-3xl">1</div><div><p class="text-brand-blue font-bold uppercase tracking-widest">First Project</p><h1 class="text-4xl font-extrabold">Create & Rename</h1></div></div>
+                <div class="grid md:grid-cols-[1.1fr_.9fr] gap-8 w-full max-w-5xl items-center">
+                    <div class="bg-white rounded-3xl p-8 border-2 border-slate-200 shadow-md"><div class="text-8xl text-center mb-5">📄</div><h3 class="text-3xl font-bold text-center mb-5">Click Create</h3><p class="text-xl text-center text-slate-600">Buka project baru dari menu <strong>Create</strong>.</p></div>
+                    <div class="bg-slate-900 text-white rounded-3xl p-8"><p class="text-lg text-slate-300 mb-3">Project title</p><div class="bg-white text-slate-800 rounded-xl p-4 text-2xl font-bold mb-5">My First Scene</div><p class="text-xl">Gunakan nama yang singkat dan sesuai isi project.</p></div>
+                </div>
+            </div>
+
+            <!-- 15. CHOOSE SPRITE -->
+            <div class="slide s1 flex-col items-center justify-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">2. Choose One Sprite</h1>
+                <div class="w-full max-w-2xl rounded-2xl shadow-lg overflow-hidden border-4 border-blue-200"><div class="media-frame"><iframe src="https://jumpshare.com/embed/r6Vcq0arPI15UiJqS7DQ" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen title="Choose a Sprite"></iframe></div></div>
+                <div class="mt-6 bg-blue-50 border-2 border-blue-200 rounded-2xl px-8 py-5 text-xl text-center max-w-4xl"><strong>Sprite</strong> adalah objek atau karakter yang dapat diberi kode.</div>
+            </div>
+
+            <!-- 16. CHOOSE BACKDROP -->
+            <div class="slide s1 flex-col items-center justify-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">3. Choose One Backdrop</h1>
+                <div class="w-full max-w-2xl rounded-2xl shadow-lg overflow-hidden border-4 border-purple-200"><div class="media-frame"><iframe src="https://jumpshare.com/embed/f3btNglHQgxAvdMIvVKp" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen title="Choose a Backdrop"></iframe></div></div>
+                <div class="mt-6 bg-purple-50 border-2 border-purple-200 rounded-2xl px-8 py-5 text-xl text-center max-w-4xl"><strong>Backdrop</strong> adalah latar tempat project berlangsung.</div>
+            </div>
+
+            <!-- 17. MINI PROJECT -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center"><p class="text-brand-orange font-bold uppercase tracking-widest">Your Turn</p><h1 class="text-5xl font-extrabold mt-2">Build Your First Scene 🎬</h1><p class="text-2xl text-slate-500 mt-3">Buat satu scene sederhana yang terlihat jelas dan konsisten.</p></div>
+                <div class="grid md:grid-cols-[1fr_1.15fr] gap-8 w-full max-w-5xl items-center">
+                    <div class="bg-white rounded-[2.5rem] p-8 border-2 border-slate-200 shadow-md"><h3 class="text-3xl font-bold mb-5">Project Checklist</h3>
+                        <div class="space-y-2 text-xl">
+                            <label class="flex items-center gap-4 cursor-pointer p-3 hover:bg-slate-50 rounded-xl transition border border-transparent hover:border-slate-200 group">
+                                <input type="checkbox" class="w-7 h-7 rounded border-slate-300 text-brand-orange focus:ring-brand-orange accent-brand-orange cursor-pointer">
+                                <span class="group-hover:text-brand-orange transition">Project sudah diberi nama</span>
+                            </label>
+                            <label class="flex items-center gap-4 cursor-pointer p-3 hover:bg-slate-50 rounded-xl transition border border-transparent hover:border-slate-200 group">
+                                <input type="checkbox" class="w-7 h-7 rounded border-slate-300 text-brand-orange focus:ring-brand-orange accent-brand-orange cursor-pointer">
+                                <span class="group-hover:text-brand-orange transition">Memiliki minimal 1 sprite</span>
+                            </label>
+                            <label class="flex items-center gap-4 cursor-pointer p-3 hover:bg-slate-50 rounded-xl transition border border-transparent hover:border-slate-200 group">
+                                <input type="checkbox" class="w-7 h-7 rounded border-slate-300 text-brand-orange focus:ring-brand-orange accent-brand-orange cursor-pointer">
+                                <span class="group-hover:text-brand-orange transition">Memiliki 1 backdrop</span>
+                            </label>
+                            <label class="flex items-center gap-4 cursor-pointer p-3 hover:bg-slate-50 rounded-xl transition border border-transparent hover:border-slate-200 group">
+                                <input type="checkbox" class="w-7 h-7 rounded border-slate-300 text-brand-orange focus:ring-brand-orange accent-brand-orange cursor-pointer">
+                                <span class="group-hover:text-brand-orange transition">Sprite dan backdrop sesuai tema</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="rounded-[2.5rem] overflow-hidden border-4 border-slate-700 shadow-xl bg-gradient-to-b from-indigo-900 to-slate-900 h-80 relative"><div class="absolute top-5 right-8 text-6xl">🌙</div><div class="absolute bottom-0 left-0 right-0 h-24 bg-slate-800"></div><div class="absolute bottom-16 left-16 text-8xl">🚲</div><div class="absolute bottom-14 right-20 text-7xl">🏙️</div><div class="absolute top-6 left-7 bg-white/90 rounded-xl px-4 py-2 font-bold">Example: Night Ride</div></div>
+                </div>
+            </div>
+
+            <!-- 18. SAVE & SHARE -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Save First, Share When Ready 💾</h1><p class="text-2xl text-slate-500 mt-3">Save dan Share memiliki fungsi yang berbeda.</p></div>
+                <div class="grid md:grid-cols-2 gap-7 w-full max-w-5xl mb-6">
+                    <div class="bg-green-50 rounded-3xl p-7 border-2 border-green-200"><div class="text-5xl mb-3">💾</div><h3 class="text-3xl font-bold mb-3">Save</h3><p class="text-xl">Saat sudah Sign In, simpan project online. Gunakan <strong>File → Save now</strong> bila diperlukan.</p></div>
+                    <div class="bg-orange-50 rounded-3xl p-7 border-2 border-orange-200"><div class="text-5xl mb-3">🔗</div><h3 class="text-3xl font-bold mb-3">Share</h3><p class="text-xl">Klik <strong>Share</strong> saat project siap dipublikasikan dan link-nya akan dikumpulkan.</p></div>
+                </div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Scratch Share button" class="w-full max-w-4xl rounded-3xl border-4 border-orange-200 shadow-lg">
+            </div>
+
+            <!-- 19. FINAL CHECK -->
+            <div class="slide s1 flex-col items-center justify-center">
+                <div class="bg-white rounded-[3rem] p-10 shadow-lg border-2 border-slate-200 w-full max-w-5xl">
+                    <div class="text-center mb-7"><div class="text-7xl mb-3">✅</div><h1 class="text-5xl font-extrabold">Before You Leave</h1></div>
+                    <div class="grid md:grid-cols-2 gap-5 text-xl">
+                        <label class="flex items-center gap-4 bg-slate-50 hover:bg-green-50 border-2 border-slate-200 hover:border-green-300 rounded-2xl p-5 cursor-pointer transition group">
+                            <input type="checkbox" class="w-8 h-8 rounded border-slate-300 accent-green-500 cursor-pointer">
+                            <span class="font-medium group-hover:text-green-700 transition">Nama project sudah jelas</span>
+                        </label>
+                        <label class="flex items-center gap-4 bg-slate-50 hover:bg-green-50 border-2 border-slate-200 hover:border-green-300 rounded-2xl p-5 cursor-pointer transition group">
+                            <input type="checkbox" class="w-8 h-8 rounded border-slate-300 accent-green-500 cursor-pointer">
+                            <span class="font-medium group-hover:text-green-700 transition">Sprite dan backdrop sudah ditambahkan</span>
+                        </label>
+                        <label class="flex items-center gap-4 bg-slate-50 hover:bg-green-50 border-2 border-slate-200 hover:border-green-300 rounded-2xl p-5 cursor-pointer transition group">
+                            <input type="checkbox" class="w-8 h-8 rounded border-slate-300 accent-green-500 cursor-pointer">
+                            <span class="font-medium group-hover:text-green-700 transition">Project sudah tersimpan</span>
+                        </label>
+                        <label class="flex items-center gap-4 bg-slate-50 hover:bg-green-50 border-2 border-slate-200 hover:border-green-300 rounded-2xl p-5 cursor-pointer transition group">
+                            <input type="checkbox" class="w-8 h-8 rounded border-slate-300 accent-green-500 cursor-pointer">
+                            <span class="font-medium group-hover:text-green-700 transition">Link sudah dikumpulkan jika diminta</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 20. RECAP -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Session Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat hal penting yang sudah dilakukan.</p></div>
+                <div class="grid grid-cols-2 gap-6 w-full max-w-5xl">
+                    <div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">🔐</div><h3 class="text-2xl font-bold">Account Access</h3><p class="text-lg mt-2">Sign Up atau Log In dengan aman.</p></div>
+                    <div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">🧭</div><h3 class="text-2xl font-bold">Platform Navigation</h3><p class="text-lg mt-2">Kenali Block Palette, Code Area, Stage, dan Sprite List.</p></div>
+                    <div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">🎬</div><h3 class="text-2xl font-bold">First Project</h3><p class="text-lg mt-2">Tambahkan satu sprite dan satu backdrop.</p></div>
+                    <div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">💾</div><h3 class="text-2xl font-bold">Save & Share</h3><p class="text-lg mt-2">Simpan project dan bagikan saat sudah siap.</p></div>
+                </div>
+            </div>
+
+            <!-- 21. QUIZ -->
+            <div class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-xl text-slate-500 mt-3">Check your understanding.</p></div>
+                <div class="bg-white p-9 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl">
+                    <div class="quiz-q" id="s1-q1"><h2 class="text-3xl font-bold mb-6">1. Area untuk menyusun blok kode disebut...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q1')">A. Stage</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s1-q1')">B. Code Area</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q1')">C. Sprite List</button></div><button id="s1-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s1-q1','s1-q2')">Next ➡️</button></div>
+                    <div class="quiz-q hidden" id="s1-q2"><h2 class="text-3xl font-bold mb-6">2. Manakah username yang lebih aman untuk akun publik?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q2')">A. Nama lengkap dan tanggal lahir</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s1-q2')">B. Nama panggilan tanpa data pribadi</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q2')">C. Nomor telepon</button></div><button id="s1-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s1-q2','s1-q3')">Next ➡️</button></div>
+                    <div class="quiz-q hidden" id="s1-q3"><h2 class="text-3xl font-bold mb-6">3. Apa fungsi Share pada Scratch?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q3')">A. Menghapus project</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s1-q3')">B. Mengganti password</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s1-q3')">C. Mempublikasikan project agar dapat dibuka melalui link</button></div><button id="s1-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s1-q3','s1-done')">Finish ✅</button></div>
+                    <div class="quiz-q hidden text-center py-8" id="s1-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Session Complete!</h2><p class="text-xl text-slate-500 mt-3">Akun siap dan project pertamamu sudah dibuat.</p></div>
+                </div>
+            </div>
+
+            <!-- 22. FEEDBACK -->
+            <div class="slide s1 flex-col items-center justify-center feedback-slide">
+                <h1 class="text-5xl font-extrabold mb-5 text-center">How Was Today’s Session?</h1>
+                <p class="text-2xl text-slate-500 mb-10">Pilih emoji yang paling sesuai.</p>
+                <div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🚀</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">👍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🧩</button></div>
+                <div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Thanks for your feedback!</div></div>
+            </div>
+
+            <!-- ============================== SESSION 2 ============================== -->
+            <!-- SESSION 2 · SLIDE 1 -->
+            <div class="slide s2 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-purple rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto"><i class="fa-solid fa-comments"></i></div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-4 text-xl">Creative Storytelling</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Sequence<br><span class="text-4xl text-brand-blue font-medium inline-block mt-3">& Dialogue</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl leading-relaxed">Koordinasikan percakapan, gerakan, costume, dan timing agar cerita berjalan natural.</p>
+            </div>
+            <!-- SESSION 2 · SLIDE 2 -->
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-10 text-center"><h1 class="text-5xl md:text-6xl font-extrabold">Today’s Agenda 📋</h1><p class="text-2xl text-slate-500 mt-4 font-medium">Kita akan membuat project Hatching Chick dengan alur yang terkontrol.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold"><div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-7"><div class="text-5xl">🐔</div><div>Explore the Hatching Chick Story</div></div><div class="bg-purple-50 p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-7"><div class="text-5xl">⏱️</div><div>Coordinate Dialogue Timing</div></div><div class="bg-orange-50 p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-7"><div class="text-5xl">🎭</div><div>Animate Costumes & Movement</div></div><div class="bg-green-50 p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-7"><div class="text-5xl">🧪</div><div>Playtest and Refine</div></div></div>
+            </div>
+            <!-- SESSION 2 · SLIDE 3 -->
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Have You Ever Visited a Chicken Farm? 🐔</h1><p class="text-2xl text-slate-500 mt-3">Sebelum coding, mari pahami konteks cerita yang akan kita buat.</p></div>
+                <div class="lesson-hero farm-scene w-full max-w-5xl"><div class="label">Farm Observation</div><div class="cloud a">☁️</div><div class="cloud b">☁️</div><div class="barn">🏡</div><div class="hen">🐔</div><div class="eggs">🥚🥚🥚</div></div>
+                <div class="mt-6 grid md:grid-cols-2 gap-5 w-full max-w-5xl"><div class="bg-white p-6 rounded-2xl border-2 border-slate-200 text-xl"><strong>Question:</strong> Berapa lama telur ayam biasanya dierami hingga menetas?</div><div class="bg-yellow-50 p-6 rounded-2xl border-2 border-yellow-200 text-xl"><strong>Answer:</strong> Sekitar <span class="text-3xl font-extrabold text-yellow-700">21 hari</span>.</div></div>
+            </div>
+            <!-- SESSION 2 · SLIDE 4 -->
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">From Egg to Chick 🥚 → 🐣</h1><p class="text-2xl text-slate-500 mt-3">Kita akan mengubah proses menetas menjadi cerita animasi berurutan.</p></div>
+                <div class="grid md:grid-cols-4 gap-5 w-full max-w-6xl text-center"><div class="stage-card p-6"><div class="text-7xl mb-3">🐔</div><h3 class="text-2xl font-bold">Hen Introduces</h3><p class="mt-2 text-slate-600">Hen membuka cerita.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">➡️</div><h3 class="text-2xl font-bold">Hen Glides</h3><p class="mt-2 text-slate-600">Hen berpindah ke setiap egg.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🥚</div><h3 class="text-2xl font-bold">Egg Animates</h3><p class="mt-2 text-slate-600">Costume berubah hingga menetas.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🐣</div><h3 class="text-2xl font-bold">Chick Appears</h3><p class="mt-2 text-slate-600">Sound dan dialogue menutup scene.</p></div></div>
+            </div>
+            <!-- SESSION 2 · SLIDE 5 -->
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Sample Project: Hatching Chick 🐣</h1><p class="text-2xl text-slate-500 mt-3">Klik Green Flag dan perhatikan timing dialogue, glide, costume, dan sound.</p></div>
+                <div class="w-full max-w-4xl bg-white p-4 rounded-[2rem] border-4 border-purple-200 shadow-xl"><div class="media-frame bg-slate-100"><iframe src="https://scratch.mit.edu/projects/1364216822/embed" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen title="Scratch sample project"></iframe></div></div>
+                <a href="https://scratch.mit.edu/projects/1364216822/" target="_blank" rel="noopener noreferrer" class="mt-5 bg-brand-purple hover:bg-purple-700 text-white px-7 py-3 rounded-2xl font-bold text-xl transition">Open Project in New Tab ↗</a>
+            </div>
+            <!-- SESSION 2 · SLIDE 6 -->
+            <div class="slide s2 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-4 animate-float">🐱💻</div><h1 class="text-5xl md:text-6xl font-extrabold mb-5">Now It’s Your Turn!</h1><p class="text-2xl text-slate-600 max-w-3xl mb-8">Buka Scratch. Kamu boleh membuat project dari awal atau melanjutkan melalui starter project pada slide berikutnya.</p>
+                <a href="https://scratch.mit.edu/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-5 bg-[#f59e0b] hover:bg-orange-500 text-white px-12 py-7 rounded-[2rem] shadow-xl text-4xl font-extrabold transition hover:scale-105"><span class="text-6xl">🐱</span><span>OPEN SCRATCH</span></a>
+                <div class="mt-7 bg-blue-50 border-2 border-blue-200 px-7 py-4 rounded-2xl text-xl font-bold text-blue-800">Pastikan akunmu sudah Sign In sebelum mulai coding.</div>
+            </div>
+            <!-- SESSION 2 · SLIDE 7 -->
+            <div class="slide s2 flex-col items-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">Need a Starter Project? 🛠️</h1>
+                <div class="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-center w-full max-w-6xl">
+                    <div class="bg-white rounded-[2rem] p-4 border-2 border-slate-200 shadow-lg"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/541086b5-83bb-4123-9545-9dc63f28a3d5.png" alt="Scratch Remix tutorial" class="w-full h-[350px] object-contain rounded-xl"></div>
+                    <div class="bg-white rounded-[2rem] p-7 border-2 border-slate-200 shadow-lg text-left"><h2 class="text-3xl font-extrabold text-brand-orange mb-5">Remix the Project</h2><ol class="text-xl leading-relaxed space-y-5 list-decimal pl-6"><li>Buka starter project melalui tombol berikut.</li><li>Klik <strong>Remix</strong> di kanan atas.</li><li>Rename project dan cek seluruh sprite serta backdrop.</li></ol><a href="https://scratch.mit.edu/projects/1365628537/" target="_blank" rel="noopener noreferrer" class="mt-7 inline-flex w-full justify-center bg-brand-green hover:bg-emerald-600 text-white px-6 py-4 rounded-2xl font-bold text-xl transition">OPEN STARTER PROJECT ↗</a><p class="mt-4 text-slate-500 text-lg">Starter project sudah menyiapkan asset utama agar kita bisa fokus pada coding.</p></div>
+                </div>
+            </div>
+            <!-- SESSION 2 · SLIDE 8 -->
+            <div class="slide s2 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Prepare the Project Assets</h1><p class="text-2xl text-slate-500 mt-3">Pastikan setiap asset mendukung alur cerita.</p></div><div class="grid md:grid-cols-4 gap-5 w-full max-w-6xl text-center"><div class="stage-card p-6"><div class="text-7xl mb-3">🐔</div><h3 class="text-2xl font-bold">Main Sprite</h3><p class="mt-2">Hen sebagai narrator.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🥚</div><h3 class="text-2xl font-bold">Egg Sprites</h3><p class="mt-2">Beberapa egg dengan costume.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🐣</div><h3 class="text-2xl font-bold">Chick Costume</h3><p class="mt-2">Final state setelah menetas.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🔊</div><h3 class="text-2xl font-bold">Sound Effect</h3><p class="mt-2">Crack dan chirp sound.</p></div></div></div>
+            <!-- SESSION 2 · SLIDE 9 -->
+            <div class="slide s2 flex-col items-center justify-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Build the Story Sequence</h1><p class="text-2xl text-slate-500 mt-3">Gunakan urutan block yang jelas agar aksi tidak bertabrakan.</p></div><div class="flex flex-col gap-4 w-full max-w-4xl"><div class="block-chip event-chip">when green flag clicked</div><div class="block-chip looks-chip">say [The eggs are ready to hatch!] for [2] seconds</div><div class="block-chip motion-chip">glide [1] seconds to [Egg 1 position]</div><div class="block-chip looks-chip">broadcast [Hatch Egg 1]</div><div class="block-chip control-chip">wait [1] seconds</div><div class="block-chip sound-chip">start sound [Chirp]</div></div><div class="mt-7 bg-slate-900 text-white rounded-2xl px-8 py-5 text-xl max-w-4xl"><strong>Key idea:</strong> dialogue, movement, dan costume change harus memiliki timing yang cukup agar penonton dapat mengikuti cerita.</div></div>
+            <!-- SESSION 2 · SLIDE 10 -->
+            <div class="slide s2 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Playtest: Find Timing Problems 🔍</h1><p class="text-2xl text-slate-500 mt-3">Jalankan project beberapa kali dan cek masalah berikut.</p></div><div class="grid md:grid-cols-2 gap-6 w-full max-w-5xl"><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Dialogue Overlap</h3><p class="text-xl">Dua speech bubble muncul bersamaan dan sulit dibaca.</p></div><div class="fix-card"><h3 class="text-2xl font-bold mb-3">Fix</h3><p class="text-xl">Tambahkan atau sesuaikan <strong>wait</strong> dan durasi <strong>say</strong>.</p></div><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Costume Too Fast</h3><p class="text-xl">Egg langsung berubah menjadi chick tanpa transisi.</p></div><div class="fix-card"><h3 class="text-2xl font-bold mb-3">Fix</h3><p class="text-xl">Gunakan beberapa costume dan jeda singkat di antaranya.</p></div></div></div>
+            <!-- SESSION 2 · SLIDE 11 -->
+            <div class="slide s2 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Don’t Forget to Save 💾</h1><p class="text-2xl text-slate-500 mt-3">Gunakan nama project yang jelas: <strong>Hatching Chick – Nama Kamu</strong>.</p></div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Save and Share Scratch project" class="w-full max-w-4xl rounded-3xl border-4 border-green-300 shadow-xl">
+                <div class="mt-6 grid md:grid-cols-3 gap-4 w-full max-w-4xl text-lg font-bold"><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">1️⃣ Check project title</div><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">2️⃣ Use File → Save now</div><div class="bg-green-50 border-2 border-green-200 p-4 rounded-2xl text-green-800">3️⃣ Share when instructed</div></div>
+            </div>
+            <!-- SESSION 2 · QUIZ -->
+            <div class="slide s2 flex-col items-center"><div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-xl text-slate-500 mt-3">Check your understanding before closing the session.</p></div><div class="bg-white p-9 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl"><div class="quiz-q" id="s2-q1"><h2 class="text-3xl font-bold mb-6">1. Block apa yang digunakan agar dua sprite berbicara bergantian?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s2-q1')">A. wait</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q1')">B. change color effect</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q1')">C. set size</button></div><button id="s2-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s2-q1','s2-q2')">Next ➡️</button></div><div class="quiz-q hidden" id="s2-q2"><h2 class="text-3xl font-bold mb-6">2. Bagaimana membuat egg terlihat sedang menetas?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s2-q2')">A. Menggunakan next costume</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q2')">B. Menghapus backdrop</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q2')">C. Mengganti username</button></div><button id="s2-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s2-q2','s2-q3')">Next ➡️</button></div><div class="quiz-q hidden" id="s2-q3"><h2 class="text-3xl font-bold mb-6">3. Mengapa project perlu di-playtest beberapa kali?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s2-q3')">A. Untuk mencari masalah timing dan urutan</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q3')">B. Agar ukuran file selalu lebih besar</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s2-q3')">C. Agar semua sprite hilang</button></div><button id="s2-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s2-q3','s2-done')">Finish ✅</button></div><div class="quiz-q hidden text-center py-8" id="s2-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Session Complete!</h2><p class="text-xl text-slate-500 mt-3">Dialogue dan animasi Hatching Chick sudah tersusun dengan timing yang lebih baik.</p></div></div></div>
+            <!-- SESSION 2 · RECAP -->
+            <div class="slide s2 flex-col items-center"><div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat poin utama dari sesi hari ini.</p></div><div class="grid grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">⏱️</div><h3 class="text-2xl font-bold">Timing</h3><p class="text-lg mt-2">Gunakan wait agar percakapan tidak bertumpuk.</p></div><div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">🎭</div><h3 class="text-2xl font-bold">Costume Animation</h3><p class="text-lg mt-2">Gunakan next costume untuk proses menetas.</p></div><div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">➡️</div><h3 class="text-2xl font-bold">Movement</h3><p class="text-lg mt-2">Gunakan glide untuk mengarahkan Hen.</p></div><div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">🧪</div><h3 class="text-2xl font-bold">Playtest</h3><p class="text-lg mt-2">Uji ulang dan perbaiki bagian yang terasa terlalu cepat.</p></div></div></div>
+            <!-- SESSION 2 · FEEDBACK -->
+            <div class="slide s2 flex-col items-center justify-center feedback-slide"><h1 class="text-5xl font-extrabold mb-5 text-center">How Was Today’s Session?</h1><p class="text-2xl text-slate-500 mb-10">Pilih emoji yang paling sesuai.</p><div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🚀</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">👍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🧩</button></div><div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Thanks for your feedback!</div></div></div>
+
+            <!-- ============================== SESSION 3 ============================== -->
+            <!-- SESSION 3 · SLIDE 1 -->
+            <div class="slide s3 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-blue rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto"><i class="fa-solid fa-location-crosshairs"></i></div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-4 text-xl">Interactive Mechanics</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Motion<br><span class="text-4xl text-brand-blue font-medium inline-block mt-3">& Spatial Logic</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl leading-relaxed">Programkan delivery drone menggunakan koordinat X–Y, glide, dan direction.</p>
+            </div>
+            <!-- SESSION 3 · SLIDE 2 -->
+            <div class="slide s3 flex-col items-center">
+                <div class="mb-10 text-center"><h1 class="text-5xl md:text-6xl font-extrabold">Today’s Agenda 🗺️</h1><p class="text-2xl text-slate-500 mt-4 font-medium">Kita akan mengubah peta digital menjadi sistem navigasi di Scratch.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold"><div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-7"><div class="text-5xl">📍</div><div>Understand X and Y Position</div></div><div class="bg-purple-50 p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-7"><div class="text-5xl">🤖</div><div>Meet Robo-KAL</div></div><div class="bg-orange-50 p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-7"><div class="text-5xl">🧭</div><div>Program a Delivery Route</div></div><div class="bg-green-50 p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-7"><div class="text-5xl">🔄</div><div>Rotate and Return Home</div></div></div>
+            </div>
+            <!-- SESSION 3 · SLIDE 3 -->
+            <div class="slide s3 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Have You Ever Tracked a Delivery? 📱</h1><p class="text-2xl text-slate-500 mt-3">Aplikasi delivery dan transportasi menampilkan objek yang bergerak dari satu titik ke titik lain.</p></div><div class="lesson-hero map-scene w-full max-w-5xl"><div class="label">Live Tracking Map</div><div class="route-line" style="left:130px;top:220px;width:250px;transform:rotate(-18deg)"></div><div class="route-line" style="left:360px;top:145px;width:270px;transform:rotate(17deg)"></div><div class="route-line" style="left:610px;top:225px;width:230px;transform:rotate(-12deg)"></div><div class="map-pin" style="left:95px;top:200px">🏪</div><div class="map-pin" style="left:355px;top:95px">🏠</div><div class="map-pin" style="right:95px;top:165px">🏢</div><div class="drone-badge" style="left:51%;top:175px">🛸</div></div><div class="mt-6 bg-white border-2 border-slate-200 rounded-2xl p-5 text-2xl font-bold max-w-4xl text-center">Setiap titik pada Stage dapat dijelaskan menggunakan posisi <span class="text-brand-blue">X</span> dan <span class="text-brand-purple">Y</span>.</div></div>
+            <!-- SESSION 3 · SLIDE 4 -->
+            <div class="slide s3 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Meet Robo-KAL 🤖</h1><p class="text-2xl text-slate-500 mt-3">Delivery drone yang harus mengirim paket ke alamat yang tepat tanpa tersesat.</p></div><div class="grid md:grid-cols-[.8fr_1.2fr] gap-8 items-center w-full max-w-5xl"><div class="stage-card p-6 text-center"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/9cec3931-7d01-4ef7-b4a6-9f7f17d0c21a.png" alt="Robo-KAL delivery drone" class="w-full h-[360px] object-contain"><div class="inline-block mt-4 bg-purple-50 border-2 border-purple-200 rounded-xl px-5 py-3 text-2xl font-bold text-purple-700">Robo-KAL</div></div><div class="space-y-5"><div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6"><h3 class="text-2xl font-bold mb-2">Mission</h3><p class="text-xl">Mengunjungi seluruh delivery point secara berurutan.</p></div><div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-6"><h3 class="text-2xl font-bold mb-2">Navigation</h3><p class="text-xl">Gunakan glide to x: y: untuk posisi yang presisi.</p></div><div class="bg-orange-50 border-2 border-orange-200 rounded-2xl p-6"><h3 class="text-2xl font-bold mb-2">Orientation</h3><p class="text-xl">Gunakan point in direction agar drone menghadap sesuai arah perjalanan.</p></div></div></div></div>
+            <!-- SESSION 3 · SLIDE 5 -->
+            <div class="slide s3 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Read the Scratch Coordinate Grid</h1><p class="text-2xl text-slate-500 mt-3">Stage Scratch memiliki pusat di x: 0 dan y: 0.</p></div><div class="relative w-full max-w-4xl h-[390px] bg-white rounded-[2rem] border-4 border-slate-300 overflow-hidden shadow-lg" style="background-image:linear-gradient(#dbeafe 1px,transparent 1px),linear-gradient(90deg,#dbeafe 1px,transparent 1px);background-size:40px 40px"><div class="absolute left-1/2 top-0 bottom-0 w-1 bg-blue-500"></div><div class="absolute top-1/2 left-0 right-0 h-1 bg-purple-500"></div><div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold">0,0</div><div class="absolute top-6 right-8 bg-green-100 border-2 border-green-300 rounded-xl p-3 font-bold">x: + / y: +</div><div class="absolute bottom-6 left-8 bg-orange-100 border-2 border-orange-300 rounded-xl p-3 font-bold">x: − / y: −</div><div class="absolute top-14 left-16 text-5xl">🏠</div><div class="absolute bottom-12 right-20 text-5xl">🏢</div></div></div>
+            <!-- SESSION 3 · SLIDE 6 -->
+            <div class="slide s3 flex-col items-center">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Sample Project: Robo-KAL Delivery Drone</h1><p class="text-2xl text-slate-500 mt-3">Perhatikan rute, koordinat, rotation, dialogue, dan return-to-base sequence.</p></div>
+                <div class="w-full max-w-4xl bg-white p-4 rounded-[2rem] border-4 border-blue-200 shadow-xl"><div class="media-frame bg-slate-100"><iframe src="https://scratch.mit.edu/projects/1365429952/embed" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen title="Scratch sample project"></iframe></div></div>
+                <a href="https://scratch.mit.edu/projects/1365429952/" target="_blank" rel="noopener noreferrer" class="mt-5 bg-brand-purple hover:bg-purple-700 text-white px-7 py-3 rounded-2xl font-bold text-xl transition">Open Project in New Tab ↗</a>
+            </div>
+            <!-- SESSION 3 · SLIDE 7 -->
+            <div class="slide s3 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-4 animate-float">🐱💻</div><h1 class="text-5xl md:text-6xl font-extrabold mb-5">Now It’s Your Turn!</h1><p class="text-2xl text-slate-600 max-w-3xl mb-8">Buka Scratch dan siapkan workspace. Pada project ini kita akan membaca posisi X–Y secara presisi.</p>
+                <a href="https://scratch.mit.edu/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-5 bg-[#f59e0b] hover:bg-orange-500 text-white px-12 py-7 rounded-[2rem] shadow-xl text-4xl font-extrabold transition hover:scale-105"><span class="text-6xl">🐱</span><span>OPEN SCRATCH</span></a>
+                <div class="mt-7 bg-blue-50 border-2 border-blue-200 px-7 py-4 rounded-2xl text-xl font-bold text-blue-800">Pastikan akunmu sudah Sign In sebelum mulai coding.</div>
+            </div>
+            <!-- SESSION 3 · SLIDE 8 -->
+            <div class="slide s3 flex-col items-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">Need a Starter Project? 🛠️</h1>
+                <div class="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-center w-full max-w-6xl">
+                    <div class="bg-white rounded-[2rem] p-4 border-2 border-slate-200 shadow-lg"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/541086b5-83bb-4123-9545-9dc63f28a3d5.png" alt="Scratch Remix tutorial" class="w-full h-[350px] object-contain rounded-xl"></div>
+                    <div class="bg-white rounded-[2rem] p-7 border-2 border-slate-200 shadow-lg text-left"><h2 class="text-3xl font-extrabold text-brand-orange mb-5">Remix the Project</h2><ol class="text-xl leading-relaxed space-y-5 list-decimal pl-6"><li>Buka starter project melalui tombol berikut.</li><li>Klik <strong>Remix</strong> di kanan atas.</li><li>Rename project dan cek seluruh sprite serta backdrop.</li></ol><a href="https://scratch.mit.edu/projects/1324369947/" target="_blank" rel="noopener noreferrer" class="mt-7 inline-flex w-full justify-center bg-brand-green hover:bg-emerald-600 text-white px-6 py-4 rounded-2xl font-bold text-xl transition">OPEN STARTER PROJECT ↗</a><p class="mt-4 text-slate-500 text-lg">Starter project sudah menyiapkan asset utama agar kita bisa fokus pada coding.</p></div>
+                </div>
+            </div>
+            <!-- SESSION 3 · SLIDE 9 -->
+            <div class="slide s3 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Prepare the Delivery Map</h1><p class="text-2xl text-slate-500 mt-3">Setiap destination harus terlihat jelas dan memiliki posisi yang berbeda.</p></div><div class="grid md:grid-cols-4 gap-5 w-full max-w-6xl text-center"><div class="stage-card p-6"><div class="text-7xl mb-3">🤖</div><h3 class="text-2xl font-bold">Robo-KAL</h3><p class="mt-2">Main delivery drone.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🏠</div><h3 class="text-2xl font-bold">Home A</h3><p class="mt-2">Delivery point 1.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🏢</div><h3 class="text-2xl font-bold">Home B</h3><p class="mt-2">Delivery point 2.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🏪</div><h3 class="text-2xl font-bold">Base</h3><p class="mt-2">Start and finish position.</p></div></div></div>
+            <!-- SESSION 3 · SLIDE 10 -->
+            <div class="slide s3 flex-col items-center justify-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Program the Route</h1><p class="text-2xl text-slate-500 mt-3">Susun rute berdasarkan koordinat destination.</p></div><div class="flex flex-col gap-4 w-full max-w-4xl"><div class="block-chip event-chip">when green flag clicked</div><div class="block-chip motion-chip">go to x: [0] y: [-120]</div><div class="block-chip looks-chip">say [Starting delivery route.] for [2] seconds</div><div class="block-chip motion-chip">point in direction [45]</div><div class="block-chip motion-chip">glide [1.5] seconds to x: [160] y: [90]</div><div class="block-chip looks-chip">say [Package delivered!] for [1] seconds</div><div class="block-chip motion-chip">glide [1.5] seconds to x: [0] y: [-120]</div></div></div>
+            <!-- SESSION 3 · SLIDE 11 -->
+            <div class="slide s3 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Don’t Forget to Save 💾</h1><p class="text-2xl text-slate-500 mt-3">Gunakan nama project yang jelas: <strong>Robo-KAL Delivery – Nama Kamu</strong>.</p></div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Save and Share Scratch project" class="w-full max-w-4xl rounded-3xl border-4 border-green-300 shadow-xl">
+                <div class="mt-6 grid md:grid-cols-3 gap-4 w-full max-w-4xl text-lg font-bold"><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">1️⃣ Check project title</div><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">2️⃣ Use File → Save now</div><div class="bg-green-50 border-2 border-green-200 p-4 rounded-2xl text-green-800">3️⃣ Share when instructed</div></div>
+            </div>
+            <!-- SESSION 3 · QUIZ -->
+            <div class="slide s3 flex-col items-center"><div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-xl text-slate-500 mt-3">Check your understanding before closing the session.</p></div><div class="bg-white p-9 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl"><div class="quiz-q" id="s3-q1"><h2 class="text-3xl font-bold mb-6">1. Koordinat apa yang menunjukkan posisi tengah Stage Scratch?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s3-q1')">A. x: 0 y: 0</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s3-q1')">B. x: 240 y: 180</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s3-q1')">C. x: -500 y: -500</button></div><button id="s3-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s3-q1','s3-q2')">Next ➡️</button></div><div class="quiz-q hidden" id="s3-q2"><h2 class="text-3xl font-bold mb-6">2. Block yang paling tepat untuk bergerak halus menuju koordinat tertentu adalah...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s3-q2')">A. glide seconds to x: y:</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s3-q2')">B. say</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s3-q2')">C. hide</button></div><button id="s3-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s3-q2','s3-q3')">Next ➡️</button></div><div class="quiz-q hidden" id="s3-q3"><h2 class="text-3xl font-bold mb-6">3. Apa fungsi point in direction?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s3-q3')">A. Mengatur arah hadap sprite</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s3-q3')">B. Menghapus project</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s3-q3')">C. Mengganti username</button></div><button id="s3-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s3-q3','s3-done')">Finish ✅</button></div><div class="quiz-q hidden text-center py-8" id="s3-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Session Complete!</h2><p class="text-xl text-slate-500 mt-3">Robo-KAL sudah dapat menavigasi beberapa titik dengan koordinat dan direction yang tepat.</p></div></div></div>
+            <!-- SESSION 3 · RECAP -->
+            <div class="slide s3 flex-col items-center"><div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat poin utama dari sesi hari ini.</p></div><div class="grid grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">📍</div><h3 class="text-2xl font-bold">X–Y Position</h3><p class="text-lg mt-2">Setiap titik pada Stage memiliki koordinat.</p></div><div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">➡️</div><h3 class="text-2xl font-bold">Glide</h3><p class="text-lg mt-2">Gerakkan sprite menuju posisi yang presisi.</p></div><div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">🧭</div><h3 class="text-2xl font-bold">Direction</h3><p class="text-lg mt-2">Atur arah hadap agar animasi lebih masuk akal.</p></div><div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">🔁</div><h3 class="text-2xl font-bold">Sequence</h3><p class="text-lg mt-2">Kunjungi destination secara berurutan lalu kembali ke base.</p></div></div></div>
+            <!-- SESSION 3 · FEEDBACK -->
+            <div class="slide s3 flex-col items-center justify-center feedback-slide"><h1 class="text-5xl font-extrabold mb-5 text-center">How Was Today’s Session?</h1><p class="text-2xl text-slate-500 mb-10">Pilih emoji yang paling sesuai.</p><div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🚀</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">👍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🧩</button></div><div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Thanks for your feedback!</div></div></div>
+
+            <!-- ============================== SESSION 4 ============================== -->
+            <!-- SESSION 4 · SLIDE 1 -->
+            <div class="slide s4 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-orange rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto"><i class="fa-solid fa-bolt"></i></div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-4 text-xl">Interactive Mechanics</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Event-Driven<br><span class="text-4xl text-brand-blue font-medium inline-block mt-3">Triggers</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl leading-relaxed">Bangun scene interaktif menggunakan keyboard, click events, movement, dan hidden sound effects.</p>
+            </div>
+            <!-- SESSION 4 · SLIDE 2 -->
+            <div class="slide s4 flex-col items-center">
+                <div class="mb-10 text-center"><h1 class="text-5xl md:text-6xl font-extrabold">Today’s Agenda ⚡</h1><p class="text-2xl text-slate-500 mt-4 font-medium">Kita akan membantu kelompok pirate menemukan hidden treasure.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold"><div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-7"><div class="text-5xl">🏴‍☠️</div><div>Understand the Pirate Mission</div></div><div class="bg-purple-50 p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-7"><div class="text-5xl">🖱️</div><div>Use Click Events</div></div><div class="bg-orange-50 p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-7"><div class="text-5xl">✨</div><div>Animate Collected Treasure</div></div><div class="bg-green-50 p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-7"><div class="text-5xl">🔊</div><div>Add Feedback Sound</div></div></div>
+            </div>
+            <!-- SESSION 4 · SLIDE 3 -->
+            <div class="slide s4 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Mission: Recover the Hidden Treasure 🏴‍☠️</h1><p class="text-2xl text-slate-500 mt-3">Kelompok pirate membutuhkan sistem interaktif untuk menemukan seluruh treasure.</p></div><div class="lesson-hero pirate-scene w-full max-w-5xl"><div class="label">Treasure Hunt Briefing</div><div class="pirate-ship">⛵</div><div class="pirate-team">🏴‍☠️🧭</div><div class="island"></div><div class="treasure-pile">💰🪙</div></div><div class="mt-6 bg-white border-2 border-slate-200 rounded-2xl p-5 text-2xl font-bold max-w-4xl text-center">Tidak semua event harus dimulai dengan Green Flag. User dapat memicu aksi dengan <span class="text-brand-orange">keyboard</span> atau <span class="text-brand-purple">click</span>.</div></div>
+            <!-- SESSION 4 · SLIDE 4 -->
+            <div class="slide s4 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Event Trigger = Start Signal</h1><p class="text-2xl text-slate-500 mt-3">Event menentukan kapan sebuah script mulai dijalankan.</p></div><div class="grid md:grid-cols-3 gap-6 w-full max-w-5xl"><div class="stage-card p-8 text-center"><div class="text-7xl mb-4">⌨️</div><div class="block-chip event-chip">when [space] key pressed</div><p class="text-xl mt-5">User menekan tombol keyboard.</p></div><div class="stage-card p-8 text-center"><div class="text-7xl mb-4">🖱️</div><div class="block-chip event-chip">when this sprite clicked</div><p class="text-xl mt-5">User mengklik sprite.</p></div><div class="stage-card p-8 text-center"><div class="text-7xl mb-4">🏁</div><div class="block-chip event-chip">when green flag clicked</div><p class="text-xl mt-5">Project dimulai secara umum.</p></div></div></div>
+            <!-- SESSION 4 · SLIDE 5 -->
+            <div class="slide s4 flex-col items-center">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Sample Project: Find the Treasure</h1><p class="text-2xl text-slate-500 mt-3">Coba klik berbagai area dan perhatikan bagaimana treasure bereaksi.</p></div>
+                <div class="w-full max-w-4xl bg-white p-4 rounded-[2rem] border-4 border-orange-200 shadow-xl"><div class="media-frame bg-slate-100"><iframe src="https://scratch.mit.edu/projects/710783599/embed" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen title="Scratch sample project"></iframe></div></div>
+                <a href="https://scratch.mit.edu/projects/710783599/" target="_blank" rel="noopener noreferrer" class="mt-5 bg-brand-purple hover:bg-purple-700 text-white px-7 py-3 rounded-2xl font-bold text-xl transition">Open Project in New Tab ↗</a>
+            </div>
+            <!-- SESSION 4 · SLIDE 6 -->
+            <div class="slide s4 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-4 animate-float">🐱💻</div><h1 class="text-5xl md:text-6xl font-extrabold mb-5">Now It’s Your Turn!</h1><p class="text-2xl text-slate-600 max-w-3xl mb-8">Buka Scratch dan siapkan project baru. Kita akan mengubah treasure menjadi interactive objects.</p>
+                <a href="https://scratch.mit.edu/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-5 bg-[#f59e0b] hover:bg-orange-500 text-white px-12 py-7 rounded-[2rem] shadow-xl text-4xl font-extrabold transition hover:scale-105"><span class="text-6xl">🐱</span><span>OPEN SCRATCH</span></a>
+                <div class="mt-7 bg-blue-50 border-2 border-blue-200 px-7 py-4 rounded-2xl text-xl font-bold text-blue-800">Pastikan akunmu sudah Sign In sebelum mulai coding.</div>
+            </div>
+            <!-- SESSION 4 · SLIDE 7 -->
+            <div class="slide s4 flex-col items-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">Need a Starter Project? 🛠️</h1>
+                <div class="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-center w-full max-w-6xl">
+                    <div class="bg-white rounded-[2rem] p-4 border-2 border-slate-200 shadow-lg"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/541086b5-83bb-4123-9545-9dc63f28a3d5.png" alt="Scratch Remix tutorial" class="w-full h-[350px] object-contain rounded-xl"></div>
+                    <div class="bg-white rounded-[2rem] p-7 border-2 border-slate-200 shadow-lg text-left"><h2 class="text-3xl font-extrabold text-brand-orange mb-5">Remix the Project</h2><ol class="text-xl leading-relaxed space-y-5 list-decimal pl-6"><li>Buka starter project melalui tombol berikut.</li><li>Klik <strong>Remix</strong> di kanan atas.</li><li>Rename project dan cek seluruh sprite serta backdrop.</li></ol><a href="https://scratch.mit.edu/projects/1365643494/" target="_blank" rel="noopener noreferrer" class="mt-7 inline-flex w-full justify-center bg-brand-green hover:bg-emerald-600 text-white px-6 py-4 rounded-2xl font-bold text-xl transition">OPEN STARTER PROJECT ↗</a><p class="mt-4 text-slate-500 text-lg">Starter project sudah menyiapkan asset utama agar kita bisa fokus pada coding.</p></div>
+                </div>
+            </div>
+            <!-- SESSION 4 · SLIDE 8 -->
+            <div class="slide s4 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Prepare the Treasure Hunt Scene</h1><p class="text-2xl text-slate-500 mt-3">Treasure harus tersembunyi tetapi tetap mungkin ditemukan.</p></div><div class="grid md:grid-cols-4 gap-5 w-full max-w-6xl text-center"><div class="stage-card p-6"><div class="text-7xl mb-3">🏴‍☠️</div><h3 class="text-2xl font-bold">Pirate Team</h3><p class="mt-2">Main characters.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🗺️</div><h3 class="text-2xl font-bold">Island Map</h3><p class="mt-2">Backdrop with hiding spots.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">💎</div><h3 class="text-2xl font-bold">Treasure Sprites</h3><p class="mt-2">Clickable objects.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🔊</div><h3 class="text-2xl font-bold">Collect Sound</h3><p class="mt-2">Immediate feedback.</p></div></div></div>
+            <!-- SESSION 4 · SLIDE 9 -->
+            <div class="slide s4 flex-col items-center justify-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Code Each Hidden Treasure</h1><p class="text-2xl text-slate-500 mt-3">Setiap treasure menjalankan script yang sama saat diklik.</p></div><div class="flex flex-col gap-4 w-full max-w-4xl"><div class="block-chip event-chip">when this sprite clicked</div><div class="block-chip sound-chip">start sound [Coin]</div><div class="block-chip motion-chip">glide [0.5] seconds to x: [0] y: [0]</div><div class="block-chip looks-chip">change [ghost] effect by [25]</div><div class="block-chip looks-chip">hide</div></div><div class="mt-7 bg-orange-50 border-2 border-orange-200 rounded-2xl px-8 py-5 text-xl max-w-4xl"><strong>Design decision:</strong> treasure dapat bergerak ke tengah untuk menandai collect, lalu menghilang agar user tahu object sudah ditemukan.</div></div>
+            <!-- SESSION 4 · SLIDE 10 -->
+            <div class="slide s4 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Test the Interaction</h1><p class="text-2xl text-slate-500 mt-3">Cek apakah setiap treasure memberikan respons yang konsisten.</p></div><div class="grid md:grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-white border-2 border-slate-200 rounded-2xl p-7"><h3 class="text-2xl font-bold mb-4">Interaction Checklist</h3><label class="flex gap-3 text-xl mb-3"><input type="checkbox" class="w-6 h-6 accent-orange-500"> Treasure dapat diklik</label><label class="flex gap-3 text-xl mb-3"><input type="checkbox" class="w-6 h-6 accent-orange-500"> Treasure glide ke target</label><label class="flex gap-3 text-xl mb-3"><input type="checkbox" class="w-6 h-6 accent-orange-500"> Sound effect terdengar</label><label class="flex gap-3 text-xl"><input type="checkbox" class="w-6 h-6 accent-orange-500"> Treasure menghilang setelah collected</label></div><div class="bg-slate-900 text-white rounded-2xl p-7"><div class="text-7xl mb-4">🔍</div><h3 class="text-3xl font-bold mb-3">Think Like a User</h3><p class="text-xl text-slate-300">Apakah treasure terlalu mudah? Terlalu kecil? Tidak terlihat sama sekali? Sesuaikan posisi agar challenge tetap fair.</p></div></div></div>
+            <!-- SESSION 4 · SLIDE 11 -->
+            <div class="slide s4 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Don’t Forget to Save 💾</h1><p class="text-2xl text-slate-500 mt-3">Gunakan nama project yang jelas: <strong>Find the Treasure – Nama Kamu</strong>.</p></div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Save and Share Scratch project" class="w-full max-w-4xl rounded-3xl border-4 border-green-300 shadow-xl">
+                <div class="mt-6 grid md:grid-cols-3 gap-4 w-full max-w-4xl text-lg font-bold"><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">1️⃣ Check project title</div><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">2️⃣ Use File → Save now</div><div class="bg-green-50 border-2 border-green-200 p-4 rounded-2xl text-green-800">3️⃣ Share when instructed</div></div>
+            </div>
+            <!-- SESSION 4 · QUIZ -->
+            <div class="slide s4 flex-col items-center"><div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-xl text-slate-500 mt-3">Check your understanding before closing the session.</p></div><div class="bg-white p-9 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl"><div class="quiz-q" id="s4-q1"><h2 class="text-3xl font-bold mb-6">1. Event yang tepat untuk menjalankan aksi saat treasure diklik adalah...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s4-q1')">A. when this sprite clicked</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s4-q1')">B. when backdrop switches</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s4-q1')">C. stop all</button></div><button id="s4-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s4-q1','s4-q2')">Next ➡️</button></div><div class="quiz-q hidden" id="s4-q2"><h2 class="text-3xl font-bold mb-6">2. Apa fungsi glide pada treasure?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s4-q2')">A. Memindahkan treasure secara halus ke posisi target</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s4-q2')">B. Menghapus sound</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s4-q2')">C. Mengganti akun</button></div><button id="s4-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s4-q2','s4-q3')">Next ➡️</button></div><div class="quiz-q hidden" id="s4-q3"><h2 class="text-3xl font-bold mb-6">3. Mengapa sound effect penting pada interaction?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s4-q3')">A. Memberikan feedback bahwa aksi berhasil</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s4-q3')">B. Membuat project tidak bisa dijalankan</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s4-q3')">C. Menghapus sprite lain</button></div><button id="s4-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s4-q3','s4-done')">Finish ✅</button></div><div class="quiz-q hidden text-center py-8" id="s4-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Session Complete!</h2><p class="text-xl text-slate-500 mt-3">Hidden treasure sudah memiliki click interaction, movement, dan feedback yang jelas.</p></div></div></div>
+            <!-- SESSION 4 · RECAP -->
+            <div class="slide s4 flex-col items-center"><div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat poin utama dari sesi hari ini.</p></div><div class="grid grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">⚡</div><h3 class="text-2xl font-bold">Event Trigger</h3><p class="text-lg mt-2">Aksi dapat dimulai oleh keyboard atau click.</p></div><div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">🖱️</div><h3 class="text-2xl font-bold">Sprite Click</h3><p class="text-lg mt-2">Gunakan when this sprite clicked untuk object interaktif.</p></div><div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">✨</div><h3 class="text-2xl font-bold">Visual Feedback</h3><p class="text-lg mt-2">Gunakan glide, effects, dan hide untuk menunjukkan collect.</p></div><div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">🔊</div><h3 class="text-2xl font-bold">Sound Feedback</h3><p class="text-lg mt-2">Tambahkan sound agar respons terasa lebih jelas.</p></div></div></div>
+            <!-- SESSION 4 · FEEDBACK -->
+            <div class="slide s4 flex-col items-center justify-center feedback-slide"><h1 class="text-5xl font-extrabold mb-5 text-center">How Was Today’s Session?</h1><p class="text-2xl text-slate-500 mb-10">Pilih emoji yang paling sesuai.</p><div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🚀</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">👍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🧩</button></div><div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Thanks for your feedback!</div></div></div>
+
+            <!-- ============================== SESSION 5 ============================== -->
+            <!-- SESSION 5 · SLIDE 1 -->
+            <div class="slide s5 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-navy rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto"><i class="fa-solid fa-bug"></i></div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-4 text-xl">Problem Solving</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Systematic<br><span class="text-4xl text-brand-blue font-medium inline-block mt-3">Debugging</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl leading-relaxed">Identifikasi, isolasi, dan perbaiki kesalahan logika pada project Ice Cream Maker.</p>
+            </div>
+            <!-- SESSION 5 · SLIDE 2 -->
+            <div class="slide s5 flex-col items-center">
+                <div class="mb-10 text-center"><h1 class="text-5xl md:text-6xl font-extrabold">Today’s Agenda 🐞</h1><p class="text-2xl text-slate-500 mt-4 font-medium">Kita tidak membangun project baru—kita memperbaiki project yang belum bekerja dengan benar.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold"><div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-7"><div class="text-5xl">🧪</div><div>Test Every Feature</div></div><div class="bg-purple-50 p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-7"><div class="text-5xl">🔍</div><div>Identify the Bugs</div></div><div class="bg-orange-50 p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-7"><div class="text-5xl">🛠️</div><div>Fix One Script at a Time</div></div><div class="bg-green-50 p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-7"><div class="text-5xl">✅</div><div>Retest the Whole Project</div></div></div>
+            </div>
+            <!-- SESSION 5 · SLIDE 3 -->
+            <div class="slide s5 flex-col items-center">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Broken Project: Ice Cream Maker 🍦</h1><p class="text-2xl text-slate-500 mt-3">Coba seluruh fitur. Jangan langsung melihat kode—rasakan dulu masalahnya sebagai user.</p></div>
+                <div class="w-full max-w-4xl bg-white p-4 rounded-[2rem] border-4 border-red-200 shadow-xl"><div class="media-frame bg-slate-100"><iframe src="https://scratch.mit.edu/projects/706631186/embed" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen title="Scratch sample project"></iframe></div></div>
+                <a href="https://scratch.mit.edu/projects/706631186/" target="_blank" rel="noopener noreferrer" class="mt-5 bg-brand-purple hover:bg-purple-700 text-white px-7 py-3 rounded-2xl font-bold text-xl transition">Open Project in New Tab ↗</a>
+            </div>
+            <!-- SESSION 5 · SLIDE 4 -->
+            <div class="slide s5 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Test Like a User</h1><p class="text-2xl text-slate-500 mt-3">Jalankan project dan catat setiap perilaku yang terasa tidak sesuai.</p></div><div class="grid md:grid-cols-3 gap-6 w-full max-w-5xl"><div class="stage-card p-7"><div class="text-6xl mb-4">🍦</div><h3 class="text-2xl font-bold mb-3">Try Every Button</h3><p class="text-xl">Klik semua topping, cone, dan control.</p></div><div class="stage-card p-7"><div class="text-6xl mb-4">👀</div><h3 class="text-2xl font-bold mb-3">Observe Carefully</h3><p class="text-xl">Perhatikan aksi yang salah, terlambat, atau tidak muncul.</p></div><div class="stage-card p-7"><div class="text-6xl mb-4">📝</div><h3 class="text-2xl font-bold mb-3">Record Evidence</h3><p class="text-xl">Tuliskan apa yang terjadi dan apa yang seharusnya terjadi.</p></div></div></div>
+            <!-- SESSION 5 · SLIDE 5 -->
+            <div class="slide s5 flex-col items-center justify-center"><div class="debug-console p-10 w-full max-w-5xl"><div class="flex items-center gap-5 mb-7"><div class="text-7xl">🤨</div><div><h1 class="text-5xl font-extrabold">What Feels Wrong?</h1><p class="text-2xl text-slate-300 mt-2">Bandingkan expected behavior dengan actual behavior.</p></div></div><div class="grid md:grid-cols-2 gap-5"><div class="bg-white/10 border border-white/20 rounded-2xl p-6"><h3 class="text-2xl font-bold text-green-300 mb-3">Expected</h3><p class="text-xl">Button topping menambahkan topping yang sesuai.</p></div><div class="bg-white/10 border border-white/20 rounded-2xl p-6"><h3 class="text-2xl font-bold text-red-300 mb-3">Actual</h3><p class="text-xl">Button tidak merespons atau memicu sprite yang salah.</p></div></div></div></div>
+            <!-- SESSION 5 · SLIDE 6 -->
+            <div class="slide s5 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">What Is Debugging?</h1><p class="text-2xl text-slate-500 mt-3">Debugging adalah proses mencari penyebab masalah dan memperbaikinya secara sistematis.</p></div><div class="grid md:grid-cols-4 gap-5 w-full max-w-6xl"><div class="stage-card p-6 text-center"><div class="text-6xl mb-3">1️⃣</div><h3 class="text-2xl font-bold">Reproduce</h3><p class="mt-2">Ulangi masalah.</p></div><div class="stage-card p-6 text-center"><div class="text-6xl mb-3">2️⃣</div><h3 class="text-2xl font-bold">Isolate</h3><p class="mt-2">Cari script terkait.</p></div><div class="stage-card p-6 text-center"><div class="text-6xl mb-3">3️⃣</div><h3 class="text-2xl font-bold">Fix</h3><p class="mt-2">Ubah satu bagian.</p></div><div class="stage-card p-6 text-center"><div class="text-6xl mb-3">4️⃣</div><h3 class="text-2xl font-bold">Retest</h3><p class="mt-2">Cek hasil perbaikan.</p></div></div></div>
+            <!-- SESSION 5 · SLIDE 7 -->
+            <div class="slide s5 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-4 animate-float">🐱💻</div><h1 class="text-5xl md:text-6xl font-extrabold mb-5">Now It’s Your Turn!</h1><p class="text-2xl text-slate-600 max-w-3xl mb-8">Buka Scratch. Kali ini kita akan me-remix broken project dan bekerja seperti software tester.</p>
+                <a href="https://scratch.mit.edu/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-5 bg-[#f59e0b] hover:bg-orange-500 text-white px-12 py-7 rounded-[2rem] shadow-xl text-4xl font-extrabold transition hover:scale-105"><span class="text-6xl">🐱</span><span>OPEN SCRATCH</span></a>
+                <div class="mt-7 bg-blue-50 border-2 border-blue-200 px-7 py-4 rounded-2xl text-xl font-bold text-blue-800">Pastikan akunmu sudah Sign In sebelum mulai coding.</div>
+            </div>
+            <!-- SESSION 5 · SLIDE 8 -->
+            <div class="slide s5 flex-col items-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">Remix the Broken Project 🛠️</h1>
+                <div class="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-center w-full max-w-6xl">
+                    <div class="bg-white rounded-[2rem] p-4 border-2 border-slate-200 shadow-lg"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/541086b5-83bb-4123-9545-9dc63f28a3d5.png" alt="Scratch Remix tutorial" class="w-full h-[350px] object-contain rounded-xl"></div>
+                    <div class="bg-white rounded-[2rem] p-7 border-2 border-slate-200 shadow-lg text-left"><h2 class="text-3xl font-extrabold text-brand-orange mb-5">Remix the Project</h2><ol class="text-xl leading-relaxed space-y-5 list-decimal pl-6"><li>Buka starter project melalui tombol berikut.</li><li>Klik <strong>Remix</strong> di kanan atas.</li><li>Rename project dan cek seluruh sprite serta backdrop.</li></ol><a href="https://scratch.mit.edu/projects/706631186/" target="_blank" rel="noopener noreferrer" class="mt-7 inline-flex w-full justify-center bg-brand-green hover:bg-emerald-600 text-white px-6 py-4 rounded-2xl font-bold text-xl transition">OPEN STARTER PROJECT ↗</a><p class="mt-4 text-slate-500 text-lg">Jangan memperbaiki semuanya sekaligus. Temukan dan selesaikan satu bug per satu bug.</p></div>
+                </div>
+            </div>
+            <!-- SESSION 5 · SLIDE 9 -->
+            <div class="slide s5 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Bug Hunt Strategy</h1><p class="text-2xl text-slate-500 mt-3">Gunakan pertanyaan berikut untuk mengisolasi penyebab masalah.</p></div><div class="grid md:grid-cols-2 gap-6 w-full max-w-5xl"><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Missing Trigger?</h3><p class="text-xl">Apakah script memiliki event seperti when this sprite clicked?</p></div><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Wrong Target?</h3><p class="text-xl">Apakah code berada pada sprite yang benar?</p></div><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Wrong Order?</h3><p class="text-xl">Apakah block tersusun dalam sequence yang masuk akal?</p></div><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Wrong Value?</h3><p class="text-xl">Apakah costume, position, sound, atau message yang dipilih sudah benar?</p></div></div></div>
+            <!-- SESSION 5 · SLIDE 10 -->
+            <div class="slide s5 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Fix One Script at a Time</h1><p class="text-2xl text-slate-500 mt-3">Perubahan kecil lebih mudah diuji dan dijelaskan.</p></div><div class="grid md:grid-cols-[1fr_1fr] gap-7 w-full max-w-5xl"><div class="bg-red-50 border-2 border-red-200 rounded-3xl p-8"><h3 class="text-3xl font-bold mb-5 text-red-700">Avoid</h3><p class="text-xl mb-3">❌ Mengubah banyak script sekaligus</p><p class="text-xl mb-3">❌ Menebak tanpa testing</p><p class="text-xl">❌ Menghapus block sebelum memahami fungsinya</p></div><div class="bg-green-50 border-2 border-green-200 rounded-3xl p-8"><h3 class="text-3xl font-bold mb-5 text-green-700">Use</h3><p class="text-xl mb-3">✅ Uji satu feature</p><p class="text-xl mb-3">✅ Periksa satu script</p><p class="text-xl">✅ Perbaiki lalu retest</p></div></div></div>
+            <!-- SESSION 5 · SLIDE 11 -->
+            <div class="slide s5 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Don’t Forget to Save 💾</h1><p class="text-2xl text-slate-500 mt-3">Gunakan nama project yang jelas: <strong>Ice Cream Maker – Debugged – Nama Kamu</strong>.</p></div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Save and Share Scratch project" class="w-full max-w-4xl rounded-3xl border-4 border-green-300 shadow-xl">
+                <div class="mt-6 grid md:grid-cols-3 gap-4 w-full max-w-4xl text-lg font-bold"><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">1️⃣ Check project title</div><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">2️⃣ Use File → Save now</div><div class="bg-green-50 border-2 border-green-200 p-4 rounded-2xl text-green-800">3️⃣ Share when instructed</div></div>
+            </div>
+            <!-- SESSION 5 · QUIZ -->
+            <div class="slide s5 flex-col items-center"><div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-xl text-slate-500 mt-3">Check your understanding before closing the session.</p></div><div class="bg-white p-9 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl"><div class="quiz-q" id="s5-q1"><h2 class="text-3xl font-bold mb-6">1. Apa langkah pertama saat menemukan bug?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s5-q1')">A. Ulangi masalah agar bisa diamati</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s5-q1')">B. Hapus semua sprite</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s5-q1')">C. Buat akun baru</button></div><button id="s5-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s5-q1','s5-q2')">Next ➡️</button></div><div class="quiz-q hidden" id="s5-q2"><h2 class="text-3xl font-bold mb-6">2. Mengapa sebaiknya memperbaiki satu script pada satu waktu?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s5-q2')">A. Agar penyebab dan hasil perubahan mudah diuji</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s5-q2')">B. Agar project semakin lambat</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s5-q2')">C. Agar semua block hilang</button></div><button id="s5-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s5-q2','s5-q3')">Next ➡️</button></div><div class="quiz-q hidden" id="s5-q3"><h2 class="text-3xl font-bold mb-6">3. Jika sprite tidak bereaksi saat diklik, bagian pertama yang perlu diperiksa adalah...</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s5-q3')">A. Event trigger</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s5-q3')">B. Nama browser</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s5-q3')">C. Warna laptop</button></div><button id="s5-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s5-q3','s5-done')">Finish ✅</button></div><div class="quiz-q hidden text-center py-8" id="s5-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Session Complete!</h2><p class="text-xl text-slate-500 mt-3">Broken project sudah dianalisis dan diperbaiki menggunakan proses debugging yang sistematis.</p></div></div></div>
+            <!-- SESSION 5 · RECAP -->
+            <div class="slide s5 flex-col items-center"><div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat poin utama dari sesi hari ini.</p></div><div class="grid grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">🧪</div><h3 class="text-2xl font-bold">Reproduce</h3><p class="text-lg mt-2">Ulangi bug agar masalah dapat diamati.</p></div><div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">🔍</div><h3 class="text-2xl font-bold">Isolate</h3><p class="text-lg mt-2">Temukan sprite dan script yang terkait.</p></div><div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">🛠️</div><h3 class="text-2xl font-bold">Fix</h3><p class="text-lg mt-2">Lakukan satu perubahan yang masuk akal.</p></div><div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">✅</div><h3 class="text-2xl font-bold">Retest</h3><p class="text-lg mt-2">Uji kembali feature dan seluruh project.</p></div></div></div>
+            <!-- SESSION 5 · FEEDBACK -->
+            <div class="slide s5 flex-col items-center justify-center feedback-slide"><h1 class="text-5xl font-extrabold mb-5 text-center">How Was Today’s Session?</h1><p class="text-2xl text-slate-500 mb-10">Pilih emoji yang paling sesuai.</p><div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🚀</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">👍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🧩</button></div><div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Thanks for your feedback!</div></div></div>
+
+            <!-- ============================== SESSION 6 ============================== -->
+            <!-- SESSION 6 · SLIDE 1 -->
+            <div class="slide s6 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-purple rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto"><i class="fa-solid fa-rotate"></i></div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-4 text-xl">Logic & Automation</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Intro to<br><span class="text-4xl text-brand-blue font-medium inline-block mt-3">Loops</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl leading-relaxed">Gunakan repetition untuk menyederhanakan code dan membuat animasi firework otomatis.</p>
+            </div>
+            <!-- SESSION 6 · SLIDE 2 -->
+            <div class="slide s6 flex-col items-center">
+                <div class="mb-10 text-center"><h1 class="text-5xl md:text-6xl font-extrabold">Today’s Agenda 🔁</h1><p class="text-2xl text-slate-500 mt-4 font-medium">Kita akan mengubah block berulang menjadi animasi yang lebih efisien.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold"><div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-7"><div class="text-5xl">🎭</div><div>Review Sprite Costumes</div></div><div class="bg-purple-50 p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-7"><div class="text-5xl">🔁</div><div>Understand Repeat Loops</div></div><div class="bg-orange-50 p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-7"><div class="text-5xl">🎆</div><div>Build Firework Animation</div></div><div class="bg-green-50 p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-7"><div class="text-5xl">🧪</div><div>Test Repetition Timing</div></div></div>
+            </div>
+            <!-- SESSION 6 · SLIDE 3 -->
+            <div class="slide s6 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Remember Sprite Costumes?</h1><p class="text-2xl text-slate-500 mt-3">Pergantian costume secara cepat dapat menciptakan ilusi gerak.</p></div><img src="https://s3.amazonaws.com/fllcasts/content_pictures/pictures/000/003/579/507cc4365fc6b28e67fcc632936f305926ed94ffScratch-ENSelectingCostumes.png?1585045412" alt="Scratch sprite costume selection" class="w-full max-w-4xl max-h-[420px] object-contain rounded-3xl border-4 border-purple-200 shadow-lg"><div class="mt-6 bg-purple-50 border-2 border-purple-200 rounded-2xl p-5 text-2xl font-bold max-w-4xl text-center">Jika next costume dijalankan berulang, sprite terlihat seperti sedang bergerak atau berubah bentuk.</div></div>
+            <!-- SESSION 6 · SLIDE 4 -->
+            <div class="slide s6 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Why Use a Loop?</h1><p class="text-2xl text-slate-500 mt-3">Loop menggantikan susunan block yang sama berulang kali.</p></div><div class="grid md:grid-cols-[1fr_auto_1fr] gap-7 items-center w-full max-w-5xl"><div class="stage-card p-7"><h3 class="text-2xl font-bold mb-4 text-red-600">Without Loop</h3><div class="space-y-3"><div class="block-chip looks-chip">next costume</div><div class="block-chip looks-chip">next costume</div><div class="block-chip looks-chip">next costume</div><div class="block-chip looks-chip">next costume</div></div></div><div class="text-6xl">→</div><div class="stage-card p-7"><h3 class="text-2xl font-bold mb-4 text-green-600">With Loop</h3><div class="block-chip control-chip mb-3">repeat [4]</div><div class="block-chip looks-chip ml-8">next costume</div><p class="text-xl mt-5">Lebih singkat, rapi, dan mudah diubah.</p></div></div></div>
+            <!-- SESSION 6 · SLIDE 5 -->
+            <div class="slide s6 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Project Theme: Firework Animation 🎆</h1><p class="text-2xl text-slate-500 mt-3">Setiap firework akan muncul, memainkan costume animation, lalu menghilang.</p></div><div class="lesson-hero firework-scene w-full max-w-5xl"><div class="label">Night Sky Simulation</div><div class="firework-burst a">🎆</div><div class="firework-burst b">✨</div><div class="firework-burst c">🎇</div><div class="cityline"></div></div></div>
+            <!-- SESSION 6 · SLIDE 6 -->
+            <div class="slide s6 flex-col items-center">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Sample Project: Firework</h1><p class="text-2xl text-slate-500 mt-3">Perhatikan bagaimana setiap firework menggunakan costume animation dan repetition.</p></div>
+                <div class="w-full max-w-4xl bg-white p-4 rounded-[2rem] border-4 border-purple-200 shadow-xl"><div class="media-frame bg-slate-100"><iframe src="https://scratch.mit.edu/projects/845839911/embed" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen title="Scratch sample project"></iframe></div></div>
+                <a href="https://scratch.mit.edu/projects/845839911/" target="_blank" rel="noopener noreferrer" class="mt-5 bg-brand-purple hover:bg-purple-700 text-white px-7 py-3 rounded-2xl font-bold text-xl transition">Open Project in New Tab ↗</a>
+            </div>
+            <!-- SESSION 6 · SLIDE 7 -->
+            <div class="slide s6 flex-col items-center justify-center text-center">
+                <div class="text-[8rem] mb-4 animate-float">🐱💻</div><h1 class="text-5xl md:text-6xl font-extrabold mb-5">Now It’s Your Turn!</h1><p class="text-2xl text-slate-600 max-w-3xl mb-8">Buka Scratch dan siapkan project Firework. Gunakan starter project agar dapat fokus pada loop dan animation.</p>
+                <a href="https://scratch.mit.edu/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-5 bg-[#f59e0b] hover:bg-orange-500 text-white px-12 py-7 rounded-[2rem] shadow-xl text-4xl font-extrabold transition hover:scale-105"><span class="text-6xl">🐱</span><span>OPEN SCRATCH</span></a>
+                <div class="mt-7 bg-blue-50 border-2 border-blue-200 px-7 py-4 rounded-2xl text-xl font-bold text-blue-800">Pastikan akunmu sudah Sign In sebelum mulai coding.</div>
+            </div>
+            <!-- SESSION 6 · SLIDE 8 -->
+            <div class="slide s6 flex-col items-center">
+                <h1 class="text-5xl font-extrabold text-center mb-7">Need a Starter Project? 🛠️</h1>
+                <div class="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-center w-full max-w-6xl">
+                    <div class="bg-white rounded-[2rem] p-4 border-2 border-slate-200 shadow-lg"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/541086b5-83bb-4123-9545-9dc63f28a3d5.png" alt="Scratch Remix tutorial" class="w-full h-[350px] object-contain rounded-xl"></div>
+                    <div class="bg-white rounded-[2rem] p-7 border-2 border-slate-200 shadow-lg text-left"><h2 class="text-3xl font-extrabold text-brand-orange mb-5">Remix the Project</h2><ol class="text-xl leading-relaxed space-y-5 list-decimal pl-6"><li>Buka starter project melalui tombol berikut.</li><li>Klik <strong>Remix</strong> di kanan atas.</li><li>Rename project dan cek seluruh sprite serta backdrop.</li></ol><a href="https://scratch.mit.edu/projects/1365649114/" target="_blank" rel="noopener noreferrer" class="mt-7 inline-flex w-full justify-center bg-brand-green hover:bg-emerald-600 text-white px-6 py-4 rounded-2xl font-bold text-xl transition">OPEN STARTER PROJECT ↗</a><p class="mt-4 text-slate-500 text-lg">Starter project sudah menyiapkan asset utama agar kita bisa fokus pada coding.</p></div>
+                </div>
+            </div>
+            <!-- SESSION 6 · SLIDE 9 -->
+            <div class="slide s6 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Prepare the Firework Scene</h1><p class="text-2xl text-slate-500 mt-3">Gunakan beberapa sprite dengan costume animation yang berbeda.</p></div><div class="grid md:grid-cols-4 gap-5 w-full max-w-6xl text-center"><div class="stage-card p-6"><div class="text-7xl mb-3">🌌</div><h3 class="text-2xl font-bold">Sky Backdrop</h3><p class="mt-2">Dark background.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🎆</div><h3 class="text-2xl font-bold">Firework A</h3><p class="mt-2">Costume sequence A.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🎇</div><h3 class="text-2xl font-bold">Firework B</h3><p class="mt-2">Costume sequence B.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🔊</div><h3 class="text-2xl font-bold">Explosion Sound</h3><p class="mt-2">Visual feedback support.</p></div></div></div>
+            <!-- SESSION 6 · SLIDE 10 -->
+            <div class="slide s6 flex-col items-center justify-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Create One Firework Cycle</h1><p class="text-2xl text-slate-500 mt-3">Sesi ini fokus pada satu cycle menggunakan Repeat.</p></div><div class="flex flex-col gap-4 w-full max-w-4xl"><div class="block-chip event-chip">when green flag clicked</div><div class="block-chip looks-chip">hide</div><div class="block-chip motion-chip">go to random position</div><div class="block-chip looks-chip">show</div><div class="block-chip control-chip">repeat [number of costumes]</div><div class="block-chip looks-chip ml-10">next costume</div><div class="block-chip control-chip ml-10">wait [0.1] seconds</div><div class="block-chip looks-chip">hide</div></div></div>
+            <!-- SESSION 6 · SLIDE 11 -->
+            <div class="slide s6 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Don’t Forget to Save 💾</h1><p class="text-2xl text-slate-500 mt-3">Gunakan nama project yang jelas: <strong>Firework Animation – Nama Kamu</strong>.</p></div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Save and Share Scratch project" class="w-full max-w-4xl rounded-3xl border-4 border-green-300 shadow-xl">
+                <div class="mt-6 grid md:grid-cols-3 gap-4 w-full max-w-4xl text-lg font-bold"><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">1️⃣ Check project title</div><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">2️⃣ Use File → Save now</div><div class="bg-green-50 border-2 border-green-200 p-4 rounded-2xl text-green-800">3️⃣ Share when instructed</div></div>
+            </div>
+            <!-- SESSION 6 · QUIZ -->
+            <div class="slide s6 flex-col items-center"><div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-xl text-slate-500 mt-3">Check your understanding before closing the session.</p></div><div class="bg-white p-9 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl"><div class="quiz-q" id="s6-q1"><h2 class="text-3xl font-bold mb-6">1. Apa fungsi Repeat block?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s6-q1')">A. Menjalankan block di dalamnya beberapa kali</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s6-q1')">B. Menghapus semua sprite</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s6-q1')">C. Mengganti password</button></div><button id="s6-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s6-q1','s6-q2')">Next ➡️</button></div><div class="quiz-q hidden" id="s6-q2"><h2 class="text-3xl font-bold mb-6">2. Mengapa loop membuat code lebih efisien?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s6-q2')">A. Mengurangi pengulangan block yang sama</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s6-q2')">B. Membuat project tidak bisa disimpan</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s6-q2')">C. Menambah jumlah akun</button></div><button id="s6-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s6-q2','s6-q3')">Next ➡️</button></div><div class="quiz-q hidden" id="s6-q3"><h2 class="text-3xl font-bold mb-6">3. Block apa yang dapat digunakan untuk memainkan animation costume?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s6-q3')">A. next costume</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s6-q3')">B. ask and wait</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s6-q3')">C. stop all sounds</button></div><button id="s6-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s6-q3','s6-done')">Finish ✅</button></div><div class="quiz-q hidden text-center py-8" id="s6-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Session Complete!</h2><p class="text-xl text-slate-500 mt-3">Satu cycle firework sudah dapat berjalan menggunakan Repeat dan costume animation.</p></div></div></div>
+            <!-- SESSION 6 · RECAP -->
+            <div class="slide s6 flex-col items-center"><div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat poin utama dari sesi hari ini.</p></div><div class="grid grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">🔁</div><h3 class="text-2xl font-bold">Repeat</h3><p class="text-lg mt-2">Jalankan instruksi beberapa kali.</p></div><div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">🎭</div><h3 class="text-2xl font-bold">Costume</h3><p class="text-lg mt-2">Gunakan costume sequence untuk membuat animation.</p></div><div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">📍</div><h3 class="text-2xl font-bold">Random Position</h3><p class="text-lg mt-2">Pindahkan firework ke lokasi berbeda.</p></div><div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">🎆</div><h3 class="text-2xl font-bold">Animation Cycle</h3><p class="text-lg mt-2">Show, animate, lalu hide.</p></div></div></div>
+            <!-- SESSION 6 · FEEDBACK -->
+            <div class="slide s6 flex-col items-center justify-center feedback-slide"><h1 class="text-5xl font-extrabold mb-5 text-center">How Was Today’s Session?</h1><p class="text-2xl text-slate-500 mb-10">Pilih emoji yang paling sesuai.</p><div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🚀</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">👍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🧩</button></div><div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Thanks for your feedback!</div></div></div>
+
+            <!-- ============================== SESSION 7 ============================== -->
+            <!-- SESSION 7 · SLIDE 1 -->
+            <div class="slide s7 flex-col items-center justify-center text-center">
+                <div class="w-32 h-32 bg-brand-green rounded-3xl flex items-center justify-center text-white text-6xl shadow-xl mb-8 animate-float border-4 border-white mx-auto"><i class="fa-solid fa-infinity"></i></div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-4 text-xl">Logic & Automation</h2>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">Loop<br><span class="text-4xl text-brand-blue font-medium inline-block mt-3">Variations</span></h1>
+                <p class="text-2xl text-slate-600 font-medium max-w-3xl leading-relaxed">Bandingkan Repeat, Repeat Until, dan Forever untuk mengatur perilaku animation yang berbeda.</p>
+            </div>
+            <!-- SESSION 7 · SLIDE 2 -->
+            <div class="slide s7 flex-col items-center">
+                <div class="mb-10 text-center"><h1 class="text-5xl md:text-6xl font-extrabold">Today’s Agenda ♾️</h1><p class="text-2xl text-slate-500 mt-4 font-medium">Kita akan melanjutkan Firework Project dan membuat animation berjalan otomatis.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-7 w-full max-w-5xl text-2xl font-semibold"><div class="bg-blue-50 p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-7"><div class="text-5xl">🔁</div><div>Review Firework Cycle</div></div><div class="bg-purple-50 p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-7"><div class="text-5xl">⚖️</div><div>Compare Loop Types</div></div><div class="bg-orange-50 p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-7"><div class="text-5xl">🎲</div><div>Add Random Position & Wait</div></div><div class="bg-green-50 p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-7"><div class="text-5xl">♾️</div><div>Automate with Forever</div></div></div>
+            </div>
+            <!-- SESSION 7 · SLIDE 3 -->
+            <div class="slide s7 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">What Did We Build Last Session?</h1><p class="text-2xl text-slate-500 mt-3">Kita sudah menyiapkan backdrop, firework sprites, dan costume animation.</p></div><div class="grid md:grid-cols-4 gap-5 w-full max-w-6xl text-center"><div class="stage-card p-6"><div class="text-7xl mb-3">🌌</div><h3 class="text-2xl font-bold">Backdrop</h3><p class="mt-2">Night sky.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🎆</div><h3 class="text-2xl font-bold">Sprite</h3><p class="mt-2">Firework with costumes.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">🔁</div><h3 class="text-2xl font-bold">Repeat</h3><p class="mt-2">Plays one animation cycle.</p></div><div class="stage-card p-6"><div class="text-7xl mb-3">💾</div><h3 class="text-2xl font-bold">Saved Project</h3><p class="mt-2">Ready to continue.</p></div></div></div>
+            <!-- SESSION 7 · SLIDE 4 -->
+            <div class="slide s7 flex-col items-center">
+                <div class="mb-5 text-center"><h1 class="text-5xl font-extrabold">Firework Project Review</h1><p class="text-2xl text-slate-500 mt-3">Tampilkan kembali project dan perhatikan apa yang masih kurang dari automation-nya.</p></div>
+                <div class="w-full max-w-4xl bg-white p-4 rounded-[2rem] border-4 border-green-200 shadow-xl"><div class="media-frame bg-slate-100"><iframe src="https://scratch.mit.edu/projects/845839911/embed" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen title="Scratch sample project"></iframe></div></div>
+                <a href="https://scratch.mit.edu/projects/845839911/" target="_blank" rel="noopener noreferrer" class="mt-5 bg-brand-purple hover:bg-purple-700 text-white px-7 py-3 rounded-2xl font-bold text-xl transition">Open Project in New Tab ↗</a>
+            </div>
+            <!-- SESSION 7 · SLIDE 5 -->
+            <div class="slide s7 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">What Is Still Missing?</h1><p class="text-2xl text-slate-500 mt-3">Satu cycle sudah bekerja, tetapi project belum terasa seperti pertunjukan firework yang terus berjalan.</p></div><div class="grid md:grid-cols-2 gap-6 w-full max-w-5xl"><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Current Behavior</h3><p class="text-xl">Firework muncul satu kali lalu berhenti.</p></div><div class="fix-card"><h3 class="text-2xl font-bold mb-3">Target Behavior</h3><p class="text-xl">Firework muncul berulang di posisi dan waktu yang bervariasi.</p></div><div class="bug-card"><h3 class="text-2xl font-bold mb-3">Current Position</h3><p class="text-xl">Sprite selalu muncul di lokasi yang sama.</p></div><div class="fix-card"><h3 class="text-2xl font-bold mb-3">Target Position</h3><p class="text-xl">Gunakan random position dan random wait.</p></div></div></div>
+            <!-- SESSION 7 · SLIDE 6 -->
+            <div class="slide s7 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Compare Loop Variations</h1><p class="text-2xl text-slate-500 mt-3">Pilih loop berdasarkan kapan repetition harus berhenti.</p></div><div class="grid md:grid-cols-3 gap-6 w-full max-w-6xl"><div class="stage-card p-7"><div class="block-chip control-chip mb-5">repeat [10]</div><h3 class="text-2xl font-bold mb-3">Fixed Count</h3><p class="text-xl">Berhenti setelah jumlah tertentu.</p></div><div class="stage-card p-7"><div class="block-chip control-chip mb-5">repeat until &lt;condition&gt;</div><h3 class="text-2xl font-bold mb-3">Condition Based</h3><p class="text-xl">Berhenti ketika condition terpenuhi.</p></div><div class="stage-card p-7"><div class="block-chip control-chip mb-5">forever</div><h3 class="text-2xl font-bold mb-3">Continuous</h3><p class="text-xl">Berjalan sampai project dihentikan.</p></div></div></div>
+            <!-- SESSION 7 · SLIDE 7 -->
+            <div class="slide s7 flex-col items-center justify-center text-center"><div class="text-[8rem] mb-4">📂🐱</div><h1 class="text-5xl md:text-6xl font-extrabold mb-5">Open Your Previous Project</h1><p class="text-2xl text-slate-600 max-w-3xl mb-8">Buka project Firework yang sudah kamu simpan pada Session 6. Jangan membuat project baru.</p><a href="https://scratch.mit.edu/mystuff/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-5 bg-brand-blue hover:bg-blue-600 text-white px-12 py-7 rounded-[2rem] shadow-xl text-3xl font-extrabold transition hover:scale-105"><i class="fa-solid fa-folder-open"></i><span>OPEN MY STUFF</span></a></div>
+            <!-- SESSION 7 · SLIDE 8 -->
+            <div class="slide s7 flex-col items-center justify-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Continue the Firework Program</h1><p class="text-2xl text-slate-500 mt-3">Masukkan satu cycle animation ke dalam Forever.</p></div><div class="flex flex-col gap-4 w-full max-w-4xl"><div class="block-chip event-chip">when green flag clicked</div><div class="block-chip control-chip">forever</div><div class="block-chip looks-chip ml-10">hide</div><div class="block-chip control-chip ml-10">wait [pick random 1 to 4] seconds</div><div class="block-chip motion-chip ml-10">go to random position</div><div class="block-chip looks-chip ml-10">show</div><div class="block-chip control-chip ml-10">repeat [number of costumes]</div><div class="block-chip looks-chip ml-20">next costume</div><div class="block-chip looks-chip ml-10">hide</div></div></div>
+            <!-- SESSION 7 · SLIDE 9 -->
+            <div class="slide s7 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Randomness Makes It Feel Natural</h1><p class="text-2xl text-slate-500 mt-3">Project yang terlalu teratur akan terlihat mekanis dan mudah diprediksi.</p></div><div class="grid md:grid-cols-3 gap-6 w-full max-w-5xl"><div class="stage-card p-7 text-center"><div class="text-7xl mb-4">📍</div><h3 class="text-2xl font-bold">Random Position</h3><p class="text-xl mt-2">Ledakan muncul di lokasi berbeda.</p></div><div class="stage-card p-7 text-center"><div class="text-7xl mb-4">⏳</div><h3 class="text-2xl font-bold">Random Wait</h3><p class="text-xl mt-2">Jeda antarledakan bervariasi.</p></div><div class="stage-card p-7 text-center"><div class="text-7xl mb-4">🎆</div><h3 class="text-2xl font-bold">Multiple Sprites</h3><p class="text-xl mt-2">Beberapa firework berjalan bersamaan.</p></div></div></div>
+            <!-- SESSION 7 · SLIDE 10 -->
+            <div class="slide s7 flex-col items-center"><div class="mb-7 text-center"><h1 class="text-5xl font-extrabold">Playtest the Firework Show</h1><p class="text-2xl text-slate-500 mt-3">Cek kualitas animation dan performa project.</p></div><div class="grid md:grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-white border-2 border-slate-200 rounded-2xl p-7"><h3 class="text-2xl font-bold mb-4">Visual Check</h3><label class="flex gap-3 text-xl mb-3"><input type="checkbox" class="w-6 h-6 accent-green-500"> Tidak semua firework muncul bersamaan</label><label class="flex gap-3 text-xl mb-3"><input type="checkbox" class="w-6 h-6 accent-green-500"> Costume animation tidak terlalu cepat</label><label class="flex gap-3 text-xl"><input type="checkbox" class="w-6 h-6 accent-green-500"> Firework muncul di berbagai posisi</label></div><div class="bg-white border-2 border-slate-200 rounded-2xl p-7"><h3 class="text-2xl font-bold mb-4">Logic Check</h3><label class="flex gap-3 text-xl mb-3"><input type="checkbox" class="w-6 h-6 accent-blue-500"> Forever membungkus satu cycle lengkap</label><label class="flex gap-3 text-xl mb-3"><input type="checkbox" class="w-6 h-6 accent-blue-500"> Random wait memiliki range yang masuk akal</label><label class="flex gap-3 text-xl"><input type="checkbox" class="w-6 h-6 accent-blue-500"> Stop button menghentikan semua loop</label></div></div></div>
+            <!-- SESSION 7 · SLIDE 11 -->
+            <div class="slide s7 flex-col items-center">
+                <div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Don’t Forget to Save 💾</h1><p class="text-2xl text-slate-500 mt-3">Gunakan nama project yang jelas: <strong>Firework Show – Final – Nama Kamu</strong>.</p></div>
+                <img src="https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-7-1-1024x481.png" alt="Save and Share Scratch project" class="w-full max-w-4xl rounded-3xl border-4 border-green-300 shadow-xl">
+                <div class="mt-6 grid md:grid-cols-3 gap-4 w-full max-w-4xl text-lg font-bold"><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">1️⃣ Check project title</div><div class="bg-white border-2 border-slate-200 p-4 rounded-2xl">2️⃣ Use File → Save now</div><div class="bg-green-50 border-2 border-green-200 p-4 rounded-2xl text-green-800">3️⃣ Share when instructed</div></div>
+            </div>
+            <!-- SESSION 7 · QUIZ -->
+            <div class="slide s7 flex-col items-center"><div class="mb-6 text-center"><h1 class="text-5xl font-extrabold">Quick Quiz 🧠</h1><p class="text-xl text-slate-500 mt-3">Check your understanding before closing the session.</p></div><div class="bg-white p-9 rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl"><div class="quiz-q" id="s7-q1"><h2 class="text-3xl font-bold mb-6">1. Kapan Forever block berhenti?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s7-q1')">A. Ketika project dihentikan</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s7-q1')">B. Setelah satu kali</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s7-q1')">C. Setelah sprite diklik satu kali</button></div><button id="s7-q1-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s7-q1','s7-q2')">Next ➡️</button></div><div class="quiz-q hidden" id="s7-q2"><h2 class="text-3xl font-bold mb-6">2. Loop apa yang berhenti ketika sebuah condition terpenuhi?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s7-q2')">A. repeat until</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s7-q2')">B. forever</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s7-q2')">C. say</button></div><button id="s7-q2-next" class="mt-6 bg-brand-orange text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s7-q2','s7-q3')">Next ➡️</button></div><div class="quiz-q hidden" id="s7-q3"><h2 class="text-3xl font-bold mb-6">3. Mengapa random position digunakan pada Firework Project?</h2><div class="flex flex-col gap-4 text-xl"><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" data-correct="true" onclick="checkQuiz(this,true,'s7-q3')">A. Agar ledakan muncul di lokasi yang bervariasi</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s7-q3')">B. Agar semua sprite hilang permanen</button><button class="quiz-btn bg-slate-50 p-5 rounded-2xl text-left border-2 border-slate-200" onclick="checkQuiz(this,false,'s7-q3')">C. Agar akun keluar otomatis</button></div><button id="s7-q3-next" class="mt-6 bg-brand-green text-white font-bold py-3 px-8 rounded-full text-xl hidden float-right" onclick="nextQuiz('s7-q3','s7-done')">Finish ✅</button></div><div class="quiz-q hidden text-center py-8" id="s7-done"><div class="text-8xl mb-4">🎉</div><h2 class="text-4xl font-bold text-brand-green">Session Complete!</h2><p class="text-xl text-slate-500 mt-3">Firework Show sudah berjalan otomatis menggunakan Forever, random position, dan random wait.</p></div></div></div>
+            <!-- SESSION 7 · RECAP -->
+            <div class="slide s7 flex-col items-center"><div class="mb-8 text-center"><h1 class="text-5xl font-extrabold">Today’s Recap 📚</h1><p class="text-2xl text-slate-500 mt-3">Empat poin utama dari sesi hari ini.</p></div><div class="grid grid-cols-2 gap-6 w-full max-w-5xl"><div class="bg-blue-50 p-7 rounded-3xl border-2 border-blue-200"><div class="text-5xl mb-3">🔢</div><h3 class="text-2xl font-bold">Repeat</h3><p class="text-lg mt-2">Berhenti setelah jumlah tertentu.</p></div><div class="bg-purple-50 p-7 rounded-3xl border-2 border-purple-200"><div class="text-5xl mb-3">🎯</div><h3 class="text-2xl font-bold">Repeat Until</h3><p class="text-lg mt-2">Berhenti saat condition terpenuhi.</p></div><div class="bg-orange-50 p-7 rounded-3xl border-2 border-orange-200"><div class="text-5xl mb-3">♾️</div><h3 class="text-2xl font-bold">Forever</h3><p class="text-lg mt-2">Berjalan sampai project dihentikan.</p></div><div class="bg-green-50 p-7 rounded-3xl border-2 border-green-200"><div class="text-5xl mb-3">🎲</div><h3 class="text-2xl font-bold">Randomness</h3><p class="text-lg mt-2">Variasikan posisi dan timing agar animation lebih natural.</p></div></div></div>
+            <!-- SESSION 7 · FEEDBACK -->
+            <div class="slide s7 flex-col items-center justify-center feedback-slide"><h1 class="text-5xl font-extrabold mb-5 text-center">How Was Today’s Session?</h1><p class="text-2xl text-slate-500 mb-10">Pilih emoji yang paling sesuai.</p><div class="feedback-options flex gap-10"><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🚀</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">👍</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🤔</button><button class="text-[6rem] hover:scale-125 transition" onclick="submitFeedback(this)">🧩</button></div><div class="feedback-result hidden flex-col items-center text-center"><div class="selected-emoji text-[11rem] feedback-wobble"></div><div class="text-3xl text-brand-purple font-bold mt-5">Thanks for your feedback!</div></div></div>
+
+            <!-- Untuk menambahkan sesi berikutnya, gunakan class s2, s3, dst. -->
+
+        </div>
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 h-20 bg-white/90 backdrop-blur border-t border-slate-200 flex items-center justify-between px-10 z-50">
+        <div class="text-lg font-bold text-slate-400"><span id="meetingTitle">Session 1: Account Setup & First Project</span></div>
+        <div class="flex items-center gap-6">
+            <button id="prevBtn" class="w-14 h-14 rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition disabled:opacity-50 disabled:cursor-not-allowed text-xl" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="font-mono font-bold text-slate-600 min-w-[5rem] px-2 text-center text-2xl"><span id="currentSlide">1</span> / <span id="totalSlides">0</span></div>
+            <button id="nextBtn" class="w-14 h-14 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg shadow-orange-500/30 hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed text-xl" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        let currentSession = '1';
+        let currentSlideIndex = 0;
+        let activeSlides = [];
+
+        function updateView() {
+            document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
+            activeSlides = [...document.querySelectorAll(`.slide.s${currentSession}`)];
+            if (currentSlideIndex >= activeSlides.length) currentSlideIndex = Math.max(0, activeSlides.length - 1);
+            if (activeSlides[currentSlideIndex]) activeSlides[currentSlideIndex].classList.add('active');
+            document.getElementById('currentSlide').innerText = activeSlides.length ? currentSlideIndex + 1 : 0;
+            document.getElementById('totalSlides').innerText = activeSlides.length;
+            document.getElementById('prevBtn').disabled = currentSlideIndex === 0;
+            document.getElementById('nextBtn').disabled = currentSlideIndex >= activeSlides.length - 1;
+            document.querySelector('main').scrollTop = 0;
+        }
+
+        document.getElementById('meetingSelector').addEventListener('change', event => {
+            currentSession = event.target.value;
+            currentSlideIndex = 0;
+            document.getElementById('meetingTitle').innerText = event.target.options[event.target.selectedIndex].text;
+            updateView();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentSlideIndex > 0) { currentSlideIndex--; updateView(); }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlideIndex < activeSlides.length - 1) { currentSlideIndex++; updateView(); }
+        });
+
+        document.addEventListener('keydown', event => {
+            const tag = document.activeElement?.tagName;
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) return;
+            if (event.key === 'ArrowRight' && currentSlideIndex < activeSlides.length - 1) { currentSlideIndex++; updateView(); }
+            if (event.key === 'ArrowLeft' && currentSlideIndex > 0) { currentSlideIndex--; updateView(); }
+        });
+
+        function checkQuiz(button, isCorrect, questionId) {
+            const buttons = button.parentElement.querySelectorAll('.quiz-btn');
+            buttons.forEach(item => item.disabled = true);
+            if (isCorrect) {
+                button.classList.add('bg-green-100', 'border-green-400', 'text-green-900');
+                button.innerHTML += ' <span class="float-right">✅ Correct</span>';
+            } else {
+                button.classList.add('bg-red-100', 'border-red-400', 'text-red-900');
+                button.innerHTML += ' <span class="float-right">❌ Try again next time</span>';
+                buttons.forEach(item => {
+                    if (item.dataset.correct === 'true') {
+                        item.classList.add('bg-green-100', 'border-green-400', 'text-green-900');
+                        item.innerHTML += ' <span class="float-right">👈 Answer</span>';
+                    }
+                });
+            }
+            document.getElementById(`${questionId}-next`)?.classList.remove('hidden');
+        }
+
+        function nextQuiz(currentQuestion, nextQuestion) {
+            document.getElementById(currentQuestion).classList.add('hidden');
+            document.getElementById(nextQuestion).classList.remove('hidden');
+        }
+
+        function submitFeedback(button) {
+            const slide = button.closest('.feedback-slide');
+            slide.querySelector('.feedback-options').classList.add('hidden');
+            const result = slide.querySelector('.feedback-result');
+            result.classList.remove('hidden');
+            result.classList.add('flex');
+            result.querySelector('.selected-emoji').textContent = button.textContent.trim();
+        }
+
+        function initSortable() {
+            const pool = document.getElementById('sortPool');
+            if (!pool) return;
+            let draggedItem = null;
+
+            pool.querySelectorAll('.sort-item').forEach(item => {
+                item.addEventListener('dragstart', function(event) {
+                    draggedItem = this;
+                    event.dataTransfer.effectAllowed = 'move';
+                    setTimeout(() => this.style.opacity = '.4', 0);
+                });
+                item.addEventListener('dragend', function() {
+                    this.style.opacity = '1';
+                    pool.querySelectorAll('.sort-item').forEach(element => element.classList.remove('sort-over'));
+                });
+                item.addEventListener('dragover', function(event) {
+                    event.preventDefault();
+                    pool.querySelectorAll('.sort-item').forEach(element => element.classList.remove('sort-over'));
+                    if (this !== draggedItem) this.classList.add('sort-over');
+                });
+                item.addEventListener('drop', function(event) {
+                    event.preventDefault();
+                    if (draggedItem !== this) {
+                        const items = [...pool.querySelectorAll('.sort-item')];
+                        const sourceIndex = items.indexOf(draggedItem);
+                        const targetIndex = items.indexOf(this);
+                        pool.insertBefore(draggedItem, sourceIndex < targetIndex ? this.nextSibling : this);
+                        pool.querySelectorAll('.sort-item').forEach(element => {
+                            element.classList.remove('sort-correct', 'sort-wrong');
+                            element.querySelector('.sort-num').textContent = '?';
+                        });
+                        document.getElementById('sortFeedback').classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        function checkSortOrder() {
+            const items = [...document.querySelectorAll('#sortPool .sort-item')];
+            let allCorrect = true;
+            items.forEach((item, index) => {
+                const currentPosition = index + 1;
+                item.querySelector('.sort-num').textContent = currentPosition;
+                item.classList.remove('sort-correct', 'sort-wrong');
+                if (Number(item.dataset.order) === currentPosition) item.classList.add('sort-correct');
+                else { item.classList.add('sort-wrong'); allCorrect = false; }
+            });
+            const feedback = document.getElementById('sortFeedback');
+            feedback.classList.remove('hidden', 'text-green-600', 'text-red-500');
+            feedback.textContent = allCorrect ? 'Flow sudah logis dan siap dijalankan. ✅' : 'Masih ada langkah yang tidak berada di posisi tepat. Coba analisis ulang. 🔍';
+            feedback.classList.add(allCorrect ? 'text-green-600' : 'text-red-500');
+        }
+
+        const puzzleData = {
+            drone: {
+                rows: 5, cols: 6, actor: '🚁', goal: '📦', start: [0, 4], end: [5, 0],
+                obstacles: [[1,4], [1,3], [1,2], [1,1], [3,0], [3,1], [3,2], [3,3]], obstacleEmoji: '🏢',
+                available: ['up','up','up','up','up','up','up','up','right','right','right','right','right','down','down','down','down']
+            },
+            rover: {
+                rows: 6, cols: 7, actor: '🚙', goal: '💎', start: [0, 5], end: [6, 0],
+                obstacles: [[1,1], [1,2], [1,3], [1,4], [1,5], [3,0], [3,1], [3,2], [3,3], [3,4], [5,1], [5,2], [5,3], [5,4], [5,5]], obstacleEmoji: '🌋',
+                available: ['up','up','up','up','up','up','up','up','up','up','down','down','down','down','down','right','right','right','right','right','right']
+            },
+            sub: {
+                rows: 7, cols: 7, actor: '🚤', goal: '⚓', start: [3, 3], end: [6, 6],
+                obstacles: [[2,2], [3,2], [4,2], [2,3], [4,3], [4,4], [3,5], [2,5], [1,5], [0,4], [0,3], [0,2], [0,1], [1,0], [2,0], [3,0], [4,0], [5,0], [6,1], [6,2], [6,3], [6,4], [6,5], [4,5], [4,6]], obstacleEmoji: '🦈',
+                available: ['down','down','down','down','down','down','down','left','left','up','up','up','up','right','right','right','right','right']
+            }
+        };
+
+        const puzzleStates = {};
+        const directionLabels = {
+            up: '⬆ move up',
+            down: '⬇ move down',
+            left: '⬅ move left',
+            right: '➡ move right'
+        };
+
+        function createPuzzleBlock(direction) {
+            const block = document.createElement('div');
+            block.className = 'scratch-block block-motion';
+            block.draggable = true;
+            block.dataset.dir = direction;
+            block.textContent = directionLabels[direction];
+            block.addEventListener('dragstart', event => {
+                window.draggedPuzzleBlock = block;
+                event.dataTransfer.effectAllowed = 'move';
+            });
+            block.addEventListener('click', () => {
+                const shell = block.closest('.puzzle-shell');
+                const programZone = shell.querySelector('.program-zone');
+                const blockPool = shell.querySelector('.block-pool');
+                if (block.parentElement === programZone) blockPool.appendChild(block);
+                else programZone.appendChild(block);
+            });
+            return block;
+        }
+
+        function renderPuzzle(name) {
+            const data = puzzleData[name];
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            if (!shell) return;
+            const board = shell.querySelector('.puzzle-board');
+            const position = puzzleStates[name].position;
+            board.style.gridTemplateColumns = `repeat(${data.cols}, 61px)`;
+            board.innerHTML = '';
+
+            for (let y = 0; y < data.rows; y++) {
+                for (let x = 0; x < data.cols; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'puzzle-cell';
+                    const isObstacle = data.obstacles.some(([obstacleX, obstacleY]) => obstacleX === x && obstacleY === y);
+                    if (isObstacle) { cell.classList.add('obstacle'); cell.textContent = data.obstacleEmoji; }
+                    if (x === data.end[0] && y === data.end[1]) { cell.classList.add('goal'); cell.textContent = data.goal; }
+                    if (x === position[0] && y === position[1]) { cell.classList.add('start'); cell.textContent = data.actor; }
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function initPuzzle(name) {
+            const data = puzzleData[name];
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            if (!shell) return;
+            puzzleStates[name] = { position: [...data.start], running: false };
+            const blockPool = shell.querySelector('.block-pool');
+            const programZone = shell.querySelector('.program-zone');
+            data.available.forEach(direction => blockPool.appendChild(createPuzzleBlock(direction)));
+
+            [blockPool, programZone].forEach(area => {
+                area.addEventListener('dragover', event => event.preventDefault());
+                area.addEventListener('drop', event => {
+                    event.preventDefault();
+                    if (window.draggedPuzzleBlock && window.draggedPuzzleBlock.closest('.puzzle-shell') === shell) {
+                        area.appendChild(window.draggedPuzzleBlock);
+                    }
+                });
+            });
+
+            shell.querySelector('.run-puzzle').addEventListener('click', () => runPuzzle(name));
+            shell.querySelector('.reset-puzzle').addEventListener('click', () => resetPuzzle(name));
+            renderPuzzle(name);
+        }
+
+        function resetPuzzle(name) {
+            const data = puzzleData[name];
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            puzzleStates[name].position = [...data.start];
+            const blockPool = shell.querySelector('.block-pool');
+            const programZone = shell.querySelector('.program-zone');
+            [...programZone.children].forEach(block => blockPool.appendChild(block));
+            shell.querySelector('.puzzle-feedback').classList.add('hidden');
+            renderPuzzle(name);
+        }
+
+        function runPuzzle(name) {
+            const data = puzzleData[name];
+            const state = puzzleStates[name];
+            if (state.running) return;
+            const shell = document.querySelector(`.puzzle-shell[data-puzzle="${name}"]`);
+            const blocks = [...shell.querySelectorAll('.program-zone .scratch-block')];
+            const feedback = shell.querySelector('.puzzle-feedback');
+            feedback.classList.add('hidden');
+
+            if (!blocks.length) {
+                feedback.textContent = 'Pindahkan blok ke Program Area terlebih dahulu.';
+                feedback.className = 'puzzle-feedback text-center font-bold text-xl text-red-500';
+                return;
+            }
+
+            state.running = true;
+            state.position = [...data.start];
+            renderPuzzle(name);
+            let failed = false;
+
+            blocks.forEach((block, index) => {
+                setTimeout(() => {
+                    if (failed) return;
+                    const [x, y] = state.position;
+                    let nextX = x;
+                    let nextY = y;
+                    if (block.dataset.dir === 'up') nextY--;
+                    if (block.dataset.dir === 'down') nextY++;
+                    if (block.dataset.dir === 'left') nextX--;
+                    if (block.dataset.dir === 'right') nextX++;
+
+                    const outside = nextX < 0 || nextY < 0 || nextX >= data.cols || nextY >= data.rows;
+                    const hitObstacle = data.obstacles.some(([obstacleX, obstacleY]) => obstacleX === nextX && obstacleY === nextY);
+                    if (outside || hitObstacle) failed = true;
+                    else state.position = [nextX, nextY];
+
+                    renderPuzzle(name);
+                    block.classList.add('ring-4', 'ring-yellow-300');
+                    setTimeout(() => block.classList.remove('ring-4', 'ring-yellow-300'), 350);
+
+                    if (index === blocks.length - 1 || failed) {
+                        setTimeout(() => {
+                            state.running = false;
+                            const success = !failed && state.position[0] === data.end[0] && state.position[1] === data.end[1];
+                            feedback.className = `puzzle-feedback text-center font-bold text-xl ${success ? 'text-green-600' : 'text-red-500'}`;
+                            feedback.textContent = success ? 'Delivery completed. Algorithm works! ✅' : failed ? 'Drone menabrak gedung atau keluar dari area. Debug programnya. 🚧' : 'Drone belum mencapai tujuan. Periksa urutan dan blok yang tidak diperlukan.';
+                        }, 450);
+                    }
+                }, index * 500);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateView();
+            initSortable();
+            Object.keys(puzzleData).forEach(initPuzzle);
+        });
+    </script>
+</body>
+</html>
