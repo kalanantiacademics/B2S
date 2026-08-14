@@ -2389,6 +2389,181 @@
             .property-grid, .match-board, .particle-options { grid-template-columns: 1fr; }
         }
 
+    
+        /* Adventure System Sessions 3-7: text-only, no image assets */
+        .adv-hero {
+            width:100%;
+            min-height:calc(100vh - 180px);
+            border-radius:32px;
+            background:linear-gradient(135deg,#0f2747 0%,#1e5d78 52%,#ff7a1a 100%);
+            color:#fff;
+            box-shadow:var(--shadow);
+            padding:56px;
+            display:grid;
+            grid-template-columns:1fr .55fr;
+            align-items:center;
+            gap:30px;
+            position:relative;
+            overflow:hidden;
+        }
+        .adv-hero:before {
+            content:"";
+            position:absolute;
+            width:420px;height:420px;
+            right:-140px;top:-160px;
+            border-radius:50%;
+            border:70px solid rgba(255,255,255,.12);
+        }
+        .adv-hero:after {
+            content:"";
+            position:absolute;
+            width:260px;height:260px;
+            left:-90px;bottom:-110px;
+            border-radius:50%;
+            background:rgba(255,196,46,.12);
+        }
+        .adv-hero > * { position:relative; z-index:2; }
+        .adv-hero h1 {
+            font-size:clamp(48px,5.6vw,78px);
+            line-height:1.02;
+            margin:18px 0 12px;
+        }
+        .adv-hero h1 span { color:var(--yellow); }
+        .adv-hero p {
+            font-size:24px;
+            line-height:1.42;
+            color:#eaf7ff;
+            max-width:760px;
+        }
+        .adv-emoji {
+            font-size:130px;
+            text-align:center;
+            filter:drop-shadow(0 18px 18px rgba(0,0,0,.22));
+            animation:float 4s ease-in-out infinite;
+        }
+        .big-card {
+            background:#fff;
+            border:3px solid #e2eaf2;
+            border-radius:30px;
+            padding:30px;
+            box-shadow:var(--shadow);
+        }
+        .big-card h3 {
+            font-size:31px;
+            margin:10px 0 10px;
+            color:var(--navy);
+        }
+        .big-card p {
+            font-size:22px;
+            line-height:1.42;
+            color:var(--muted);
+            margin:0;
+        }
+        .big-icon { font-size:68px; line-height:1; }
+        .concept-grid {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:22px;
+            width:100%;
+        }
+        .concept-grid.two { grid-template-columns:repeat(2,1fr); }
+        .flow-strip {
+            width:100%;
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:16px;
+            align-items:stretch;
+        }
+        .flow-box {
+            background:#fff;
+            border:3px solid #e2eaf2;
+            border-radius:24px;
+            padding:22px;
+            text-align:center;
+            box-shadow:0 8px 22px rgba(15,39,71,.07);
+        }
+        .flow-box b { display:block; font-size:24px; color:var(--navy); margin:8px 0 6px; }
+        .flow-box span { font-size:18px; color:var(--muted); line-height:1.35; }
+        .code-mini {
+            background:#0f2747;
+            color:#eaf7ff;
+            border-radius:26px;
+            padding:28px;
+            border:4px solid #183d68;
+            box-shadow:var(--shadow);
+            font-size:21px;
+            line-height:1.55;
+            width:100%;
+        }
+        .code-mini b { color:var(--yellow); }
+        .code-mini code {
+            color:#fff;
+            background:rgba(255,255,255,.12);
+            padding:3px 8px;
+            border-radius:8px;
+            font-family:Consolas, Monaco, monospace;
+        }
+        .placeholder-box {
+            width:100%;
+            min-height:300px;
+            border:4px dashed #cbd8e4;
+            background:#f8fafc;
+            border-radius:30px;
+            display:grid;
+            place-items:center;
+            text-align:center;
+            color:#7a8fa3;
+            font-size:28px;
+            font-weight:700;
+            padding:30px;
+        }
+        .compact-steps {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:18px;
+            width:100%;
+        }
+        .compact-step {
+            background:#fff;
+            border:3px solid #e2eaf2;
+            border-radius:24px;
+            padding:24px;
+            box-shadow:0 8px 22px rgba(15,39,71,.07);
+        }
+        .compact-step .num {
+            width:52px;height:52px;
+            font-size:24px;
+            border-radius:16px;
+            background:var(--orange);
+        }
+        .compact-step h3 {
+            font-size:27px;
+            margin:14px 0 8px;
+        }
+        .compact-step p {
+            font-size:20px;
+            line-height:1.4;
+            color:var(--muted);
+            margin:0;
+        }
+        .term-pill {
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:9px 13px;
+            border-radius:999px;
+            background:#eef6ff;
+            color:#1558a6;
+            font-weight:700;
+            font-size:18px;
+            margin:4px;
+        }
+        @media(max-width:900px) {
+            .adv-hero { grid-template-columns:1fr; padding:36px; }
+            .adv-emoji { display:none; }
+            .concept-grid, .concept-grid.two, .flow-strip, .compact-steps { grid-template-columns:1fr; }
+        }
+
     </style>
 </head>
 
@@ -2412,6 +2587,11 @@
             <select class="selector" id="sessionSelector">
                 <option value="1">Session 1: Terrain World Building</option>
                 <option value="2">Session 2: Atmosphere, Skybox &amp; Ambience</option>
+                <option value="3">Session 3: Arena and Adventure Path</option>
+                <option value="4">Session 4: Kill Brick and Respawn</option>
+                <option value="5">Session 5: Leaderstats, Collecting &amp; Interaction</option>
+                <option value="6">Session 6: SurfaceGui and Signboards</option>
+                <option value="7">Session 7: Finish Line and Victory Effects</option>
             </select>
         </div>
     </nav>
@@ -3456,6 +3636,609 @@
                 </div>
             </section>
 
+
+            <!-- SESSION 3: Arena and Adventure Path -->
+            <section class="slide s3">
+                <div class="adv-hero">
+                    <div>
+                        <div class="eyebrow">🧭 Adventure System</div>
+                        <h1>Arena and <span>Adventure Path</span></h1>
+                        <p>Mulai Session 3, kita membuat satu project besar: <b>Adventure Obstacles Course</b>.</p>
+                        <div class="mission-pill">🎯 Mission: plan the start, path, checkpoints, and finish</div>
+                    </div>
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/23242791-ad89-4015-9571-89eca0857107.png" class="adv-emoji" style="font-size:unset;width:340px;height:auto;border-radius:22px;box-shadow:0 25px 50px rgba(0,0,0,.32);border:4px solid rgba(255,255,255,.8);" alt="Session 3 Preview">
+                </div>
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Today's Agenda</div>
+                    <h2>Apa yang akan kita pelajari hari ini? 📅</h2>
+                    <p>Fokus utama di sesi ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Plan Level</h3><p>Merencanakan jalur dan rintangan untuk pemain.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Build Course</h3><p>Membuat struktur rintangan dengan Terrain dan Parts.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Playtest</h3><p>Menguji kelayakan jalur yang sudah dibuat.</p></div>
+                </div>
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Project Direction</div>
+                    <h2>Adventure Obstacles Course 🏁</h2>
+                    <p>Satu project besar yang akan berkembang dari Session 3 sampai Session 7.</p>
+                </div>
+                <div class="concept-grid">
+                    <div class="big-card accent-blue"><div class="big-icon">🚩</div><h3>Start Area</h3><p>Tempat player muncul dan memahami arah awal.</p></div>
+                    <div class="big-card accent-orange"><div class="big-icon">🧗</div><h3>Obstacle Path</h3><p>Jalur platform, rintangan, safe area, dan tantangan.</p></div>
+                    <div class="big-card accent-green"><div class="big-icon">🏁</div><h3>Finish Area</h3><p>Tujuan akhir yang menandakan course selesai.</p></div>
+                </div>
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Level Design</div>
+                    <h2>Path Harus Terasa Jelas 👀</h2>
+                    <p>Player harus tahu: mulai dari mana, lewat mana, dan selesai di mana.</p>
+                </div>
+                <div class="flow-strip">
+                    <div class="flow-box"><div class="big-icon">🚩</div><b>Start</b><span>Area aman untuk spawn.</span></div>
+                    <div class="flow-box"><div class="big-icon">🟫</div><b>Platforms</b><span>Jalur dan lompatan.</span></div>
+                    <div class="flow-box"><div class="big-icon">✅</div><b>Checkpoint</b><span>Titik progress pemain.</span></div>
+                    <div class="flow-box"><div class="big-icon">🏁</div><b>Finish</b><span>Akhir perjalanan.</span></div>
+                </div>
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Placeholder Visual</div>
+                    <h2>Tambahkan Gambar Project di Sini 🖼️</h2>
+                    <p>Bagian ini sengaja kosong agar nanti bisa kamu isi dengan screenshot project.</p>
+                </div>
+                <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/fd9844f2-f044-4567-9d8b-bf5e588c45d1.png" class="interface-shot" alt="Adventure path layout" style="margin: 0 auto; box-shadow: var(--shadow);">
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Build Activity</div>
+                    <h2>Hari Ini Buat Kerangka Course 🛠️</h2>
+                    <p>Fokusnya visual layout dulu, belum masuk script.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Plan</h3><p>Tentukan start, path, checkpoint, dan finish.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Build</h3><p>Buat basic obstacle dan platform dengan Terrain & Parts.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Playtest</h3><p>Coba jalurnya, lalu atur jarak dan posisi.</p></div>
+                </div>
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Session 3 Check</div>
+                    <h2>Arena Ready? ✅</h2>
+                    <p>Klik checklist setelah selesai dibuat di Roblox Studio.</p>
+                </div>
+                <div class="checklist">
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Start area sudah jelas</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Adventure path sudah terbentuk</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Ada obstacle dan safe area</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Ada checkpoint dan finish area</button>
+                </div>
+                <div class="feedback"></div>
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Quiz</div>
+                    <h2>Knowledge Challenge 🧠</h2>
+                    <p>Jawab dua pertanyaan singkat tentang materi hari ini.</p>
+                </div>
+                <div class="quiz" id="s3QuizBox">
+                    <div id="s3QuizQ"></div>
+                    <div class="quiz-options" id="s3QuizOptions"></div>
+                    <div class="feedback" id="s3QuizFeedback"></div>
+                    <div class="button-row"><button class="primary-btn hidden" id="s3QuizNext" onclick="nexts3Quiz()">Next Question ➜</button></div>
+                </div>
+            </section>
+            <section class="slide s3 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Review</div>
+                    <h2>Session Recap 📚</h2>
+                    <p>Hal penting yang telah kita pelajari hari ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">💡</div><h3>Start & Finish</h3><p>Menentukan awal dan akhir yang jelas bagi pemain.</p></div>
+                    <div class="compact-step"><div class="num">🧱</div><h3>Obstacle Path</h3><p>Membuat rintangan yang menantang namun bisa dilewati.</p></div>
+                    <div class="compact-step"><div class="num">✅</div><h3>Checkpoint</h3><p>Memberi progress agar pemain tidak frustrasi saat gagal.</p></div>
+                </div>
+            </section>
+            <section class="slide s3">
+                <div class="feedback-panel">
+                    <h2>How do you feel today? 💬</h2>
+                    <p style="font-size:20px;color:var(--muted)">Pilih satu emoji yang mewakili perasaanmu di sesi ini.</p>
+                    <div class="emoji-row" id="emojiRows3"><button class="emoji-btn" onclick="chooseEmojiGen(this, 's3')">🤩</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's3')">😊</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's3')">🤔</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's3')">😵‍💫</button></div>
+                    <div class="thanks" id="thankss3">Thank you! Jangan lupa save project-mu. 🚀</div>
+                </div>
+            </section>
+
+            <!-- SESSION 4: Kill Brick and Respawn -->
+            <section class="slide s4">
+                <div class="adv-hero">
+                    <div>
+                        <div class="eyebrow">☠️ Adventure System</div>
+                        <h1>Kill Brick and <span>Respawn</span></h1>
+                        <p>Hari ini obstacle course punya bahaya. Kita memakai <b>Touched event</b> dan <b>Humanoid</b>.</p>
+                        <div class="mission-pill">🎯 Mission: create hazards that affect the player</div>
+                    </div>
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/891fa236-d9b2-4f00-a50f-c8117ab5eee3.png" class="adv-emoji" style="font-size:unset;width:340px;height:auto;border-radius:22px;box-shadow:0 25px 50px rgba(0,0,0,.32);border:4px solid rgba(255,255,255,.8);" alt="Session 4 Preview">
+                </div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Today's Agenda</div>
+                    <h2>Apa yang akan kita pelajari hari ini? 📅</h2>
+                    <p>Fokus utama di sesi ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Kill Brick Concept</h3><p>Memahami apa itu Kill Brick dan bagaimana ia bekerja.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Touched Event</h3><p>Menggunakan event untuk mendeteksi sentuhan.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Humanoid & Respawn</h3><p>Mengurangi darah pemain dan mengetes sistem respawn.</p></div>
+                </div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Main Logic</div>
+                    <h2>Apa Itu Kill Brick? 🧱</h2>
+                    <p>Kill Brick adalah Part berbahaya yang bereaksi saat disentuh player.</p>
+                </div>
+                <div class="concept-grid">
+                    <div class="big-card accent-orange"><div class="big-icon">👟</div><h3>Touched</h3><p>Event aktif saat karakter menyentuh Part.</p></div>
+                    <div class="big-card accent-blue"><div class="big-icon">🧍</div><h3>Character</h3><p>Script mencari karakter player yang menyentuh Part.</p></div>
+                    <div class="big-card accent-purple"><div class="big-icon">❤️</div><h3>Humanoid</h3><p>Health player dapat diubah melalui Humanoid.</p></div>
+                </div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Logic Flow</div>
+                    <h2>Dari Sentuh Sampai Respawn 🔄</h2>
+                    <p>Urutan logic harus jelas agar hazard bekerja dengan benar.</p>
+                </div>
+                <div class="flow-strip">
+                    <div class="flow-box"><div class="big-icon">🧱</div><b>Touch Part</b><span>Player menyentuh kill brick.</span></div>
+                    <div class="flow-box"><div class="big-icon">🔎</div><b>Find Humanoid</b><span>Script mengecek karakter.</span></div>
+                    <div class="flow-box"><div class="big-icon">💔</div><b>Set Health</b><span>Health dibuat 0.</span></div>
+                    <div class="flow-box"><div class="big-icon">🚩</div><b>Respawn</b><span>Player kembali ke spawn.</span></div>
+                </div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Script Idea</div>
+                    <h2>Bagian Penting Script 💻</h2>
+                    <p>Teacher akan bantu menulis script lengkap di Roblox Studio.</p>
+                </div>
+                <div class="code-mini">
+                    <b>Keyword hari ini:</b><br>
+                    <code>Touched</code> → mendeteksi sentuhan<br>
+                    <code>FindFirstChild("Humanoid")</code> → cek karakter<br>
+                    <code>Humanoid.Health = 0</code> → membuat player respawn
+                </div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Build Activity</div>
+                    <h2>Buat Hazard System ⚠️</h2>
+                    <p>Fokus hari ini adalah logic dasar hazard dan respawn.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Create</h3><p>Buat Kill Brick di area obstacle.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Script</h3><p>Gunakan Touched untuk mencari Humanoid.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Test</h3><p>Atur SpawnLocation dan coba respawn.</p></div>
+                </div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Session 4 Check</div>
+                    <h2>Hazard Ready? ✅</h2>
+                    <p>Pastikan hazard bekerja tetapi tetap adil untuk player.</p>
+                </div>
+                <div class="checklist">
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Kill Brick sudah dibuat</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Touched event sudah digunakan</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Humanoid health berubah</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Respawn sudah dites</button>
+                </div>
+                <div class="feedback"></div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Quiz</div>
+                    <h2>Knowledge Challenge 🧠</h2>
+                    <p>Jawab dua pertanyaan singkat tentang materi hari ini.</p>
+                </div>
+                <div class="quiz" id="s4QuizBox">
+                    <div id="s4QuizQ"></div>
+                    <div class="quiz-options" id="s4QuizOptions"></div>
+                    <div class="feedback" id="s4QuizFeedback"></div>
+                    <div class="button-row"><button class="primary-btn hidden" id="s4QuizNext" onclick="nexts4Quiz()">Next Question ➜</button></div>
+                </div>
+            </section>
+            <section class="slide s4 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Review</div>
+                    <h2>Session Recap 📚</h2>
+                    <p>Hal penting yang telah kita pelajari hari ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">☠️</div><h3>Kill Brick</h3><p>Part berbahaya yang memberi tantangan bagi pemain.</p></div>
+                    <div class="compact-step"><div class="num">⚡</div><h3>Touched Event</h3><p>Cara ampuh mendeteksi saat pemain menyentuh suatu object.</p></div>
+                    <div class="compact-step"><div class="num">🔄</div><h3>Respawn</h3><p>Memastikan pemain bisa mencoba lagi setelah gagal.</p></div>
+                </div>
+            </section>
+            <section class="slide s4">
+                <div class="feedback-panel">
+                    <h2>How do you feel today? 💬</h2>
+                    <p style="font-size:20px;color:var(--muted)">Pilih satu emoji yang mewakili perasaanmu di sesi ini.</p>
+                    <div class="emoji-row" id="emojiRows4"><button class="emoji-btn" onclick="chooseEmojiGen(this, 's4')">🤩</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's4')">😊</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's4')">🤔</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's4')">😵‍💫</button></div>
+                    <div class="thanks" id="thankss4">Thank you! Jangan lupa save project-mu. 🚀</div>
+                </div>
+            </section>
+
+            <!-- SESSION 5: Leaderstats, Collecting Items & Interaction -->
+            <section class="slide s5">
+                <div class="adv-hero">
+                    <div>
+                        <div class="eyebrow">💎 Adventure System</div>
+                        <h1>Leaderstats and <span>Interaction</span></h1>
+                        <p>Hari ini game mulai menyimpan data: item yang dikumpulkan dan progress checkpoint.</p>
+                        <div class="mission-pill">🎯 Mission: track collected items and checkpoint progress</div>
+                    </div>
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/fa4f6ef4-01d7-488c-a29d-64125e4457ed.jpg" class="adv-emoji" style="font-size:unset;width:340px;height:auto;border-radius:22px;box-shadow:0 25px 50px rgba(0,0,0,.32);border:4px solid rgba(255,255,255,.8);" alt="Session 5 Preview">
+                </div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Today's Agenda</div>
+                    <h2>Apa yang akan kita pelajari hari ini? 📅</h2>
+                    <p>Fokus utama di sesi ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Leaderstats</h3><p>Membuat sistem untuk melacak data pemain.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Collectibles</h3><p>Mengumpulkan koin atau gem dengan berinteraksi.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Interactions</h3><p>Menggunakan ClickDetector dan ProximityPrompt.</p></div>
+                </div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Game Data</div>
+                    <h2>Apa Itu Leaderstats? 📊</h2>
+                    <p>Leaderstats adalah data player yang bisa terlihat di leaderboard.</p>
+                </div>
+                <div class="concept-grid">
+                    <div class="big-card accent-green"><div class="big-icon">💎</div><h3>Coins / Gems</h3><p>Jumlah item yang berhasil dikumpulkan.</p></div>
+                    <div class="big-card accent-blue"><div class="big-icon">🚩</div><h3>Checkpoint</h3><p>Progress lokasi terakhir player.</p></div>
+                    <div class="big-card accent-purple"><div class="big-icon">👆</div><h3>Interaction</h3><p>Touch, click, atau proximity untuk berinteraksi.</p></div>
+                </div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Interaction Types</div>
+                    <h2>Tiga Cara Berinteraksi 🤝</h2>
+                    <p>Pilih interaction sesuai kebutuhan object.</p>
+                </div>
+                <div class="concept-grid">
+                    <div class="big-card accent-orange"><div class="big-icon">👟</div><h3>Touched</h3><p>Cocok untuk collectible yang diambil saat disentuh.</p></div>
+                    <div class="big-card accent-blue"><div class="big-icon">🖱️</div><h3>ClickDetector</h3><p>Cocok untuk object yang diklik player.</p></div>
+                    <div class="big-card accent-green"><div class="big-icon">⌨️</div><h3>ProximityPrompt</h3><p>Cocok untuk tombol interaksi dekat object.</p></div>
+                </div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Logic Flow</div>
+                    <h2>Item Collect Flow 💎</h2>
+                    <p>Object harus menambah data lalu menghilang atau berubah.</p>
+                </div>
+                <div class="flow-strip">
+                    <div class="flow-box"><div class="big-icon">💎</div><b>Touch Item</b><span>Player menyentuh collectible.</span></div>
+                    <div class="flow-box"><div class="big-icon">📊</div><b>Add Stat</b><span>Coin/Gem bertambah.</span></div>
+                    <div class="flow-box"><div class="big-icon">✨</div><b>Feedback</b><span>Berikan sound/effect kecil.</span></div>
+                    <div class="flow-box"><div class="big-icon">🫥</div><b>Remove</b><span>Item hilang agar tidak dihitung lagi.</span></div>
+                </div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Build Activity</div>
+                    <h2>Buat Data dan Interaksi 🧩</h2>
+                    <p>Player mulai punya progress yang bisa dibaca.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Create Stats</h3><p>Buat Coin dan Checkpoint leaderstats.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Add Items</h3><p>Buat collectible dan checkpoint update.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Test</h3><p>Coba Touched, ClickDetector, dan ProximityPrompt.</p></div>
+                </div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Session 5 Check</div>
+                    <h2>Data System Ready? ✅</h2>
+                    <p>Pastikan data tidak bertambah berkali-kali secara tidak sengaja.</p>
+                </div>
+                <div class="checklist">
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Leaderstats sudah muncul</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Collectible menambah Coin/Gem</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Checkpoint progress berubah</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Interaksi sudah dites</button>
+                </div>
+                <div class="feedback"></div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Quiz</div>
+                    <h2>Knowledge Challenge 🧠</h2>
+                    <p>Jawab dua pertanyaan singkat tentang materi hari ini.</p>
+                </div>
+                <div class="quiz" id="s5QuizBox">
+                    <div id="s5QuizQ"></div>
+                    <div class="quiz-options" id="s5QuizOptions"></div>
+                    <div class="feedback" id="s5QuizFeedback"></div>
+                    <div class="button-row"><button class="primary-btn hidden" id="s5QuizNext" onclick="nexts5Quiz()">Next Question ➜</button></div>
+                </div>
+            </section>
+            <section class="slide s5 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Review</div>
+                    <h2>Session Recap 📚</h2>
+                    <p>Hal penting yang telah kita pelajari hari ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">📊</div><h3>Leaderstats</h3><p>Data penting pemain yang ditampilkan di leaderboard.</p></div>
+                    <div class="compact-step"><div class="num">💎</div><h3>Item Collection</h3><p>Memberi feedback dan menambah stats ketika diambil.</p></div>
+                    <div class="compact-step"><div class="num">👆</div><h3>Interaction</h3><p>Berbagai cara pemain berinteraksi dengan object.</p></div>
+                </div>
+            </section>
+            <section class="slide s5">
+                <div class="feedback-panel">
+                    <h2>How do you feel today? 💬</h2>
+                    <p style="font-size:20px;color:var(--muted)">Pilih satu emoji yang mewakili perasaanmu di sesi ini.</p>
+                    <div class="emoji-row" id="emojiRows5"><button class="emoji-btn" onclick="chooseEmojiGen(this, 's5')">🤩</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's5')">😊</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's5')">🤔</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's5')">😵‍💫</button></div>
+                    <div class="thanks" id="thankss5">Thank you! Jangan lupa save project-mu. 🚀</div>
+                </div>
+            </section>
+
+            <!-- SESSION 6: SurfaceGui and Signboards -->
+            <section class="slide s6">
+                <div class="adv-hero">
+                    <div>
+                        <div class="eyebrow">🪧 Adventure System</div>
+                        <h1>SurfaceGui and <span>Signboards</span></h1>
+                        <p>Hari ini kita menambahkan petunjuk di dunia game agar player tidak bingung.</p>
+                        <div class="mission-pill">🎯 Mission: guide players with clear in-world text</div>
+                    </div>
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/0d03d722-7255-4404-816b-f5610bf43ad3.png" class="adv-emoji" style="font-size:unset;width:340px;height:auto;border-radius:22px;box-shadow:0 25px 50px rgba(0,0,0,.32);border:4px solid rgba(255,255,255,.8);" alt="Session 6 Preview">
+                </div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Today's Agenda</div>
+                    <h2>Apa yang akan kita pelajari hari ini? 📅</h2>
+                    <p>Fokus utama di sesi ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Why Signboards?</h3><p>Pentingnya memberi petunjuk bagi pemain.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>SurfaceGui</h3><p>Menambahkan UI text ke atas sebuah Part.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Design & Place</h3><p>Mendesain sign singkat dan menempatkannya dengan benar.</p></div>
+                </div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Player Guidance</div>
+                    <h2>Kenapa Butuh Signboard? 🧭</h2>
+                    <p>Signboard membantu player memahami arah, aturan, dan bahaya.</p>
+                </div>
+                <div class="concept-grid">
+                    <div class="big-card accent-blue"><div class="big-icon">➡️</div><h3>Direction</h3><p>Menunjukkan ke mana player harus pergi.</p></div>
+                    <div class="big-card accent-orange"><div class="big-icon">⚠️</div><h3>Warning</h3><p>Memberi tahu area bahaya atau kill brick.</p></div>
+                    <div class="big-card accent-green"><div class="big-icon">✅</div><h3>Checkpoint</h3><p>Menandai progress dan area aman.</p></div>
+                </div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Surface UI</div>
+                    <h2>Apa Itu SurfaceGui? 🧱</h2>
+                    <p>SurfaceGui membuat UI menempel pada permukaan Part.</p>
+                </div>
+                <div class="flow-strip">
+                    <div class="flow-box"><div class="big-icon">🧱</div><b>Part</b><span>Papan atau sign object.</span></div>
+                    <div class="flow-box"><div class="big-icon">🖼️</div><b>SurfaceGui</b><span>UI yang menempel di Part.</span></div>
+                    <div class="flow-box"><div class="big-icon">🔤</div><b>TextLabel</b><span>Teks yang terlihat player.</span></div>
+                    <div class="flow-box"><div class="big-icon">📍</div><b>Placement</b><span>Diletakkan di jalur yang tepat.</span></div>
+                </div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Text Style</div>
+                    <h2>Sign yang Baik Itu Singkat ✍️</h2>
+                    <p>Gunakan kalimat pendek yang langsung bisa dipahami.</p>
+                </div>
+                <div class="concept-grid two">
+                    <div class="big-card accent-green"><div class="big-icon">✅</div><h3>Good Sign</h3><p>“Checkpoint 1”<br>“Danger: Lava”<br>“Go to the bridge”</p></div>
+                    <div class="big-card accent-orange"><div class="big-icon">❌</div><h3>Too Long</h3><p>Instruksi panjang akan sulit dibaca saat player sedang bergerak.</p></div>
+                </div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Build Activity</div>
+                    <h2>Buat Signboards di Jalur 🪧</h2>
+                    <p>Fokus hari ini adalah visual guidance di dalam world.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Create</h3><p>Buat Part sebagai papan petunjuk.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Style</h3><p>Tambahkan SurfaceGui dan TextLabel.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Place</h3><p>Letakkan signs di start, danger, checkpoint, dan finish.</p></div>
+                </div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Session 6 Check</div>
+                    <h2>Signboards Ready? ✅</h2>
+                    <p>Pastikan teks terlihat dari arah player datang.</p>
+                </div>
+                <div class="checklist">
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Ada sign di start area</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Ada warning untuk bahaya</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Ada checkpoint info</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Teks mudah dibaca</button>
+                </div>
+                <div class="feedback"></div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Quiz</div>
+                    <h2>Knowledge Challenge 🧠</h2>
+                    <p>Jawab dua pertanyaan singkat tentang materi hari ini.</p>
+                </div>
+                <div class="quiz" id="s6QuizBox">
+                    <div id="s6QuizQ"></div>
+                    <div class="quiz-options" id="s6QuizOptions"></div>
+                    <div class="feedback" id="s6QuizFeedback"></div>
+                    <div class="button-row"><button class="primary-btn hidden" id="s6QuizNext" onclick="nexts6Quiz()">Next Question ➜</button></div>
+                </div>
+            </section>
+            <section class="slide s6 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Review</div>
+                    <h2>Session Recap 📚</h2>
+                    <p>Hal penting yang telah kita pelajari hari ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">🧭</div><h3>Direction</h3><p>Mengarahkan pemain lewat tanda dan papan.</p></div>
+                    <div class="compact-step"><div class="num">🖼️</div><h3>SurfaceGui</h3><p>Fitur untuk menempelkan UI pada Part.</p></div>
+                    <div class="compact-step"><div class="num">✍️</div><h3>Clear Copy</h3><p>Teks harus singkat agar gampang dibaca saat bergerak.</p></div>
+                </div>
+            </section>
+            <section class="slide s6">
+                <div class="feedback-panel">
+                    <h2>How do you feel today? 💬</h2>
+                    <p style="font-size:20px;color:var(--muted)">Pilih satu emoji yang mewakili perasaanmu di sesi ini.</p>
+                    <div class="emoji-row" id="emojiRows6"><button class="emoji-btn" onclick="chooseEmojiGen(this, 's6')">🤩</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's6')">😊</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's6')">🤔</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's6')">😵‍💫</button></div>
+                    <div class="thanks" id="thankss6">Thank you! Jangan lupa save project-mu. 🚀</div>
+                </div>
+            </section>
+
+            <!-- SESSION 7: Finish Line and Victory Effects -->
+            <section class="slide s7">
+                <div class="adv-hero">
+                    <div>
+                        <div class="eyebrow">🏁 Adventure System</div>
+                        <h1>Finish Line and <span>Victory Effects</span></h1>
+                        <p>Hari ini course punya akhir yang jelas: trigger, efek, sound, dan completion message.</p>
+                        <div class="mission-pill">🎯 Mission: make the adventure feel completed</div>
+                    </div>
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/c34d0919-a50e-480a-adcb-b27aac268eda.png" class="adv-emoji" style="font-size:unset;width:340px;height:auto;border-radius:22px;box-shadow:0 25px 50px rgba(0,0,0,.32);border:4px solid rgba(255,255,255,.8);" alt="Session 7 Preview">
+                </div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Today's Agenda</div>
+                    <h2>Apa yang akan kita pelajari hari ini? 📅</h2>
+                    <p>Fokus utama di sesi ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Finish Trigger</h3><p>Menambahkan Part akhir yang memicu kemenangan.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Victory Feedback</h3><p>Memunculkan pesan, suara, dan efek particle.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Final Playtest</h3><p>Menguji dan memastikan course sudah siap dimainkan.</p></div>
+                </div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Completion System</div>
+                    <h2>Finish Line Harus Memberi Feedback 🎉</h2>
+                    <p>Player perlu tahu bahwa mereka berhasil menyelesaikan course.</p>
+                </div>
+                <div class="concept-grid">
+                    <div class="big-card accent-blue"><div class="big-icon">🏁</div><h3>Finish Trigger</h3><p>Part yang mendeteksi player saat sampai akhir.</p></div>
+                    <div class="big-card accent-purple"><div class="big-icon">✨</div><h3>Effects</h3><p>Particles atau visual feedback saat menang.</p></div>
+                    <div class="big-card accent-orange"><div class="big-icon">🔊</div><h3>Sound</h3><p>Suara kemenangan singkat agar lebih terasa.</p></div>
+                </div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Logic Flow</div>
+                    <h2>Dari Finish Sampai Victory 🔄</h2>
+                    <p>Gunakan Touched event untuk memulai feedback kemenangan.</p>
+                </div>
+                <div class="flow-strip">
+                    <div class="flow-box"><div class="big-icon">👟</div><b>Touch Finish</b><span>Player menyentuh finish trigger.</span></div>
+                    <div class="flow-box"><div class="big-icon">🔎</div><b>Detect Player</b><span>Script mengecek karakter.</span></div>
+                    <div class="flow-box"><div class="big-icon">🎉</div><b>Show Message</b><span>“Game Completed”.</span></div>
+                    <div class="flow-box"><div class="big-icon">✨</div><b>Play Effects</b><span>Sound dan particle aktif.</span></div>
+                </div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Build Activity</div>
+                    <h2>Buat Finish System 🏁</h2>
+                    <p>Fokus hari ini adalah menyelesaikan full adventure path.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">1</div><h3>Trigger</h3><p>Buat finish trigger dengan Touched event.</p></div>
+                    <div class="compact-step"><div class="num">2</div><h3>Feedback</h3><p>Tambahkan particles, sound, dan completion message.</p></div>
+                    <div class="compact-step"><div class="num">3</div><h3>Test</h3><p>Coba full path dari start sampai finish.</p></div>
+                </div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Final Testing</div>
+                    <h2>Test Full Course 🧪</h2>
+                    <p>Jalankan game seperti player baru, bukan seperti pembuatnya.</p>
+                </div>
+                <div class="checklist">
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Start jelas dan aman</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Obstacle bisa dilewati</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Checkpoint dan collectible bekerja</button>
+                    <button class="check-item" onclick="toggleCheck(this)"><span class="check-box">✓</span>Finish memberi victory feedback</button>
+                </div>
+                <div class="feedback"></div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Quiz</div>
+                    <h2>Knowledge Challenge 🧠</h2>
+                    <p>Jawab dua pertanyaan singkat tentang materi hari ini.</p>
+                </div>
+                <div class="quiz" id="s7QuizBox">
+                    <div id="s7QuizQ"></div>
+                    <div class="quiz-options" id="s7QuizOptions"></div>
+                    <div class="feedback" id="s7QuizFeedback"></div>
+                    <div class="button-row"><button class="primary-btn hidden" id="s7QuizNext" onclick="nexts7Quiz()">Next Question ➜</button></div>
+                </div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Quick Review</div>
+                    <h2>Session Recap 📚</h2>
+                    <p>Hal penting yang telah kita pelajari hari ini.</p>
+                </div>
+                <div class="compact-steps">
+                    <div class="compact-step"><div class="num">🏁</div><h3>Finish Trigger</h3><p>Deteksi saat pemain menyentuh garis akhir.</p></div>
+                    <div class="compact-step"><div class="num">✨</div><h3>Victory Effect</h3><p>Particles dan Sound untuk menambah kepuasan bermain.</p></div>
+                    <div class="compact-step"><div class="num">🧪</div><h3>Playtest</h3><p>Memastikan seluruh pengalaman game berjalan mulus.</p></div>
+                </div>
+            </section>
+            <section class="slide s7 column">
+                <div class="slide-head">
+                    <div class="kicker">Project Complete</div>
+                    <h2>Adventure Obstacles Course Complete 🎉</h2>
+                    <p>Dari Session 3 sampai 7, project sudah punya visual, logic, data, UI, dan final testing.</p>
+                </div>
+                <div class="concept-grid">
+                    <div class="big-card accent-blue"><div class="big-icon">🧱</div><h3>Level Design</h3><p>Arena, platform, checkpoint, finish.</p></div>
+                    <div class="big-card accent-orange"><div class="big-icon">☠️</div><h3>Hazard Logic</h3><p>Touched, Humanoid, respawn.</p></div>
+                    <div class="big-card accent-green"><div class="big-icon">📊</div><h3>Game Data</h3><p>Leaderstats, collecting, interaction.</p></div>
+                    <div class="big-card accent-purple"><div class="big-icon">🏁</div><h3>Completion</h3><p>Signboards, victory effects, full test.</p></div>
+                </div>
+            </section>
+            <section class="slide s7">
+                <div class="feedback-panel">
+                    <h2>How do you feel today? 💬</h2>
+                    <p style="font-size:20px;color:var(--muted)">Pilih satu emoji yang mewakili perasaanmu di sesi ini.</p>
+                    <div class="emoji-row" id="emojiRows7"><button class="emoji-btn" onclick="chooseEmojiGen(this, 's7')">🤩</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's7')">😊</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's7')">🤔</button><button class="emoji-btn" onclick="chooseEmojiGen(this, 's7')">😵‍💫</button></div>
+                    <div class="thanks" id="thankss7">Thank you! Jangan lupa save project-mu. 🚀</div>
+                </div>
+            </section>
+
         </div>
     </main>
     <footer class="footer">
@@ -3693,6 +4476,72 @@
             else { document.getElementById('s2QuizBox').innerHTML = '<div style="text-align:center;padding:30px"><div style="font-size:80px">🎉</div><h2>Quiz Complete!</h2><p style="font-size:20px;color:#60758b">Saatnya menyelesaikan ambience di Roblox Studio.</p></div>'; }
         }
         function chooseEmojiS2(btn) { const row = document.getElementById('emojiRowS2'); row.classList.add('chosen'); btn.classList.add('active'); document.getElementById('thanksS2').classList.add('show') }
+
+        function chooseEmojiGen(btn, id) { 
+            const row = document.getElementById('emojiRow' + id); 
+            row.classList.add('chosen'); 
+            btn.classList.add('active'); 
+            document.getElementById('thanks' + id).classList.add('show'); 
+        }
+
+        const genQuizData = {
+            's3': [
+                { q: 'Apa fungsi dari Checkpoint?', a: 0, o: ['Titik progress pemain', 'Menghias peta', 'Menambah darah'] },
+                { q: 'Bagian mana yang merupakan akhir perjalanan pemain?', a: 2, o: ['Start Area', 'Obstacle Path', 'Finish Area'] }
+            ],
+            's4': [
+                { q: 'Apa kegunaan Kill Brick?', a: 1, o: ['Menambah darah', 'Membunuh pemain saat disentuh', 'Membuat pemain melompat tinggi'] },
+                { q: 'Event apa yang mendeteksi sentuhan pemain?', a: 1, o: ['Clicked', 'Touched', 'Hovered'] }
+            ],
+            's5': [
+                { q: 'Apa yang dilakukan Leaderstats?', a: 1, o: ['Membuat UI', 'Menyimpan data pemain seperti koin', 'Mengganti warna map'] },
+                { q: 'Bagaimana cara paling cocok mengambil Coin?', a: 0, o: ['Touched', 'ProximityPrompt', 'ClickDetector'] }
+            ],
+            's6': [
+                { q: 'Kenapa kita butuh Signboard?', a: 1, o: ['Agar map tidak sepi', 'Memberikan petunjuk dan peringatan kepada pemain', 'Untuk spawn pemain'] },
+                { q: 'Apa yang digunakan untuk menempelkan teks pada Part?', a: 1, o: ['ScreenGui', 'SurfaceGui', 'BillboardGui'] }
+            ],
+            's7': [
+                { q: 'Apa yang harus terjadi saat pemain menyentuh Finish Line?', a: 1, o: ['Pemain respawn', 'Muncul feedback kemenangan', 'Pemain mendapatkan koin'] },
+                { q: 'Bagaimana cara menguji game sebelum dipublish?', a: 0, o: ['Playtest dari awal sampai akhir', 'Cukup dilihat saja', 'Langsung dipublish'] }
+            ]
+        };
+
+        function setupQuiz(id) {
+            let qI = 0, answered = false;
+            window['renders' + id + 'Quiz'] = function() {
+                const q = document.getElementById('s' + id + 'QuizQ');
+                const box = document.getElementById('s' + id + 'QuizOptions');
+                if (!q || !box) return;
+                answered = false;
+                const d = genQuizData['s'+id][qI];
+                q.innerHTML = '<h3>' + (qI + 1) + '. ' + d.q + '</h3>';
+                box.innerHTML = '';
+                d.o.forEach((x, i) => { 
+                    const b = document.createElement('button'); 
+                    b.className = 'quiz-option'; 
+                    b.textContent = String.fromCharCode(65 + i) + '. ' + x; 
+                    b.onclick = () => {
+                        if (answered) return;
+                        answered = true;
+                        b.classList.add(i === d.a ? 'correct' : 'wrong');
+                        if (i !== d.a) document.querySelectorAll('#s' + id + 'QuizOptions .quiz-option')[d.a].classList.add('correct');
+                        document.getElementById('s' + id + 'QuizFeedback').textContent = (i === d.a) ? 'Correct! ✅' : 'Belum tepat. Cek jawaban hijau ya.';
+                        document.getElementById('s' + id + 'QuizNext').classList.remove('hidden');
+                    }; 
+                    box.appendChild(b); 
+                });
+                document.getElementById('s' + id + 'QuizFeedback').textContent = '';
+                document.getElementById('s' + id + 'QuizNext').classList.add('hidden');
+            };
+            window['nexts' + id + 'Quiz'] = function() {
+                if (qI < genQuizData['s'+id].length - 1) { qI++; window['renders' + id + 'Quiz'](); }
+                else { document.getElementById('s' + id + 'QuizBox').innerHTML = '<div style="text-align:center;padding:30px"><div style="font-size:80px">🎉</div><h2>Quiz Complete!</h2><p style="font-size:20px;color:#60758b">Kerja bagus! Lanjutkan ke sesi berikutnya.</p></div>'; }
+            };
+            window['renders' + id + 'Quiz']();
+        }
+
+        [3,4,5,6,7].forEach(id => setupQuiz(id));
 
         renderTool(); initSculpt(); renderQuiz(); renderS2Quiz(); updateBrush(); updateS2Atmo(); updateView();
     </script>
