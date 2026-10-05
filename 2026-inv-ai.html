@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>RUANGGURU CODING · App Inventor AI · Session 1</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Fredoka', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#F97316',
+                            blue: '#3B82F6',
+                            purple: '#8B5CF6',
+                            green: '#10B981',
+                            navy: '#172554'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --nav-h: 80px;
+            --footer-h: 80px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            overflow: hidden;
+            background: #f8fafc;
+            color: #1e293b;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button,
+        select,
+        input {
+            font: inherit;
+        }
+
+        button {
+            touch-action: manipulation;
+        }
+
+        .top-nav {
+            height: var(--nav-h);
+            padding-left: clamp(14px, 3vw, 32px);
+            padding-right: clamp(14px, 3vw, 32px);
+        }
+
+        .brand-logo {
+            height: clamp(28px, 4vw, 40px);
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-divider {
+            height: 32px;
+            margin: 0 clamp(10px, 1.7vw, 20px);
+        }
+
+        .meeting-select {
+            max-width: min(48vw, 510px);
+            font-size: clamp(.82rem, 1.45vw, 1.08rem);
+        }
+
+        main {
+            margin-top: var(--nav-h);
+            width: 100%;
+            height: calc(100dvh - var(--nav-h) - var(--footer-h));
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: clamp(14px, 3vw, 32px);
+            scroll-behavior: smooth;
+        }
+
+        .slide-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            min-height: 100%;
+            margin: 0 auto;
+            max-width: 1152px;
+        }
+
+        .slide {
+            display: none;
+            opacity: 0;
+            width: 100%;
+            min-height: 100%;
+            padding: clamp(10px, 2vw, 28px) 0;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            animation: fadeIn .35s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(9px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
+        }
+
+        @keyframes wobble {
+
+            0%,
+            100% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            25% {
+                transform: rotate(-7deg) scale(1.08);
+            }
+
+            50% {
+                transform: rotate(7deg) scale(1.12);
+            }
+
+            75% {
+                transform: rotate(-4deg) scale(1.06);
+            }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .feedback-wobble {
+            animation: wobble .9s ease-in-out infinite;
+        }
+
+        .display-title {
+            font-size: clamp(2.25rem, 5.2vw, 4rem);
+            line-height: 1.05;
+        }
+
+        .slide-title {
+            font-size: clamp(2rem, 4.5vw, 3.35rem);
+            line-height: 1.08;
+        }
+
+        .slide-subtitle {
+            font-size: clamp(1.05rem, 2.3vw, 1.55rem);
+            line-height: 1.45;
+        }
+
+        .card-title {
+            font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+        }
+
+        .body-copy {
+            font-size: clamp(1rem, 1.8vw, 1.25rem);
+            line-height: 1.55;
+        }
+
+        .hero-card,
+        .stage-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: clamp(22px, 3vw, 32px);
+            box-shadow: 0 12px 28px rgba(15, 23, 42, .09);
+        }
+
+        .soft-note {
+            background: #fffbeb;
+            border: 2px solid #fde68a;
+            border-left: 9px solid #f59e0b;
+            border-radius: 18px;
+            padding: 16px 20px;
+        }
+
+        .dark-panel {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            color: white;
+            border: 3px solid #334155;
+            border-radius: clamp(24px, 3vw, 32px);
+            box-shadow: 0 18px 32px rgba(15, 23, 42, .18);
+        }
+
+        .flow-node {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 22px;
+            padding: clamp(15px, 2vw, 24px);
+            min-height: 145px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, .06);
+        }
+
+        .flow-arrow {
+            font-size: clamp(2rem, 5vw, 3.6rem);
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .comparison-card {
+            border-radius: 28px;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+            background: white;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, .08);
+        }
+
+        .ai-choice.selected {
+            transform: translateY(-4px);
+            border-color: #8b5cf6 !important;
+            background: #f5f3ff !important;
+            box-shadow: 0 12px 24px rgba(139, 92, 246, .14);
+        }
+
+        .ai-choice.correct {
+            border-color: #22c55e !important;
+            background: #ecfdf5 !important;
+        }
+
+        .ai-choice.wrong {
+            border-color: #ef4444 !important;
+            background: #fef2f2 !important;
+        }
+
+        .workspace-shell {
+            width: 100%;
+            background: white;
+            border: 4px solid #cbd5e1;
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, .12);
+        }
+
+        .app-screen {
+            background: linear-gradient(180deg, #eef2ff 0%, #ffffff 100%);
+            min-height: 290px;
+            border: 2px solid #c7d2fe;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-mock {
+            width: min(260px, 72vw);
+            aspect-ratio: 9 / 18;
+            border: 10px solid #0f172a;
+            border-radius: 34px;
+            background: white;
+            box-shadow: 0 18px 30px rgba(15, 23, 42, .18);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 7px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 34%;
+            height: 14px;
+            border-radius: 99px;
+            background: #0f172a;
+            z-index: 2;
+        }
+
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            width: 120px;
+            aspect-ratio: 1;
+            gap: 3px;
+            padding: 8px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            box-shadow: 0 6px 14px rgba(15, 23, 42, .08);
+        }
+
+        .qr-grid span {
+            background: #172554;
+            border-radius: 1px;
+        }
+
+        .qr-grid span.light {
+            background: #fff;
+        }
+
+        .readiness-item.done {
+            border-color: #86efac !important;
+            background: #ecfdf5 !important;
+        }
+
+        .readiness-item.done .status-dot {
+            background: #22c55e;
+            color: white;
+        }
+
+        .quiz-btn {
+            transition: .18s ease;
+        }
+
+        .quiz-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: #fbbf24;
+        }
+
+        .bottom-navigation {
+            height: var(--footer-h);
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            align-items: center;
+            padding-left: clamp(14px, 3vw, 40px);
+            padding-right: clamp(14px, 3vw, 40px);
+        }
+
+        .bottom-navigation-title {
+            grid-column: 1;
+            justify-self: start;
+            min-width: 0;
+        }
+
+        .bottom-navigation-controls {
+            grid-column: 2;
+            justify-self: center;
+        }
+
+        .nav-circle {
+            width: clamp(44px, 6vw, 56px);
+            height: clamp(44px, 6vw, 56px);
+        }
+
+        @media (max-width: 820px) {
+            :root {
+                --nav-h: 72px;
+                --footer-h: 70px;
+            }
+
+            .top-nav {
+                gap: 8px;
+            }
+
+            .brand-divider {
+                height: 26px;
+                margin: 0 8px;
+            }
+
+            .meeting-select {
+                max-width: 48vw;
+                padding-left: 10px !important;
+                padding-right: 28px !important;
+            }
+
+            main {
+                padding: 14px;
+            }
+
+            .slide {
+                padding: 8px 0 18px;
+            }
+
+            .grid-mobile-one {
+                grid-template-columns: 1fr !important;
+            }
+
+            .flow-responsive {
+                grid-template-columns: 1fr !important;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .workspace-columns {
+                grid-template-columns: 1fr !important;
+            }
+
+            .bottom-navigation-title {
+                display: none;
+            }
+
+            .bottom-navigation {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-navigation-controls {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 560px) {
+            :root {
+                --nav-h: 66px;
+                --footer-h: 66px;
+            }
+
+            .top-nav {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .brand-logo {
+                height: 25px;
+            }
+
+            .brand-divider {
+                height: 22px;
+                margin: 0 6px;
+            }
+
+            .meeting-select {
+                max-width: 50vw;
+                font-size: .72rem;
+                padding-top: 7px !important;
+                padding-bottom: 7px !important;
+            }
+
+            .display-title {
+                font-size: clamp(2rem, 10vw, 2.75rem);
+            }
+
+            .slide-title {
+                font-size: clamp(1.8rem, 8.5vw, 2.55rem);
+            }
+
+            .slide-subtitle {
+                font-size: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.15rem;
+            }
+
+            .body-copy {
+                font-size: .98rem;
+            }
+
+            .hero-card,
+            .stage-card {
+                border-radius: 22px;
+            }
+
+            .feedback-options {
+                gap: 12px !important;
+            }
+
+            .feedback-options button {
+                font-size: 3.4rem !important;
+            }
+
+            .qr-grid {
+                width: 100px;
+            }
+        }
+
+        @media (max-height: 650px) and (orientation: landscape) {
+            :root {
+                --nav-h: 58px;
+                --footer-h: 58px;
+            }
+
+            .brand-logo {
+                height: 26px;
+            }
+
+            .top-nav {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            main {
+                padding: 10px 20px;
+            }
+
+            .slide {
+                padding: 5px 0 12px;
+            }
+
+            .display-title {
+                font-size: clamp(2rem, 5vw, 3rem);
+            }
+
+            .slide-title {
+                font-size: clamp(1.8rem, 4vw, 2.8rem);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+    <nav
+        class="top-nav fixed top-0 left-0 right-0 bg-white border-b border-slate-200 z-50 flex items-center justify-between shadow-sm">
+        <div class="flex items-center min-w-0">
+            <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+                alt="Kalananti" class="brand-logo" />
+            <div class="brand-divider border-l-2 border-slate-200"></div>
+            <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+                alt="Ruangguru Coding" class="brand-logo" />
+        </div>
+
+        <div class="relative shrink-0">
+            <select id="meetingSelector"
+                class="meeting-select appearance-none bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 py-2 px-4 pr-8 rounded-xl font-bold cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-brand-orange">
+                <option value="1">Session 1: The AI Upgrade</option>
+                <option value="2" disabled>Session 2: Synthetic Speech</option>
+                <option value="3" disabled>Session 3: Build the Fake Voices App</option>
+                <option value="4" disabled>Session 4: Voice Lab: Design & Testing</option>
+                <option value="5" disabled>Session 5: Visual AI Foundations</option>
+                <option value="6" disabled>Session 6: Build the WhatIsIt App</option>
+                <option value="7" disabled>Session 7: AI Test Lab</option>
+                <option value="8" disabled>Session 8: Training Your Own AI</option>
+                <option value="9" disabled>Session 9: Test & Improve Your Model</option>
+                <option value="10" disabled>Session 10: The Custom Classifier</option>
+                <option value="11" disabled>Session 11: Picaboo: Game Logic</option>
+                <option value="12" disabled>Session 12: Face Tracking & Privacy</option>
+                <option value="13" disabled>Session 13: Digital Face Mapping</option>
+                <option value="14" disabled>Session 14: Smart Selfie Filters</option>
+                <option value="15" disabled>Session 15: Project Planning & Build</option>
+                <option value="16" disabled>Session 16: Final Build & Demo</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                <i class="fa-solid fa-chevron-down text-sm"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div id="slideContent" class="slide-container">
+
+            <!-- ============================== SESSION 1 ============================== -->
+
+            <!-- 1. COVER -->
+            <section class="slide s1 flex-col items-center justify-center text-center">
+                <div
+                    class="w-28 h-28 md:w-32 md:h-32 bg-brand-navy rounded-3xl flex items-center justify-center text-white text-5xl md:text-6xl shadow-xl mb-7 animate-float border-4 border-white mx-auto">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h2 class="text-slate-400 font-bold tracking-[.22em] uppercase mb-3 text-base md:text-xl">AI + App
+                    Inventor · Middle School</h2>
+                <h1 class="display-title font-extrabold text-slate-800 mb-5">The AI Upgrade<br><span
+                        class="text-brand-blue font-medium inline-block mt-3">How Smart Apps Work</span></h1>
+                <p class="slide-subtitle text-slate-600 font-medium max-w-3xl">Kenali cara kerja aplikasi AI, pahami
+                    alur <strong>Input → Process → Output</strong>, lalu siapkan App Inventor dan perangkatmu untuk
+                    course ini.</p>
+            </section>
+
+            <!-- 2. AGENDA -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center">
+                    <h1 class="slide-title font-extrabold">Today’s Agenda 📋</h1>
+                    <p class="slide-subtitle text-slate-500 mt-3">60 menit untuk memahami AI sebelum mulai membangun
+                        project.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-5xl font-semibold">
+                    <div class="bg-blue-50 p-6 md:p-8 rounded-[2rem] border-2 border-blue-200 flex items-center gap-5">
+                        <div class="text-5xl md:text-6xl">⚡</div>
+                        <div>
+                            <div class="card-title font-bold">Preparation</div>
+                            <div class="body-copy">Device & Course Readiness</div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-purple-50 p-6 md:p-8 rounded-[2rem] border-2 border-purple-200 flex items-center gap-5">
+                        <div class="text-5xl md:text-6xl">🧠</div>
+                        <div>
+                            <div class="card-title font-bold">Idea</div>
+                            <div class="body-copy">What Makes an App “Smart”?</div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-orange-50 p-6 md:p-8 rounded-[2rem] border-2 border-orange-200 flex items-center gap-5">
+                        <div class="text-5xl md:text-6xl">🔄</div>
+                        <div>
+                            <div class="card-title font-bold">Material</div>
+                            <div class="body-copy">Input, Model & Output</div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-green-50 p-6 md:p-8 rounded-[2rem] border-2 border-green-200 flex items-center gap-5">
+                        <div class="text-5xl md:text-6xl">📱</div>
+                        <div>
+                            <div class="card-title font-bold">Tools</div>
+                            <div class="body-copy">App Inventor + Live Connection</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. TARGET -->
+            <section class="slide s1 flex-col items-center justify-center">
+                <div class="hero-card p-6 md:p-10 w-full max-w-5xl">
+                    <div class="flex items-center gap-5 mb-7">
+                        <div
+                            class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-brand-blue text-white flex items-center justify-center text-3xl md:text-4xl shrink-0">
+                            🎯</div>
+                        <div>
+                            <p class="font-bold uppercase tracking-widest text-brand-blue">Session Target</p>
+                            <h1 class="slide-title font-extrabold">At the end of this session...</h1>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="bg-blue-50 rounded-2xl p-5 border-2 border-blue-100">
+                            <div class="text-4xl mb-2">🧩</div>
+                            <h3 class="card-title font-bold">Explain</h3>
+                            <p class="body-copy mt-2">Bedakan app biasa dan app yang memakai AI.</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-2xl p-5 border-2 border-purple-100">
+                            <div class="text-4xl mb-2">🔁</div>
+                            <h3 class="card-title font-bold">Map</h3>
+                            <p class="body-copy mt-2">Jelaskan <strong>Input → Process → Output</strong> dan
+                                <strong>Data → Model → Output</strong>.</p>
+                        </div>
+                        <div class="bg-green-50 rounded-2xl p-5 border-2 border-green-100">
+                            <div class="text-4xl mb-2">📲</div>
+                            <h3 class="card-title font-bold">Connect</h3>
+                            <p class="body-copy mt-2">Buka App Inventor dan cek live connection ke device.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. READINESS -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <p class="text-brand-orange font-bold uppercase tracking-widest">Before We Start</p>
+                    <h1 class="slide-title font-extrabold mt-2">Course Readiness Check ⚡</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Tap setiap item kalau sudah siap.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl" id="readinessGrid">
+                    <button
+                        class="readiness-item bg-white border-2 border-slate-200 rounded-2xl p-5 flex items-center gap-4 text-left transition"
+                        onclick="toggleReady(this)"><span
+                            class="status-dot w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold shrink-0">1</span><span
+                            class="body-copy font-semibold">💻 Laptop / Devices + browser siap</span></button>
+                    <button
+                        class="readiness-item bg-white border-2 border-slate-200 rounded-2xl p-5 flex items-center gap-4 text-left transition"
+                        onclick="toggleReady(this)"><span
+                            class="status-dot w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold shrink-0">2</span><span
+                            class="body-copy font-semibold">🌐 Internet stabil</span></button>
+                    <button
+                        class="readiness-item bg-white border-2 border-slate-200 rounded-2xl p-5 flex items-center gap-4 text-left transition"
+                        onclick="toggleReady(this)"><span
+                            class="status-dot w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold shrink-0">3</span><span
+                            class="body-copy font-semibold">📱 Phone / tablet tersedia</span></button>
+                    <button
+                        class="readiness-item bg-white border-2 border-slate-200 rounded-2xl p-5 flex items-center gap-4 text-left transition"
+                        onclick="toggleReady(this)"><span
+                            class="status-dot w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold shrink-0">4</span><span
+                            class="body-copy font-semibold">📲 MIT AI2 Companion terpasang</span></button>
+                </div>
+                <div id="readinessFeedback"
+                    class="hidden mt-5 bg-green-50 border-2 border-green-200 text-green-800 px-6 py-4 rounded-2xl body-copy font-bold text-center max-w-3xl">
+                    Ready! Perangkat utama sudah siap untuk mulai App Inventor. ✅</div>
+            </section>
+
+            <!-- 5. HOOK -->
+            <section class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[6rem] md:text-[8rem] mb-4 animate-float">📱✨🧠</div>
+                <h1 class="display-title font-extrabold mb-5">Why Do Some Apps Feel “Smart”?</h1>
+                <p class="slide-subtitle text-slate-600 max-w-4xl">Calculator selalu mengikuti rumus yang kita tulis.
+                    Tapi recommendation, image recognition, dan voice tools dapat memberi output berdasarkan
+                    <strong>patterns dari data</strong>.</p>
+            </section>
+
+            <!-- 6. AI OR RULES INTERACTIVE -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <p class="text-brand-purple font-bold uppercase tracking-widest">Interactive Challenge</p>
+                    <h1 class="slide-title font-extrabold mt-2">AI or Fixed Rules? 🤔</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Klik jenis sistem yang paling cocok untuk setiap
+                        contoh.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-5xl">
+                    <div class="stage-card p-6" data-ai-card data-answer="rules">
+                        <div class="text-5xl mb-3">🧮</div>
+                        <h3 class="card-title font-bold">Calculator</h3>
+                        <p class="body-copy mt-2 text-slate-600">2 + 2 selalu menghasilkan 4 dengan aturan yang sama.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 mt-5"><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'rules')">Fixed Rules</button><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'ai')">AI</button></div>
+                    </div>
+                    <div class="stage-card p-6" data-ai-card data-answer="ai">
+                        <div class="text-5xl mb-3">📷</div>
+                        <h3 class="card-title font-bold">Object Recognition</h3>
+                        <p class="body-copy mt-2 text-slate-600">Kamera mencoba menebak objek berdasarkan pola yang
+                            sudah dipelajari.</p>
+                        <div class="grid grid-cols-2 gap-3 mt-5"><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'rules')">Fixed Rules</button><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'ai')">AI</button></div>
+                    </div>
+                    <div class="stage-card p-6" data-ai-card data-answer="rules">
+                        <div class="text-5xl mb-3">⏰</div>
+                        <h3 class="card-title font-bold">Alarm at 06:00</h3>
+                        <p class="body-copy mt-2 text-slate-600">Jika waktunya 06:00, alarm berbunyi.</p>
+                        <div class="grid grid-cols-2 gap-3 mt-5"><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'rules')">Fixed Rules</button><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'ai')">AI</button></div>
+                    </div>
+                    <div class="stage-card p-6" data-ai-card data-answer="ai">
+                        <div class="text-5xl mb-3">🎵</div>
+                        <h3 class="card-title font-bold">Music Recommendation</h3>
+                        <p class="body-copy mt-2 text-slate-600">App mencari pola dari lagu yang sering kamu dengarkan.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 mt-5"><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'rules')">Fixed Rules</button><button
+                                class="ai-choice border-2 border-slate-200 rounded-xl p-3 font-bold"
+                                onclick="answerAI(this,'ai')">AI</button></div>
+                    </div>
+                </div>
+                <div id="aiChoiceFeedback" class="mt-5 body-copy font-bold text-center text-brand-purple">Score: 0 / 4
+                </div>
+            </section>
+
+            <!-- 7. COMPARISON -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <h1 class="slide-title font-extrabold">Fixed Rules vs AI Model 🧩🧠</h1>
+                    <p class="slide-subtitle text-slate-500 mt-3">Keduanya tetap program komputer, tapi cara
+                        menghasilkan output berbeda.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
+                    <div class="comparison-card">
+                        <div class="bg-blue-500 text-white p-5 font-bold card-title">🧩 Fixed Rules</div>
+                        <div class="p-6 space-y-4 body-copy">
+                            <div class="bg-blue-50 border-2 border-blue-100 rounded-xl p-4"><strong>Programmer
+                                    writes:</strong><br>IF password is correct → open Home.</div>
+                            <div class="bg-slate-50 rounded-xl p-4">Output mengikuti aturan yang kita tulis secara
+                                langsung.</div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="bg-purple-500 text-white p-5 font-bold card-title">🧠 AI Model</div>
+                        <div class="p-6 space-y-4 body-copy">
+                            <div class="bg-purple-50 border-2 border-purple-100 rounded-xl p-4"><strong>Model
+                                    learns:</strong><br>banyak contoh gambar → pola → prediction.</div>
+                            <div class="bg-slate-50 rounded-xl p-4">Output berdasarkan pola yang dipelajari dari data.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. IPO -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <p class="text-brand-blue font-bold uppercase tracking-widest">Core Concept</p>
+                    <h1 class="slide-title font-extrabold mt-2">Input → Process → Output 🔄</h1>
+                    <p class="slide-subtitle text-slate-500 mt-3">Semua app menerima sesuatu, melakukan proses, lalu
+                        menghasilkan sesuatu.</p>
+                </div>
+                <div class="flow-responsive grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-center w-full max-w-6xl">
+                    <div class="flow-node border-blue-200 bg-blue-50">
+                        <div class="text-6xl mb-3">📷</div>
+                        <div class="card-title font-bold text-blue-700">INPUT</div>
+                        <div class="body-copy mt-2">Camera image</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node border-purple-200 bg-purple-50">
+                        <div class="text-6xl mb-3">🧠</div>
+                        <div class="card-title font-bold text-purple-700">PROCESS</div>
+                        <div class="body-copy mt-2">AI model checks patterns</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node border-green-200 bg-green-50">
+                        <div class="text-6xl mb-3">🏷️</div>
+                        <div class="card-title font-bold text-green-700">OUTPUT</div>
+                        <div class="body-copy mt-2">“Keyboard — 83%”</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. IPO ACTIVITY -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <p class="text-brand-orange font-bold uppercase tracking-widest">Quick Check</p>
+                    <h1 class="slide-title font-extrabold mt-2">Find the Input, Process & Output</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Scenario: sebuah app mendengarkan kata “lamp”, lalu
+                        menyalakan lampu virtual.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-5xl" id="ipoChoices">
+                    <button class="stage-card p-6 text-center hover:-translate-y-1 transition"
+                        onclick="revealIPO(this,'input')">
+                        <div class="text-6xl mb-3">🎤</div>
+                        <h3 class="card-title font-bold">Voice / Word</h3>
+                        <p class="ipo-label hidden mt-3 font-bold text-blue-700">INPUT ✅</p>
+                    </button>
+                    <button class="stage-card p-6 text-center hover:-translate-y-1 transition"
+                        onclick="revealIPO(this,'process')">
+                        <div class="text-6xl mb-3">🧠</div>
+                        <h3 class="card-title font-bold">Speech System Checks</h3>
+                        <p class="ipo-label hidden mt-3 font-bold text-purple-700">PROCESS ✅</p>
+                    </button>
+                    <button class="stage-card p-6 text-center hover:-translate-y-1 transition"
+                        onclick="revealIPO(this,'output')">
+                        <div class="text-6xl mb-3">💡</div>
+                        <h3 class="card-title font-bold">Lamp Turns On</h3>
+                        <p class="ipo-label hidden mt-3 font-bold text-green-700">OUTPUT ✅</p>
+                    </button>
+                </div>
+                <div class="soft-note mt-6 max-w-4xl body-copy"><strong>Remember:</strong> “AI” biasanya berada di
+                    bagian <strong>process</strong>, tetapi app tetap membutuhkan input dan output agar berguna bagi
+                    user.</div>
+            </section>
+
+            <!-- 10. HOW AI LEARNS -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <p class="text-brand-purple font-bold uppercase tracking-widest">Behind the AI</p>
+                    <h1 class="slide-title font-extrabold mt-2">How Does AI Learn? 🧠</h1>
+                    <p class="slide-subtitle text-slate-500 mt-3">Untuk course ini, cukup ingat satu alur sederhana.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 w-full max-w-6xl items-stretch text-center">
+                    <div class="stage-card p-5 bg-blue-50 border-blue-200">
+                        <div class="text-5xl mb-2">🗂️</div>
+                        <div class="font-bold">DATA</div>
+                        <div class="text-sm mt-1">many examples</div>
+                    </div>
+                    <div class="flex items-center justify-center text-3xl text-slate-400">→</div>
+                    <div class="stage-card p-5 bg-purple-50 border-purple-200">
+                        <div class="text-5xl mb-2">⚙️</div>
+                        <div class="font-bold">TRAINING</div>
+                        <div class="text-sm mt-1">find patterns</div>
+                    </div>
+                    <div class="flex items-center justify-center text-3xl text-slate-400">→</div>
+                    <div class="stage-card p-5 bg-orange-50 border-orange-200">
+                        <div class="text-5xl mb-2">🧠</div>
+                        <div class="font-bold">MODEL</div>
+                        <div class="text-sm mt-1">learned patterns</div>
+                    </div>
+                </div>
+                <div
+                    class="mt-5 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 w-full max-w-3xl items-stretch text-center">
+                    <div class="stage-card p-5 bg-cyan-50 border-cyan-200">
+                        <div class="text-5xl mb-2">📷</div>
+                        <div class="font-bold">NEW INPUT</div>
+                    </div>
+                    <div class="flex items-center justify-center text-3xl text-slate-400">→</div>
+                    <div class="stage-card p-5 bg-green-50 border-green-200">
+                        <div class="text-5xl mb-2">🏷️</div>
+                        <div class="font-bold">OUTPUT</div>
+                        <div class="text-sm mt-1">prediction / result</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. MODEL CONCEPT -->
+            <section class="slide s1 flex-col items-center justify-center">
+                <div class="dark-panel p-7 md:p-10 w-full max-w-5xl">
+                    <div class="grid grid-cols-1 md:grid-cols-[.7fr_1.3fr] gap-7 items-center">
+                        <div class="text-center text-[7rem] md:text-[9rem]">🧠</div>
+                        <div>
+                            <p class="text-orange-300 font-bold tracking-widest uppercase">Simple Mental Model</p>
+                            <h1 class="slide-title font-extrabold mt-2 mb-4">A Model Is Not a Database of Answers</h1>
+                            <p class="slide-subtitle text-slate-200">Model adalah hasil training yang menyimpan
+                                <strong>patterns</strong>. Saat mendapat input baru, model memakai patterns itu untuk
+                                menghasilkan prediction.</p>
+                            <div class="mt-5 bg-white/10 border border-white/20 rounded-2xl p-4 body-copy">It can still
+                                be wrong — especially when the input is very different from the examples it learned
+                                from.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. RESPONSIBLE AI -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <h1 class="slide-title font-extrabold">AI Is Useful — Not Magic 🛡️</h1>
+                    <p class="slide-subtitle text-slate-500 mt-3">Tiga kebiasaan yang akan kita pakai selama course.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-5xl">
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-3xl p-6 text-center">
+                        <div class="text-6xl mb-3">🔎</div>
+                        <h3 class="card-title font-bold">Check the Result</h3>
+                        <p class="body-copy mt-2">AI prediction bukan fakta otomatis.</p>
+                    </div>
+                    <div class="bg-purple-50 border-2 border-purple-200 rounded-3xl p-6 text-center">
+                        <div class="text-6xl mb-3">🗂️</div>
+                        <h3 class="card-title font-bold">Think About Data</h3>
+                        <p class="body-copy mt-2">Output bergantung pada data dan patterns yang dipelajari.</p>
+                    </div>
+                    <div class="bg-orange-50 border-2 border-orange-200 rounded-3xl p-6 text-center">
+                        <div class="text-6xl mb-3">🙋</div>
+                        <h3 class="card-title font-bold">Use Responsibly</h3>
+                        <p class="body-copy mt-2">Camera, voice, dan personal data harus digunakan dengan izin yang
+                            tepat.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 13. APP INVENTOR REFRESH -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-5 text-center">
+                    <p class="text-brand-blue font-bold uppercase tracking-widest">Platform Refresh</p>
+                    <h1 class="slide-title font-extrabold mt-2">App Inventor: Designer + Blocks</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Kita tidak mulai dari nol — cukup ingat dua workspace
+                        utama.</p>
+                </div>
+                <div class="workspace-shell max-w-6xl">
+                    <div class="bg-[#3b82f6] text-white px-5 py-3 flex items-center gap-3 font-bold">
+                        <span class="text-2xl">📱</span><span>MIT App Inventor</span><span
+                            class="ml-auto bg-white/20 px-3 py-1 rounded-lg text-sm">Designer | Blocks</span>
+                    </div>
+                    <div class="workspace-columns grid grid-cols-[1fr_1fr] min-h-[340px]">
+                        <div class="border-r-2 border-slate-200 p-5 bg-slate-50">
+                            <div class="inline-flex bg-blue-500 text-white px-4 py-2 rounded-full font-bold mb-4">①
+                                DESIGNER</div>
+                            <div class="grid grid-cols-[130px_1fr] gap-4">
+                                <div class="bg-white border rounded-xl p-3 space-y-2 text-sm">
+                                    <div class="font-bold text-slate-500">Palette</div>
+                                    <div class="bg-blue-50 rounded-lg p-2">Button</div>
+                                    <div class="bg-blue-50 rounded-lg p-2">Label</div>
+                                    <div class="bg-blue-50 rounded-lg p-2">TextBox</div>
+                                    <div class="bg-purple-50 rounded-lg p-2">Media</div>
+                                </div>
+                                <div class="app-screen flex items-center justify-center p-5">
+                                    <div class="bg-white border-2 border-blue-200 rounded-2xl w-[75%] p-5 text-center">
+                                        <div class="font-bold text-xl mb-4">My Smart App</div>
+                                        <div class="bg-blue-500 text-white px-4 py-3 rounded-xl font-bold">TRY IT</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-5 bg-[#eef2ff]">
+                            <div class="inline-flex bg-purple-500 text-white px-4 py-2 rounded-full font-bold mb-4">②
+                                BLOCKS</div>
+                            <div class="space-y-3 mt-4">
+                                <div class="bg-[#f5a623] text-white rounded-xl px-4 py-3 font-bold shadow-md w-fit">when
+                                    Button1.Click</div>
+                                <div
+                                    class="bg-[#5b80c4] text-white rounded-xl px-4 py-3 font-bold shadow-md ml-5 w-fit">
+                                    set Label1.Text to</div>
+                                <div
+                                    class="bg-[#70b55b] text-white rounded-xl px-4 py-3 font-bold shadow-md ml-10 w-fit">
+                                    "Hello!"</div>
+                            </div>
+                            <p class="body-copy text-slate-600 mt-7"><strong>Designer</strong> = what the app looks
+                                like.<br><strong>Blocks</strong> = what the app does.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. CONNECTION -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-5 text-center">
+                    <h1 class="slide-title font-extrabold">Connect App Inventor to Your Device 📲</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Goal: perubahan di App Inventor bisa langsung dites di
+                        phone/tablet.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 items-center w-full max-w-5xl">
+                    <div class="stage-card p-6 text-center">
+                        <div class="text-6xl mb-3">💻</div>
+                        <h3 class="card-title font-bold">Computer</h3>
+                        <div class="mt-4 bg-slate-100 rounded-xl p-4 text-left body-copy"><strong>1.</strong> Open App
+                            Inventor<br><strong>2.</strong> Connect → AI Companion<br><strong>3.</strong> Show QR / code
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="text-4xl text-brand-purple">⇄</div>
+                        <div class="font-bold text-slate-500">same network</div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="phone-mock">
+                            <div class="phone-notch"></div>
+                            <div
+                                class="h-full bg-gradient-to-b from-blue-50 to-white p-6 pt-12 flex flex-col items-center justify-center text-center">
+                                <div class="text-5xl mb-3">📲</div>
+                                <div class="font-bold text-lg">MIT AI2 Companion</div>
+                                <div class="qr-grid mt-4" aria-label="QR illustration">
+                                    <span></span><span class="light"></span><span></span><span></span><span
+                                        class="light"></span><span></span><span></span>
+                                    <span></span><span></span><span class="light"></span><span
+                                        class="light"></span><span></span><span class="light"></span><span></span>
+                                    <span class="light"></span><span></span><span></span><span
+                                        class="light"></span><span></span><span></span><span class="light"></span>
+                                    <span></span><span class="light"></span><span></span><span></span><span
+                                        class="light"></span><span></span><span></span>
+                                    <span></span><span></span><span class="light"></span><span></span><span></span><span
+                                        class="light"></span><span></span>
+                                    <span class="light"></span><span></span><span></span><span
+                                        class="light"></span><span></span><span></span><span></span>
+                                    <span></span><span class="light"></span><span></span><span></span><span
+                                        class="light"></span><span></span><span class="light"></span>
+                                </div>
+                                <div class="text-sm text-slate-500 mt-3">Scan QR / enter code</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 15. LIVE LINK CHECK -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-6 text-center">
+                    <p class="text-brand-green font-bold uppercase tracking-widest">Mini Practical</p>
+                    <h1 class="slide-title font-extrabold mt-2">Live Link Check ✅</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Teacher boleh berhenti di sini sampai semua group
+                        berhasil connect.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-5xl">
+                    <label class="stage-card p-5 flex gap-4 items-center cursor-pointer"><input type="checkbox"
+                            class="w-7 h-7 accent-green-500"><span class="body-copy font-semibold">App Inventor berhasil
+                            dibuka dan login.</span></label>
+                    <label class="stage-card p-5 flex gap-4 items-center cursor-pointer"><input type="checkbox"
+                            class="w-7 h-7 accent-green-500"><span class="body-copy font-semibold">AI2 Companion bisa
+                            dibuka.</span></label>
+                    <label class="stage-card p-5 flex gap-4 items-center cursor-pointer"><input type="checkbox"
+                            class="w-7 h-7 accent-green-500"><span class="body-copy font-semibold">QR / connection code
+                            berhasil digunakan.</span></label>
+                    <label class="stage-card p-5 flex gap-4 items-center cursor-pointer"><input type="checkbox"
+                            class="w-7 h-7 accent-green-500"><span class="body-copy font-semibold">Perubahan sederhana
+                            terlihat di device.</span></label>
+                </div>
+                <div class="soft-note mt-6 max-w-4xl body-copy"><strong>If connection fails:</strong> check
+                    internet/Wi-Fi first, reopen Companion, then reconnect from <strong>Connect → AI Companion</strong>.
+                </div>
+            </section>
+
+            <!-- 16. BRIDGE TO COURSE -->
+            <section class="slide s1 flex-col items-center justify-center text-center">
+                <div class="text-[6rem] md:text-[8rem] mb-4">🎤 → 📷 → 🧠 → 🙂</div>
+                <h1 class="display-title font-extrabold mb-5">What Will We Build Next?</h1>
+                <p class="slide-subtitle text-slate-600 max-w-4xl mb-7">Sepanjang course, kita akan melihat AI dari
+                    beberapa jenis input — <strong>voice, image, custom training data, dan face landmarks</strong>.</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl">
+                    <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-5">
+                        <div class="text-5xl">🎤</div>
+                        <div class="font-bold mt-2">Fake Voices</div>
+                    </div>
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5">
+                        <div class="text-5xl">📷</div>
+                        <div class="font-bold mt-2">Visual AI</div>
+                    </div>
+                    <div class="bg-orange-50 border-2 border-orange-200 rounded-2xl p-5">
+                        <div class="text-5xl">🗂️</div>
+                        <div class="font-bold mt-2">Train Your AI</div>
+                    </div>
+                    <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-5">
+                        <div class="text-5xl">🙂</div>
+                        <div class="font-bold mt-2">Face Tracking</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 17. QUIZ -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-5 text-center">
+                    <h1 class="slide-title font-extrabold">Quick Quiz 🧠</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Check your understanding.</p>
+                </div>
+                <div
+                    class="bg-white p-6 md:p-9 rounded-[2rem] md:rounded-[3rem] shadow-lg border-4 border-yellow-300 w-full max-w-5xl">
+                    <div class="quiz-q" id="s1-q1">
+                        <h2 class="card-title font-bold mb-5">1. Dalam image classification, apa yang menjadi INPUT?
+                        </h2>
+                        <div class="flex flex-col gap-3 body-copy">
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                data-correct="true" onclick="checkQuiz(this,true,'s1-q1')">A. Image dari camera</button>
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                onclick="checkQuiz(this,false,'s1-q1')">B. Prediction label</button>
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                onclick="checkQuiz(this,false,'s1-q1')">C. Speaker output</button>
+                        </div>
+                        <button id="s1-q1-next"
+                            class="mt-5 bg-brand-orange text-white font-bold py-3 px-7 rounded-full hidden float-right"
+                            onclick="nextQuiz('s1-q1','s1-q2')">Next ➡️</button>
+                    </div>
+                    <div class="quiz-q hidden" id="s1-q2">
+                        <h2 class="card-title font-bold mb-5">2. Apa fungsi AI model?</h2>
+                        <div class="flex flex-col gap-3 body-copy">
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                onclick="checkQuiz(this,false,'s1-q2')">A. Menyimpan password user</button>
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                data-correct="true" onclick="checkQuiz(this,true,'s1-q2')">B. Menggunakan patterns yang
+                                dipelajari untuk memproses input baru</button>
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                onclick="checkQuiz(this,false,'s1-q2')">C. Menggantikan internet</button>
+                        </div>
+                        <button id="s1-q2-next"
+                            class="mt-5 bg-brand-orange text-white font-bold py-3 px-7 rounded-full hidden float-right"
+                            onclick="nextQuiz('s1-q2','s1-q3')">Next ➡️</button>
+                    </div>
+                    <div class="quiz-q hidden" id="s1-q3">
+                        <h2 class="card-title font-bold mb-5">3. Designer pada App Inventor digunakan untuk...</h2>
+                        <div class="flex flex-col gap-3 body-copy">
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                data-correct="true" onclick="checkQuiz(this,true,'s1-q3')">A. Menyusun tampilan dan
+                                components</button>
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                onclick="checkQuiz(this,false,'s1-q3')">B. Melatih semua AI model</button>
+                            <button class="quiz-btn bg-slate-50 p-4 rounded-2xl text-left border-2 border-slate-200"
+                                onclick="checkQuiz(this,false,'s1-q3')">C. Mengatur Wi-Fi sekolah</button>
+                        </div>
+                        <button id="s1-q3-next"
+                            class="mt-5 bg-brand-green text-white font-bold py-3 px-7 rounded-full hidden float-right"
+                            onclick="nextQuiz('s1-q3','s1-done')">Finish ✅</button>
+                    </div>
+                    <div class="quiz-q hidden text-center py-7" id="s1-done">
+                        <div class="text-7xl mb-3">🎉</div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-brand-green">Session Complete!</h2>
+                        <p class="body-copy text-slate-500 mt-3">You’re ready to start building AI-powered App Inventor
+                            projects.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 18. RECAP -->
+            <section class="slide s1 flex-col items-center">
+                <div class="mb-7 text-center">
+                    <h1 class="slide-title font-extrabold">Session Recap 📚</h1>
+                    <p class="slide-subtitle text-slate-500 mt-2">Empat hal penting dari Session 1.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-5xl">
+                    <div class="bg-blue-50 p-6 rounded-3xl border-2 border-blue-200">
+                        <div class="text-5xl mb-2">🧩</div>
+                        <h3 class="card-title font-bold">Rules vs AI</h3>
+                        <p class="body-copy mt-2">AI memakai patterns dari data, bukan hanya fixed rules.</p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-3xl border-2 border-purple-200">
+                        <div class="text-5xl mb-2">🔄</div>
+                        <h3 class="card-title font-bold">IPO</h3>
+                        <p class="body-copy mt-2">Setiap app punya Input → Process → Output.</p>
+                    </div>
+                    <div class="bg-orange-50 p-6 rounded-3xl border-2 border-orange-200">
+                        <div class="text-5xl mb-2">🧠</div>
+                        <h3 class="card-title font-bold">AI Model</h3>
+                        <p class="body-copy mt-2">Data → Training → Model → New Input → Output.</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-3xl border-2 border-green-200">
+                        <div class="text-5xl mb-2">📲</div>
+                        <h3 class="card-title font-bold">Live Test</h3>
+                        <p class="body-copy mt-2">Designer + Blocks + AI2 Companion siap digunakan.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 19. FEEDBACK -->
+            <section class="slide s1 flex-col items-center justify-center feedback-slide">
+                <h1 class="slide-title font-extrabold mb-4 text-center">How Was Today’s Session?</h1>
+                <p class="slide-subtitle text-slate-500 mb-8">Pilih emoji yang paling sesuai.</p>
+                <div class="feedback-options flex gap-7 md:gap-10"><button
+                        class="text-[5rem] md:text-[6rem] hover:scale-125 transition"
+                        onclick="submitFeedback(this)">🚀</button><button
+                        class="text-[5rem] md:text-[6rem] hover:scale-125 transition"
+                        onclick="submitFeedback(this)">👍</button><button
+                        class="text-[5rem] md:text-[6rem] hover:scale-125 transition"
+                        onclick="submitFeedback(this)">🤔</button><button
+                        class="text-[5rem] md:text-[6rem] hover:scale-125 transition"
+                        onclick="submitFeedback(this)">🧩</button></div>
+                <div class="feedback-result hidden flex-col items-center text-center">
+                    <div class="selected-emoji text-[8rem] md:text-[11rem] feedback-wobble"></div>
+                    <div class="text-2xl md:text-3xl text-brand-purple font-bold mt-4">Thanks for your feedback!</div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <div
+        class="bottom-navigation fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 z-50">
+        <div class="bottom-navigation-title text-lg font-bold text-slate-400 truncate"><span id="meetingTitle">Session
+                1: The AI Upgrade</span></div>
+        <div class="bottom-navigation-controls flex items-center gap-4 md:gap-6">
+            <button id="prevBtn"
+                class="nav-circle rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition disabled:opacity-40 disabled:cursor-not-allowed text-xl"
+                aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="font-mono font-bold text-slate-600 min-w-[4.8rem] text-center text-lg md:text-2xl"><span
+                    id="currentSlide">1</span> / <span id="totalSlides">0</span></div>
+            <button id="nextBtn"
+                class="nav-circle rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg shadow-orange-500/30 hover:bg-orange-600 transition disabled:opacity-40 disabled:cursor-not-allowed text-xl"
+                aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        let currentSession = '1';
+        let currentSlideIndex = 0;
+        let activeSlides = [];
+
+        function updateView() {
+            document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
+            activeSlides = [...document.querySelectorAll(`.slide.s${currentSession}`)];
+            if (currentSlideIndex >= activeSlides.length) currentSlideIndex = Math.max(0, activeSlides.length - 1);
+            if (activeSlides[currentSlideIndex]) activeSlides[currentSlideIndex].classList.add('active');
+            document.getElementById('currentSlide').innerText = activeSlides.length ? currentSlideIndex + 1 : 0;
+            document.getElementById('totalSlides').innerText = activeSlides.length;
+            document.getElementById('prevBtn').disabled = currentSlideIndex === 0;
+            document.getElementById('nextBtn').disabled = currentSlideIndex >= activeSlides.length - 1;
+            document.querySelector('main').scrollTop = 0;
+        }
+
+        document.getElementById('meetingSelector').addEventListener('change', event => {
+            currentSession = event.target.value;
+            currentSlideIndex = 0;
+            document.getElementById('meetingTitle').innerText = event.target.options[event.target.selectedIndex].text;
+            updateView();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentSlideIndex > 0) { currentSlideIndex--; updateView(); }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlideIndex < activeSlides.length - 1) { currentSlideIndex++; updateView(); }
+        });
+
+        document.addEventListener('keydown', event => {
+            const tag = document.activeElement?.tagName;
+            if (['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(tag)) return;
+            if (event.key === 'ArrowRight' && currentSlideIndex < activeSlides.length - 1) { currentSlideIndex++; updateView(); }
+            if (event.key === 'ArrowLeft' && currentSlideIndex > 0) { currentSlideIndex--; updateView(); }
+        });
+
+        function toggleReady(button) {
+            button.classList.toggle('done');
+            const dot = button.querySelector('.status-dot');
+            dot.textContent = button.classList.contains('done') ? '✓' : [...button.parentElement.children].indexOf(button) + 1;
+            const all = [...document.querySelectorAll('.readiness-item')];
+            const complete = all.every(item => item.classList.contains('done'));
+            document.getElementById('readinessFeedback').classList.toggle('hidden', !complete);
+        }
+
+        let aiScore = 0;
+        function answerAI(button, selected) {
+            const card = button.closest('[data-ai-card]');
+            if (card.dataset.answered === 'true') return;
+            card.dataset.answered = 'true';
+            const correct = card.dataset.answer;
+            const buttons = card.querySelectorAll('.ai-choice');
+            buttons.forEach(btn => btn.disabled = true);
+            button.classList.add('selected');
+            if (selected === correct) {
+                button.classList.add('correct');
+                aiScore++;
+            } else {
+                button.classList.add('wrong');
+                buttons.forEach(btn => {
+                    const text = btn.textContent.trim().toLowerCase();
+                    if ((correct === 'ai' && text === 'ai') || (correct === 'rules' && text === 'fixed rules')) btn.classList.add('correct');
+                });
+            }
+            document.getElementById('aiChoiceFeedback').textContent = `Score: ${aiScore} / 4`;
+        }
+
+        function revealIPO(button) {
+            const label = button.querySelector('.ipo-label');
+            label.classList.remove('hidden');
+            button.classList.add('border-green-300', 'bg-green-50');
+        }
+
+        function checkQuiz(button, isCorrect, questionId) {
+            const buttons = button.parentElement.querySelectorAll('.quiz-btn');
+            buttons.forEach(item => item.disabled = true);
+            if (isCorrect) {
+                button.classList.add('bg-green-100', 'border-green-400', 'text-green-900');
+                button.innerHTML += ' <span class="float-right">✅ Correct</span>';
+            } else {
+                button.classList.add('bg-red-100', 'border-red-400', 'text-red-900');
+                button.innerHTML += ' <span class="float-right">❌</span>';
+                buttons.forEach(item => {
+                    if (item.dataset.correct === 'true') item.classList.add('bg-green-100', 'border-green-400', 'text-green-900');
+                });
+            }
+            const next = document.getElementById(`${questionId}-next`);
+            if (next) next.classList.remove('hidden');
+        }
+
+        function nextQuiz(currentId, nextId) {
+            document.getElementById(currentId)?.classList.add('hidden');
+            document.getElementById(nextId)?.classList.remove('hidden');
+        }
+
+        function submitFeedback(button) {
+            const slide = button.closest('.feedback-slide');
+            slide.querySelector('.feedback-options').classList.add('hidden');
+            const result = slide.querySelector('.feedback-result');
+            result.classList.remove('hidden');
+            result.classList.add('flex');
+            result.querySelector('.selected-emoji').textContent = button.textContent.trim();
+        }
+
+        document.addEventListener('DOMContentLoaded', updateView);
+    </script>
+</body>
+
+</html>
