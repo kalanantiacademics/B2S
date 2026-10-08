@@ -1,0 +1,3007 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Scratch Advanced + AI Introduction — 16 Sessions</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #172554;
+            --ink: #263559;
+            --blue: #3b82f6;
+            --orange: #f97316;
+            --purple: #8b5cf6;
+            --teal: #10b981;
+            --muted: #5c6d89;
+            --top: 69px;
+            --bottom: 68px
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden
+        }
+
+        body {
+            font-family: Fredoka, 'Trebuchet MS', sans-serif;
+            color: var(--ink);
+            background: #f9fbff;
+            -webkit-font-smoothing: antialiased
+        }
+
+        button,
+        select {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        a {
+            text-decoration: none
+        }
+
+        .topbar,
+        .footbar {
+            position: fixed;
+            z-index: 15;
+            left: 0;
+            right: 0;
+            height: var(--top);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(16px, 3vw, 42px);
+            gap: 15px
+        }
+
+        .topbar {
+            top: 0;
+            box-shadow: 0 3px 16px #2436560b
+        }
+
+        .footbar {
+            bottom: 0;
+            height: var(--bottom);
+            border-top: 1px solid #edf1fa
+        }
+
+        .brand-logos {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0
+        }
+
+        .brand-logos img {
+            height: 36px;
+            max-width: 166px;
+            object-fit: contain
+        }
+
+        .brand-divider {
+            height: 28px;
+            width: 2px;
+            background: #e6eaf4
+        }
+
+        .brand-fallback {
+            font-size: 17px;
+            font-weight: 700;
+            color: #19438e
+        }
+
+        .brand-fallback.rg {
+            color: #f97316
+        }
+
+        .course-tools {
+            display: flex;
+            align-items: center;
+            gap: 20px
+        }
+
+        .course-name {
+            font-size: 16px;
+            color: #8490a7;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .course-name i {
+            font-style: normal;
+            color: var(--orange)
+        }
+
+        .select-wrap {
+            position: relative
+        }
+
+        .session-select {
+            height: 43px;
+            width: min(355px, 36vw);
+            border: none;
+            border-radius: 13px;
+            background: #f0f5ff;
+            padding: 0 36px 0 13px;
+            color: var(--navy);
+            font-size: 16px;
+            font-weight: 600;
+            outline-offset: 3px;
+            appearance: none
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 13px;
+            top: 9px;
+            color: #8794ab;
+            pointer-events: none;
+            font-size: 23px
+        }
+
+        .foot-label {
+            display: block;
+            font-size: 13px;
+            color: #91a0b9;
+            letter-spacing: .06em;
+            font-weight: 600
+        }
+
+        .foot-title {
+            display: block;
+            max-width: 52vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 18px;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 13px
+        }
+
+        .nav-count {
+            font-size: 20px;
+            min-width: 89px;
+            text-align: center;
+            color: #506184;
+            font-weight: 700
+        }
+
+        .navbtn {
+            width: 46px;
+            height: 46px;
+            border: 2px solid #dfe6f3;
+            border-radius: 50%;
+            background: #fff;
+            color: #54647f;
+            font-size: 25px;
+            display: grid;
+            place-items: center;
+            transition: transform .2s
+        }
+
+        .navbtn.next {
+            border-color: var(--orange);
+            background: var(--orange);
+            color: white;
+            box-shadow: 0 5px 12px #f973162d
+        }
+
+        .navbtn:disabled {
+            opacity: .3;
+            cursor: default
+        }
+
+        .navbtn:hover:not(:disabled) {
+            transform: scale(1.07)
+        }
+
+        .workarea {
+            position: fixed;
+            inset: var(--top) 0 var(--bottom);
+            padding: clamp(10px, 1.6vh, 17px) clamp(16px, 2.8vw, 45px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 8% 91%, #e9f4ff 0, transparent 33%), radial-gradient(ellipse at 95% 6%, #fff0e4 0, transparent 28%), radial-gradient(ellipse at 80% 88%, #f0ebff 0, transparent 27%), #fbfdff
+        }
+
+        .workarea:before,
+        .workarea:after {
+            content: '✦';
+            position: absolute;
+            font-size: 40px;
+            color: #ffe0a7;
+            pointer-events: none
+        }
+
+        .workarea:before {
+            top: 11%;
+            left: 4%
+        }
+
+        .workarea:after {
+            right: 5%;
+            bottom: 11%;
+            font-size: 24px;
+            color: #a6d5ff
+        }
+
+        #slideContent {
+            height: 100%;
+            width: 100%;
+            max-width: 1320px;
+            min-width: 0;
+            position: relative;
+            z-index: 1
+        }
+
+        .scene {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(11px, 2vh, 19px);
+            min-height: 0;
+            animation: scene-in .28s ease both
+        }
+
+        .scene-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .scene-body>* {
+            min-width: 0
+        }
+
+        @keyframes scene-in {
+            from {
+                opacity: .5;
+                transform: translateY(7px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .scene-head {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 7px;
+            width: 100%
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #d4661b;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase
+        }
+
+        .scene h1 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(34px, 3.1vw, 46px);
+            line-height: 1.11;
+            font-weight: 700;
+            letter-spacing: -.025em;
+            text-align: center
+        }
+
+        .subtitle {
+            max-width: 1030px;
+            margin: 0;
+            text-align: center;
+            font-size: clamp(20px, 1.8vw, 25px);
+            line-height: 1.29;
+            font-weight: 500;
+            color: var(--muted)
+        }
+
+        .emphasis {
+            color: var(--orange)
+        }
+
+        .bubble {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 48% 52% 43% 57% / 55% 43% 57% 45%;
+            background: #e6f2ff;
+            overflow: visible
+        }
+
+        .bubble.purple {
+            background: #f1ebff
+        }
+
+        .bubble.orange {
+            background: #fff1dc
+        }
+
+        .bubble.teal {
+            background: #e3f9f2
+        }
+
+        .sticker {
+            position: absolute;
+            z-index: 2;
+            font-size: clamp(26px, 3vw, 46px);
+            filter: drop-shadow(0 6px 6px #15244b16);
+            animation: float 4s ease-in-out infinite
+        }
+
+        @keyframes float {
+            50% {
+                transform: translateY(-8px) rotate(6deg)
+            }
+        }
+
+        .art {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 14px 11px #243e7317)
+        }
+
+        .art-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .art-frame .art {
+            width: min(100%, 505px);
+            height: min(100%, 375px)
+        }
+
+        /* COVER: full open page; color blobs and illustrations replace enclosing boxes. */
+        .cover-scene {
+            gap: 0
+        }
+
+        .cover-grid {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1.08fr .92fr;
+            gap: clamp(20px, 3vw, 50px);
+            align-items: center
+        }
+
+        .cover-copy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: clamp(12px, 2.3vh, 22px)
+        }
+
+        .cover-copy h1 {
+            font-size: clamp(43px, 4.5vw, 64px);
+            line-height: 1.05
+        }
+
+        .cover-copy .subtitle {
+            font-size: clamp(23px, 2.12vw, 29px);
+            line-height: 1.32
+        }
+
+        .session-label {
+            font-size: 19px;
+            font-weight: 700;
+            color: #95a2b7
+        }
+
+        .cover-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+            justify-content: center
+        }
+
+        .cover-actions span {
+            padding: 10px 17px;
+            border-radius: 999px;
+            background: #e7f3ff;
+            color: #2066ae;
+            font-size: 19px;
+            font-weight: 700
+        }
+
+        .cover-actions span:nth-child(2) {
+            background: #f3ebff;
+            color: #8253ca
+        }
+
+        .cover-actions span:nth-child(3) {
+            background: #e4f8ee;
+            color: #148463
+        }
+
+        .cover-art {
+            position: relative;
+            height: min(100%, 440px);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .cover-art>.bubble {
+            width: min(93%, 450px);
+            height: 95%;
+            min-height: 280px
+        }
+
+        .cover-art .sticker.one {
+            top: 2%;
+            right: 6%
+        }
+
+        .cover-art .sticker.two {
+            bottom: 8%;
+            left: 4%
+        }
+
+        /* AGENDA: floating icon islands, no cards or borders. */
+        .agenda-path {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            align-items: center;
+            gap: clamp(10px, 1.8vw, 24px);
+            position: relative
+        }
+
+        .agenda-path:before {
+            content: '';
+            position: absolute;
+            top: 37%;
+            left: 7%;
+            right: 7%;
+            border-top: 4px dotted #c9dcf5
+        }
+
+        .agenda-item {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 17px;
+            justify-content: center;
+            min-height: 290px;
+            text-align: center
+        }
+
+        .agenda-blob {
+            width: clamp(110px, 12vw, 165px);
+            height: clamp(110px, 12vw, 165px);
+            border-radius: 46% 54% 53% 47% / 45% 44% 56% 55%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #e7f3ff;
+            transform: rotate(-5deg)
+        }
+
+        .agenda-item:nth-child(2) .agenda-blob {
+            background: #fff0df;
+            transform: rotate(7deg)
+        }
+
+        .agenda-item:nth-child(3) .agenda-blob {
+            background: #efe9ff;
+            transform: rotate(-7deg)
+        }
+
+        .agenda-item:nth-child(4) .agenda-blob {
+            background: #e1f9ee;
+            transform: rotate(5deg)
+        }
+
+        .agenda-icon {
+            font-size: clamp(58px, 6.3vw, 91px);
+            line-height: 1
+        }
+
+        .agenda-num {
+            position: absolute;
+            top: -8px;
+            right: -1px;
+            background: #fff;
+            color: var(--orange);
+            font-size: 19px;
+            font-weight: 700;
+            width: 37px;
+            height: 37px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px #123e7033
+        }
+
+        .agenda-item strong {
+            font-size: clamp(21px, 1.8vw, 27px);
+            line-height: 1.29;
+            max-width: 275px;
+            min-height: 85px
+        }
+
+        /* Opening: illustrated space on one side + story typography on the other. */
+        .story-layout {
+            width: 100%;
+            height: 100%;
+            max-height: 450px;
+            display: grid;
+            grid-template-columns: .93fr 1.07fr;
+            gap: 3%;
+            align-items: center
+        }
+
+        .story-art {
+            height: 100%;
+            max-height: 420px;
+            position: relative
+        }
+
+        .story-art .bubble {
+            width: 100%;
+            height: 96%
+        }
+
+        .story-art .sticker {
+            right: 0;
+            top: 5%
+        }
+
+        .story-copy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            text-align: center
+        }
+
+        .story-copy .story-text {
+            font-size: clamp(24px, 2.15vw, 31px);
+            font-weight: 600;
+            line-height: 1.43;
+            color: var(--navy)
+        }
+
+        .story-tip {
+            font-size: clamp(20px, 1.65vw, 24px);
+            background: #e8f3ff;
+            color: #286caa;
+            padding: 14px 24px;
+            border-radius: 999px;
+            font-weight: 700;
+            max-width: 100%
+        }
+
+        /* FLOW: stepped illustrated tokens, NO rectangle around each step. */
+        .concept-layout {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(22px, 4vh, 45px)
+        }
+
+        .flow-track {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: clamp(7px, 1.1vw, 15px)
+        }
+
+        .flow-step {
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 244px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 12px
+        }
+
+        .flow-orb {
+            width: clamp(93px, 9vw, 122px);
+            height: clamp(93px, 9vw, 122px);
+            border-radius: 48% 52% 52% 48% / 54% 46% 54% 46%;
+            background: #e7f3ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(45px, 4.8vw, 66px);
+            line-height: 1;
+            transform: rotate(-6deg)
+        }
+
+        .flow-step:nth-child(3n) .flow-orb {
+            background: #fff0df;
+            transform: rotate(8deg)
+        }
+
+        .flow-step:nth-child(4n) .flow-orb {
+            background: #eeeaff
+        }
+
+        .flow-step strong {
+            font-size: clamp(19px, 1.8vw, 26px);
+            line-height: 1.16;
+            color: var(--navy)
+        }
+
+        .flow-arrow {
+            font-size: clamp(24px, 3vw, 42px);
+            font-weight: 700;
+            color: #f0a059;
+            flex: 0 0 auto;
+            margin-top: -28px
+        }
+
+        .flow-plus {
+            color: var(--purple);
+            font-size: 34px;
+            font-weight: 700;
+            flex: 0 0 auto;
+            margin-top: -28px
+        }
+
+        .idea-tip {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: #fff0df;
+            border-radius: 99px;
+            padding: 15px 28px;
+            font-size: clamp(20px, 1.65vw, 24px);
+            font-weight: 600;
+            color: #986022
+        }
+
+        /* Answers are interactive pill surfaces. Remaining educational content stays open. */
+        .think-layout,
+        .quiz-layout {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(16px, 3.4vh, 32px);
+            text-align: center
+        }
+
+        .thought-mark {
+            font-size: clamp(42px, 5.8vw, 76px);
+            line-height: 1;
+            filter: drop-shadow(0 8px 7px #162c5019)
+        }
+
+        .question {
+            max-width: 1120px;
+            color: var(--navy);
+            font-size: clamp(28px, 2.5vw, 36px);
+            font-weight: 700;
+            line-height: 1.29;
+            text-align: center
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            width: 100%;
+            gap: 15px
+        }
+
+        .choice {
+            min-height: 96px;
+            width: 100%;
+            padding: 15px;
+            border: 2px solid transparent;
+            background: #ecf4ff;
+            border-radius: 23px;
+            color: #214a80;
+            font-size: clamp(21px, 1.8vw, 26px);
+            line-height: 1.22;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform .2s, background .2s
+        }
+
+        .choice:nth-child(2) {
+            background: #fff0e4;
+            color: #ae5c23
+        }
+
+        .choice:nth-child(3) {
+            background: #f1ecff;
+            color: #7654bb
+        }
+
+        .choice:hover:not(:disabled) {
+            transform: translateY(-5px);
+            border-color: #a2bff0
+        }
+
+        .choice:disabled {
+            cursor: default;
+            opacity: 1
+        }
+
+        .choice.correct {
+            background: #dcf9ea !important;
+            color: #107345 !important;
+            border-color: #30bd80 !important
+        }
+
+        .choice.incorrect {
+            background: #ffe6e6 !important;
+            color: #aa3131 !important;
+            border-color: #efa5a5 !important
+        }
+
+        .answer-note {
+            border-radius: 999px;
+            padding: 11px 24px;
+            color: #168055;
+            background: #e5faee;
+            font-weight: 700;
+            font-size: 22px
+        }
+
+        .answer-note.try {
+            color: #965415;
+            background: #fff2df
+        }
+
+        /* Project: illustration, giant title, and four icon-based mini milestones, zero box grids. */
+        .project-layout {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 3%;
+            width: 100%;
+            height: 100%;
+            align-items: center
+        }
+
+        .project-show {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 9px;
+            height: 100%;
+            min-height: 0
+        }
+
+        .project-show .art-frame {
+            height: 58%;
+            max-height: 250px
+        }
+
+        .project-show h2 {
+            font-size: clamp(27px, 2.45vw, 36px);
+            color: var(--orange);
+            margin: 0;
+            line-height: 1.12
+        }
+
+        .project-show p {
+            font-size: clamp(20px, 1.7vw, 25px);
+            line-height: 1.28;
+            font-weight: 500;
+            margin: 0
+        }
+
+        .project-milestones {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 23px 20px;
+            align-items: center;
+            justify-items: center
+        }
+
+        .project-point {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 8px
+        }
+
+        .project-point .point-emoji {
+            font-size: clamp(40px, 4.7vw, 63px);
+            width: 88px;
+            height: 76px;
+            display: grid;
+            place-items: center;
+            background: #f0f6ff;
+            border-radius: 44% 56% 46% 54% / 45% 53% 47% 55%
+        }
+
+        .project-point:nth-child(2) .point-emoji {
+            background: #fff2dd
+        }
+
+        .project-point:nth-child(3) .point-emoji {
+            background: #f0eaff
+        }
+
+        .project-point:nth-child(4) .point-emoji {
+            background: #e4f8ef
+        }
+
+        .project-point strong {
+            font-size: clamp(19px, 1.65vw, 25px);
+            line-height: 1.25;
+            max-width: 300px
+        }
+
+        /* How it works: blue/orange/purple basic principles anchored by illustrations. */
+        .how-layout {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: stretch;
+            gap: clamp(23px, 4vh, 46px);
+            width: 100%;
+            height: 100%
+        }
+
+        .how-layout .flow-orb {
+            width: clamp(78px, 7.2vw, 100px);
+            height: clamp(78px, 7.2vw, 100px);
+            font-size: 51px
+        }
+
+        .how-three {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 3%;
+            text-align: center
+        }
+
+        .how-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px
+        }
+
+        .how-feature .how-emoji {
+            font-size: 52px
+        }
+
+        .how-feature h3 {
+            font-size: clamp(24px, 2.1vw, 32px);
+            margin: 0;
+            color: var(--blue)
+        }
+
+        .how-feature:nth-child(2) h3 {
+            color: var(--purple)
+        }
+
+        .how-feature:nth-child(3) h3 {
+            color: var(--teal)
+        }
+
+        .how-feature p {
+            font-size: clamp(19px, 1.6vw, 24px);
+            line-height: 1.24;
+            margin: 0
+        }
+
+        /* Sample: real embedded Scratch plus open side; no frame border around stage. */
+        .sample-layout {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1.35fr .65fr;
+            gap: 3%;
+            align-items: center
+        }
+
+        .scratch-stage {
+            height: min(100%, 445px);
+            aspect-ratio: 4/3;
+            max-width: 100%;
+            margin: auto;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 14px 36px #183b6c27
+        }
+
+        .scratch-stage iframe {
+            display: block;
+            height: 100%;
+            width: 100%;
+            border: 0
+        }
+
+        .sample-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 13px
+        }
+
+        .sample-info .sample-emoji {
+            font-size: 70px
+        }
+
+        .sample-info h2 {
+            font-size: clamp(27px, 2.6vw, 37px);
+            margin: 0;
+            color: var(--navy)
+        }
+
+        .sample-info p {
+            font-size: clamp(21px, 1.75vw, 25px);
+            line-height: 1.35;
+            margin: 0
+        }
+
+        .cta {
+            border: 0;
+            border-radius: 999px;
+            background: var(--blue);
+            color: white;
+            padding: 14px 23px;
+            min-height: 52px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: clamp(18px, 1.48vw, 22px);
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 6px 12px #4277d41c;
+            max-width: 100%;
+            transition: transform .2s
+        }
+
+        .cta:hover {
+            transform: translateY(-3px)
+        }
+
+        .cta.orange {
+            background: var(--orange)
+        }
+
+        .cta.purple {
+            background: var(--purple)
+        }
+
+        .cta.navy {
+            background: var(--navy)
+        }
+
+        .cta-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+
+        .ml4k-layout {
+            display: grid;
+            grid-template-columns: .85fr 1.15fr;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            gap: 3%
+        }
+
+        .ml4k-layout .art-frame {
+            height: min(100%, 310px)
+        }
+
+        .ml4k-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 19px;
+            text-align: center
+        }
+
+        .ml4k-info h2 {
+            font-size: clamp(27px, 2.5vw, 35px);
+            color: var(--navy);
+            margin: 0
+        }
+
+        .ml4k-info p {
+            font-size: clamp(21px, 1.8vw, 25px);
+            line-height: 1.3;
+            margin: 0
+        }
+
+        .inspiration-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 19px;
+            width: 100%;
+            max-width: 1080px
+        }
+
+        .inspiration-item {
+            background: #eaf4ff;
+            border: 0;
+            border-radius: 27px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            min-height: 126px;
+            color: var(--navy);
+            text-align: center;
+            transition: transform .2s
+        }
+
+        .inspiration-item:nth-child(2n) {
+            background: #fff0e3
+        }
+
+        .inspiration-item:hover {
+            transform: translateY(-4px)
+        }
+
+        .inspiration-item .icon {
+            font-size: 45px
+        }
+
+        .inspiration-item b {
+            font-size: clamp(20px, 1.75vw, 25px)
+        }
+
+        /* Observation: open editorial columns with illustrated checks. */
+        .notice-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            height: 100%;
+            width: 100%
+        }
+
+        .notice-columns {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 3%;
+            width: 100%
+        }
+
+        .notice-item {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            gap: 15px
+        }
+
+        .notice-item .notice-emoji {
+            font-size: clamp(65px, 6.7vw, 95px);
+            line-height: 1.25
+        }
+
+        .notice-item strong {
+            max-width: 355px;
+            font-size: clamp(22px, 1.86vw, 28px);
+            line-height: 1.28
+        }
+
+        .notice-footer {
+            background: #172554;
+            color: white;
+            font-size: clamp(19px, 1.64vw, 24px);
+            font-weight: 600;
+            text-align: center;
+            padding: 15px 30px;
+            border-radius: 999px
+        }
+
+        .notice-footer span {
+            color: #ffcc86
+        }
+
+        /* Ready: open three-step journey. */
+        .ready-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            gap: clamp(26px, 4.2vh, 45px)
+        }
+
+        .prep-steps {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 3%;
+            width: 100%;
+            max-width: 1080px;
+            position: relative
+        }
+
+        .prep-steps:before {
+            content: '';
+            border-top: 4px dotted #cfe0f7;
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            top: 52px
+        }
+
+        .prep-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            text-align: center;
+            position: relative
+        }
+
+        .prep-step .prep-emoji {
+            background: #e5f3ff;
+            font-size: 50px;
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center
+        }
+
+        .prep-step:nth-child(2) .prep-emoji {
+            background: #fff0df
+        }
+
+        .prep-step:nth-child(3) .prep-emoji {
+            background: #e6f8f1
+        }
+
+        .prep-step b {
+            font-size: clamp(23px, 1.9vw, 29px);
+            color: var(--navy)
+        }
+
+        .prep-step p {
+            font-size: clamp(20px, 1.6vw, 24px);
+            max-width: 290px;
+            margin: 0;
+            line-height: 1.26
+        }
+
+        /* Teacher, recap: illustrated, no mini boxed items. */
+        .teacher-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 27px;
+            width: 100%;
+            height: 100%
+        }
+
+        .teacher-columns {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 4%;
+            width: 100%
+        }
+
+        .teacher-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            gap: 11px
+        }
+
+        .teacher-icon {
+            font-size: clamp(76px, 8vw, 118px);
+            line-height: 1.2
+        }
+
+        .teacher-item h3 {
+            font-size: clamp(25px, 2vw, 31px);
+            margin: 0;
+            color: var(--navy)
+        }
+
+        .teacher-item p {
+            font-size: clamp(20px, 1.7vw, 25px);
+            margin: 0;
+            max-width: 365px;
+            line-height: 1.3
+        }
+
+        .teacher-tip {
+            background: #172554;
+            border-radius: 999px;
+            color: white;
+            font-size: clamp(19px, 1.6vw, 24px);
+            font-weight: 600;
+            padding: 15px 28px;
+            max-width: 1150px;
+            text-align: center
+        }
+
+        .recap-layout {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            align-items: center;
+            gap: 2%;
+            width: 100%;
+            height: 100%
+        }
+
+        .recap-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 12px;
+            min-width: 0
+        }
+
+        .recap-item .recap-emoji {
+            font-size: clamp(65px, 6vw, 87px);
+            width: 135px;
+            height: 135px;
+            display: grid;
+            place-items: center;
+            background: #eaf4ff;
+            border-radius: 43% 57% 51% 49% / 46% 45% 55% 54%
+        }
+
+        .recap-item:nth-child(2) .recap-emoji {
+            background: #fff0dd
+        }
+
+        .recap-item:nth-child(3) .recap-emoji {
+            background: #f2ebff
+        }
+
+        .recap-item:nth-child(4) .recap-emoji {
+            background: #e5f9ed
+        }
+
+        .recap-item h3 {
+            font-size: clamp(24px, 1.95vw, 31px);
+            color: var(--navy);
+            margin: 0
+        }
+
+        .recap-item p {
+            font-size: clamp(19px, 1.6vw, 25px);
+            line-height: 1.28;
+            margin: 0
+        }
+
+        /* Quiz, feelings: one at a time. */
+        .quiz-layout {
+            gap: clamp(15px, 2vh, 23px)
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            color: #687a97;
+            font-weight: 700
+        }
+
+        .step-dot {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            background: #dae5f3
+        }
+
+        .step-dot.current {
+            background: var(--orange);
+            transform: scale(1.22)
+        }
+
+        .step-dot.done {
+            background: #31be81
+        }
+
+        .quiz-layout .question {
+            font-size: clamp(29px, 2.55vw, 38px)
+        }
+
+        .quiz-status {
+            min-height: 34px;
+            color: #677e9d;
+            font-size: 22px;
+            font-weight: 600
+        }
+
+        .quiz-status.good {
+            color: #168253
+        }
+
+        .quiz-status.oops {
+            color: #b3691b
+        }
+
+        .quiz-result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 18px;
+            width: 100%;
+            height: 100%
+        }
+
+        .quiz-result .result-emoji {
+            font-size: 110px
+        }
+
+        .quiz-result h2 {
+            font-size: 43px;
+            margin: 0;
+            color: var(--navy)
+        }
+
+        .quiz-result p {
+            font-size: 27px;
+            line-height: 1.3;
+            margin: 0
+        }
+
+        .quiz-result p strong {
+            color: var(--orange)
+        }
+
+        .feeling-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 3%;
+            width: 100%;
+            align-items: center
+        }
+
+        .feeling-btn {
+            border: 0;
+            background: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: clamp(20px, 1.8vw, 27px);
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center;
+            transition: transform .2s
+        }
+
+        .feeling-btn .face {
+            width: clamp(138px, 13vw, 185px);
+            height: clamp(138px, 13vw, 185px);
+            display: grid;
+            place-items: center;
+            font-size: clamp(75px, 8.6vw, 122px);
+            border-radius: 44% 56% 52% 48% / 53% 47% 53% 47%;
+            background: #f1eaff
+        }
+
+        .feeling-btn:nth-child(2) .face {
+            background: #e5f7ee
+        }
+
+        .feeling-btn:nth-child(3) .face {
+            background: #e8f3ff
+        }
+
+        .feeling-btn:nth-child(4) .face {
+            background: #fff0de
+        }
+
+        .feeling-btn:hover {
+            transform: translateY(-7px)
+        }
+
+        .feeling-result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            text-align: center;
+            height: 100%
+        }
+
+        .feeling-result .face {
+            font-size: 105px
+        }
+
+        .feeling-result strong {
+            font-size: 41px;
+            color: var(--navy)
+        }
+
+        .feeling-result p {
+            font-size: 26px;
+            margin: 0
+        }
+
+        @media(max-height:740px) and (min-width:950px) {
+            :root {
+                --top: 61px;
+                --bottom: 61px
+            }
+
+            .scene {
+                gap: 9px
+            }
+
+            .scene-head {
+                gap: 5px
+            }
+
+            .scene h1 {
+                font-size: clamp(32px, 2.9vw, 41px)
+            }
+
+            .subtitle {
+                font-size: clamp(19px, 1.65vw, 23px)
+            }
+
+            .agenda-item {
+                min-height: 240px;
+                gap: 12px
+            }
+
+            .agenda-blob {
+                width: 135px;
+                height: 135px
+            }
+
+            .story-copy {
+                gap: 13px
+            }
+
+            .story-copy .story-text {
+                font-size: clamp(23px, 2vw, 29px)
+            }
+
+            .flow-orb {
+                width: 95px;
+                height: 95px
+            }
+
+            .concept-layout {
+                gap: 20px
+            }
+
+            .project-show .art-frame {
+                height: 52%
+            }
+
+            .project-point .point-emoji {
+                height: 68px;
+                width: 78px
+            }
+
+            .project-milestones {
+                gap: 10px
+            }
+
+            .how-layout {
+                gap: 20px
+            }
+
+            .recap-item .recap-emoji {
+                width: 110px;
+                height: 110px;
+                font-size: 66px
+            }
+
+            .teacher-layout,
+            .notice-layout {
+                gap: 15px
+            }
+
+            .teacher-icon {
+                font-size: 78px
+            }
+
+            .feeling-btn .face {
+                width: 140px;
+                height: 140px
+            }
+
+            .cover-art {
+                height: min(100%, 385px)
+            }
+        }
+
+        @media(max-width:1050px) {
+            .course-name {
+                display: none
+            }
+
+            .cover-copy h1 {
+                font-size: 42px
+            }
+
+            .cover-copy .subtitle {
+                font-size: 22px
+            }
+
+            .scene h1 {
+                font-size: 35px
+            }
+
+            .subtitle {
+                font-size: 20px
+            }
+
+            .art-frame .art {
+                width: 100%
+            }
+
+            .agenda-item strong {
+                font-size: 20px
+            }
+
+            .story-copy .story-text {
+                font-size: 23px
+            }
+
+            .sample-layout {
+                grid-template-columns: 1.2fr .8fr
+            }
+
+            .sample-info p {
+                font-size: 20px
+            }
+        }
+
+        @media(max-width:800px) {
+            :root {
+                --top: 59px;
+                --bottom: 57px
+            }
+
+            .topbar,
+            .footbar {
+                padding: 0 10px
+            }
+
+            .brand-logos {
+                gap: 6px
+            }
+
+            .brand-logos img {
+                height: 26px;
+                max-width: 95px
+            }
+
+            .brand-divider {
+                height: 21px
+            }
+
+            .session-select {
+                width: 165px;
+                font-size: 11px
+            }
+
+            .foot-label {
+                font-size: 11px
+            }
+
+            .foot-title {
+                font-size: 13px;
+                max-width: 43vw
+            }
+
+            .navbtn {
+                height: 36px;
+                width: 36px;
+                font-size: 19px
+            }
+
+            .nav-controls {
+                gap: 5px
+            }
+
+            .nav-count {
+                min-width: 59px;
+                font-size: 15px
+            }
+
+            .workarea {
+                padding: 9px
+            }
+
+            .scene {
+                gap: 6px
+            }
+
+            .scene h1 {
+                font-size: 27px
+            }
+
+            .subtitle {
+                font-size: 16px
+            }
+
+            .eyebrow {
+                font-size: 11px
+            }
+
+            .cover-grid {
+                gap: 4px
+            }
+
+            .cover-copy {
+                gap: 7px
+            }
+
+            .cover-copy h1 {
+                font-size: 32px
+            }
+
+            .cover-copy .subtitle {
+                font-size: 18px
+            }
+
+            .cover-art>.bubble {
+                min-height: 0
+            }
+
+            .cover-actions {
+                gap: 5px
+            }
+
+            .cover-actions span {
+                font-size: 13px;
+                padding: 7px
+            }
+
+            .agenda-blob {
+                width: 84px;
+                height: 84px
+            }
+
+            .agenda-icon {
+                font-size: 44px
+            }
+
+            .agenda-item {
+                min-height: 150px;
+                gap: 8px
+            }
+
+            .agenda-item strong {
+                font-size: 16px;
+                min-height: 0
+            }
+
+            .story-layout {
+                gap: 2%
+            }
+
+            .story-copy .story-text {
+                font-size: 18px
+            }
+
+            .story-tip {
+                font-size: 15px;
+                padding: 9px
+            }
+
+            .flow-orb {
+                height: 65px;
+                width: 65px;
+                font-size: 34px
+            }
+
+            .flow-step strong {
+                font-size: 15px
+            }
+
+            .flow-arrow {
+                font-size: 20px;
+                margin-top: -20px
+            }
+
+            .idea-tip {
+                font-size: 15px;
+                padding: 9px
+            }
+
+            .question,
+            .quiz-layout .question {
+                font-size: 22px
+            }
+
+            .thought-mark {
+                font-size: 42px
+            }
+
+            .choice {
+                font-size: 16px;
+                min-height: 65px;
+                padding: 8px
+            }
+
+            .answer-note {
+                font-size: 15px;
+                padding: 7px
+            }
+
+            .project-show .art-frame {
+                height: 45%
+            }
+
+            .project-show h2 {
+                font-size: 22px
+            }
+
+            .project-show p {
+                font-size: 16px
+            }
+
+            .project-point strong {
+                font-size: 16px
+            }
+
+            .project-point .point-emoji {
+                font-size: 34px;
+                width: 60px;
+                height: 55px
+            }
+
+            .how-feature .how-emoji {
+                font-size: 36px
+            }
+
+            .how-feature h3 {
+                font-size: 19px
+            }
+
+            .how-feature p {
+                font-size: 15px
+            }
+
+            .sample-info {
+                gap: 8px
+            }
+
+            .sample-info .sample-emoji {
+                font-size: 44px
+            }
+
+            .sample-info h2 {
+                font-size: 22px
+            }
+
+            .sample-info p {
+                font-size: 16px
+            }
+
+            .cta {
+                font-size: 14px;
+                min-height: 38px;
+                padding: 9px
+            }
+
+            .ml4k-info h2 {
+                font-size: 22px
+            }
+
+            .ml4k-info p {
+                font-size: 16px
+            }
+
+            .notice-item .notice-emoji {
+                font-size: 55px
+            }
+
+            .notice-item strong {
+                font-size: 17px
+            }
+
+            .notice-footer {
+                font-size: 15px;
+                padding: 10px
+            }
+
+            .ready-layout {
+                gap: 12px
+            }
+
+            .prep-steps:before {
+                top: 34px
+            }
+
+            .prep-step .prep-emoji {
+                width: 68px;
+                height: 68px;
+                font-size: 38px
+            }
+
+            .prep-step b {
+                font-size: 19px
+            }
+
+            .prep-step p {
+                font-size: 16px
+            }
+
+            .teacher-icon {
+                font-size: 56px
+            }
+
+            .teacher-item h3 {
+                font-size: 19px
+            }
+
+            .teacher-item p {
+                font-size: 16px
+            }
+
+            .teacher-tip {
+                font-size: 14px;
+                padding: 10px
+            }
+
+            .recap-item .recap-emoji {
+                width: 85px;
+                height: 85px;
+                font-size: 50px
+            }
+
+            .recap-item h3 {
+                font-size: 17px
+            }
+
+            .recap-item p {
+                font-size: 15px
+            }
+
+            .feeling-btn .face {
+                height: 92px;
+                width: 92px;
+                font-size: 55px
+            }
+
+            .feeling-btn {
+                font-size: 16px
+            }
+        }
+
+        @media(max-width:600px) and (orientation:portrait) {
+            .scene {
+                gap: 5px
+            }
+
+            .scene h1 {
+                font-size: 24px
+            }
+
+            .subtitle {
+                font-size: 15px
+            }
+
+            .cover-grid {
+                grid-template-columns: 1fr
+            }
+
+            .cover-art {
+                display: none
+            }
+
+            .cover-copy h1 {
+                font-size: 35px
+            }
+
+            .cover-copy .subtitle {
+                font-size: 19px
+            }
+
+            .agenda-path {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px
+            }
+
+            .agenda-path:before {
+                display: none
+            }
+
+            .agenda-item {
+                min-height: 0;
+                gap: 5px
+            }
+
+            .agenda-blob {
+                height: 64px;
+                width: 64px
+            }
+
+            .agenda-icon {
+                font-size: 34px
+            }
+
+            .agenda-item strong {
+                font-size: 14px;
+                min-height: 0
+            }
+
+            .story-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: .4fr .6fr
+            }
+
+            .story-copy {
+                gap: 7px
+            }
+
+            .story-copy .story-text {
+                font-size: 15px
+            }
+
+            .story-art {
+                max-height: 150px
+            }
+
+            .story-tip {
+                font-size: 12px;
+                padding: 7px
+            }
+
+            .flow-orb {
+                width: 47px;
+                height: 47px;
+                font-size: 25px
+            }
+
+            .flow-step {
+                gap: 5px
+            }
+
+            .flow-step strong {
+                font-size: 12px
+            }
+
+            .flow-arrow,
+            .flow-plus {
+                font-size: 15px;
+                margin-top: -12px
+            }
+
+            .concept-layout {
+                gap: 12px
+            }
+
+            .idea-tip {
+                font-size: 12px;
+                padding: 8px
+            }
+
+            .think-layout,
+            .quiz-layout {
+                gap: 12px
+            }
+
+            .question,
+            .quiz-layout .question {
+                font-size: 20px
+            }
+
+            .thought-mark {
+                font-size: 36px
+            }
+
+            .answers {
+                grid-template-columns: 1fr;
+                gap: 7px
+            }
+
+            .choice {
+                min-height: 44px;
+                font-size: 15px;
+                padding: 7px
+            }
+
+            .project-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: .32fr .68fr;
+                gap: 5px
+            }
+
+            .project-show .art-frame {
+                display: none
+            }
+
+            .project-show {
+                gap: 4px
+            }
+
+            .project-show h2 {
+                font-size: 20px
+            }
+
+            .project-show p {
+                font-size: 15px
+            }
+
+            .project-milestones {
+                gap: 5px
+            }
+
+            .project-point {
+                gap: 4px
+            }
+
+            .project-point .point-emoji {
+                height: 47px;
+                width: 54px;
+                font-size: 29px
+            }
+
+            .project-point strong {
+                font-size: 14px
+            }
+
+            .how-layout {
+                gap: 12px
+            }
+
+            .how-feature .how-emoji {
+                font-size: 28px
+            }
+
+            .how-feature h3 {
+                font-size: 15px
+            }
+
+            .how-feature p {
+                font-size: 12px
+            }
+
+            .sample-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: .7fr .3fr;
+                gap: 6px
+            }
+
+            .scratch-stage {
+                height: min(100%, 260px)
+            }
+
+            .sample-info .sample-emoji {
+                display: none
+            }
+
+            .sample-info h2 {
+                font-size: 18px
+            }
+
+            .sample-info p {
+                font-size: 13px
+            }
+
+            .ml4k-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: .2fr .8fr
+            }
+
+            .ml4k-layout .art-frame {
+                max-height: 95px
+            }
+
+            .ml4k-info {
+                gap: 7px
+            }
+
+            .ml4k-info h2 {
+                font-size: 19px
+            }
+
+            .ml4k-info p {
+                font-size: 15px
+            }
+
+            .inspiration-grid {
+                gap: 7px
+            }
+
+            .inspiration-item {
+                min-height: 80px;
+                gap: 4px;
+                padding: 8px;
+                flex-direction: column
+            }
+
+            .inspiration-item b {
+                font-size: 13px
+            }
+
+            .notice-layout {
+                gap: 12px
+            }
+
+            .notice-item {
+                gap: 7px
+            }
+
+            .notice-item .notice-emoji {
+                font-size: 36px
+            }
+
+            .notice-item strong {
+                font-size: 13px
+            }
+
+            .notice-footer {
+                font-size: 12px;
+                padding: 8px
+            }
+
+            .prep-steps {
+                gap: 5px
+            }
+
+            .prep-step .prep-emoji {
+                width: 54px;
+                height: 54px;
+                font-size: 27px
+            }
+
+            .prep-step b {
+                font-size: 14px
+            }
+
+            .prep-step p {
+                font-size: 12px
+            }
+
+            .teacher-layout {
+                gap: 13px
+            }
+
+            .teacher-columns {
+                gap: 8px
+            }
+
+            .teacher-icon {
+                font-size: 38px
+            }
+
+            .teacher-item h3 {
+                font-size: 15px
+            }
+
+            .teacher-item p {
+                font-size: 12px
+            }
+
+            .teacher-tip {
+                font-size: 12px;
+                padding: 8px
+            }
+
+            .recap-layout {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                gap: 9px
+            }
+
+            .recap-item {
+                gap: 4px
+            }
+
+            .recap-item .recap-emoji {
+                width: 64px;
+                height: 64px;
+                font-size: 39px
+            }
+
+            .recap-item h3 {
+                font-size: 16px
+            }
+
+            .recap-item p {
+                font-size: 13px
+            }
+
+            .quiz-result .result-emoji {
+                font-size: 65px
+            }
+
+            .quiz-result h2 {
+                font-size: 25px
+            }
+
+            .quiz-result p {
+                font-size: 19px
+            }
+
+            .feeling-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                gap: 8px
+            }
+
+            .feeling-btn {
+                gap: 6px;
+                font-size: 15px
+            }
+
+            .feeling-btn .face {
+                height: 75px;
+                width: 75px;
+                font-size: 44px
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+
+            .scene,
+            .sticker {
+                animation: none !important
+            }
+        }
+
+        /* === ADDITIONAL PLATFORM GUIDE SLIDES ONLY. Rev4 presentation styles above remain unchanged. === */
+        .guide-scene .scene-head {
+            gap: 7px
+        }
+
+        .guide-stage {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: minmax(0, 1.14fr) minmax(0, .86fr);
+            gap: clamp(23px, 3.5vw, 53px);
+            align-items: center;
+            min-height: 0;
+            max-width: 1190px;
+            margin: auto
+        }
+
+        .guide-visual {
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            max-height: 435px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: clamp(10px, 2vw, 26px)
+        }
+
+        .guide-visual:before {
+            content: '';
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            border-radius: 48% 52% 56% 44% / 53% 42% 58% 47%;
+            background: #e9f4ff;
+            transform: rotate(-5deg);
+            inset: auto;
+            z-index: 0
+        }
+
+        .guide-visual.orange:before {
+            background: #fff0e2
+        }
+
+        .guide-visual.purple:before {
+            background: #f0eaff
+        }
+
+        .guide-visual.teal:before {
+            background: #e4f7f2
+        }
+
+        .guide-shot {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+            max-height: 100%;
+            min-height: 0;
+            object-fit: contain;
+            border-radius: 14px;
+            box-shadow: 0 14px 27px #263c8340;
+            background: #fff
+        }
+
+        .guide-copy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: clamp(12px, 2.6vh, 23px);
+            height: 100%;
+            min-width: 0
+        }
+
+        .guide-step-number {
+            font-size: clamp(18px, 1.5vw, 23px);
+            letter-spacing: .04em;
+            font-weight: 700;
+            color: #d2671e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px
+        }
+
+        .guide-main {
+            font-size: clamp(26px, 2.4vw, 36px);
+            line-height: 1.17;
+            color: var(--navy);
+            font-weight: 700;
+            max-width: 530px
+        }
+
+        .guide-desc {
+            font-size: clamp(21px, 1.87vw, 27px);
+            font-weight: 500;
+            line-height: 1.34;
+            color: var(--ink);
+            max-width: 520px
+        }
+
+        .guide-hint {
+            font-size: clamp(17px, 1.35vw, 21px);
+            color: #6c7e9a;
+            font-weight: 600;
+            line-height: 1.3
+        }
+
+        .guide-screenshot-fallback {
+            position: relative;
+            z-index: 2;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+            width: 80%;
+            font-size: 23px;
+            color: var(--navy);
+            font-weight: 600
+        }
+
+        .guide-screenshot-fallback .em {
+            font-size: 85px;
+            line-height: 1
+        }
+
+        .guide-screenshot-fallback small {
+            font-size: 14px;
+            font-weight: 500;
+            color: #7988a3
+        }
+
+        .guide-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 11px;
+            flex: 0 0 auto
+        }
+
+        .guide-progress span {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #d7e7f8
+        }
+
+        .guide-progress span.on {
+            background: var(--orange);
+            transform: scale(1.2)
+        }
+
+        .guide-logos {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 17px;
+            max-width: 95%;
+            max-height: 100%
+        }
+
+        .guide-logos img {
+            max-width: 46%;
+            height: auto;
+            max-height: 210px;
+            border-radius: 15px;
+            object-fit: contain;
+            filter: drop-shadow(0 7px 8px #263c8320)
+        }
+
+        .guide-logos .guide-arrow {
+            font-size: 40px;
+            color: #ef9e52;
+            font-weight: 700
+        }
+
+        .guide-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--navy);
+            font-size: 26px;
+            font-weight: 700
+        }
+
+        .guide-brand-emoji {
+            font-size: 90px;
+            line-height: 1
+        }
+
+        .guide-code-example {
+            padding: 13px 22px;
+            background: #e3f9ee;
+            border-radius: 16px;
+            font-size: clamp(18px, 1.47vw, 22px);
+            color: #08784d;
+            font-weight: 700;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            text-align: center
+        }
+
+        .guide-scratch-mock {
+            position: relative;
+            z-index: 2;
+            background: #fff;
+            width: 95%;
+            max-width: 585px;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 17px 27px #243e7323;
+            text-align: left;
+            border: 1px solid #e2e9f3
+        }
+
+        .guide-mock-top {
+            background: #8958c7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 13px 17px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700
+        }
+
+        .guide-mock-top strong {
+            white-space: nowrap;
+            letter-spacing: .03em
+        }
+
+        .guide-mock-share {
+            border-radius: 10px;
+            background: #ff9b2f;
+            color: #fff;
+            padding: 10px 19px;
+            font-size: 24px;
+            box-shadow: 0 5px 0 #d5791d
+        }
+
+        .guide-mock-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            min-height: 145px;
+            background: linear-gradient(90deg, #f4f8ff, #fefbff);
+            font-size: 55px
+        }
+
+        .guide-mock-caption {
+            background: #fff9ef;
+            padding: 12px;
+            color: #94641e;
+            font-weight: 600;
+            font-size: 17px;
+            text-align: center
+        }
+
+        .guide-choose {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: center;
+            gap: clamp(24px, 4vw, 64px);
+            width: 100%;
+            max-width: 1120px
+        }
+
+        .guide-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 14px;
+            padding: 30px 18px;
+            background: #e9f4ff;
+            border-radius: 48% 52% 41% 59% / 12% 13% 12% 14%;
+            min-height: 320px
+        }
+
+        .guide-option:last-child {
+            background: #f1eaff
+        }
+
+        .guide-option .icon {
+            font-size: 84px;
+            line-height: 1
+        }
+
+        .guide-option h2 {
+            font-size: clamp(27px, 2.28vw, 34px);
+            color: var(--navy);
+            margin: 0
+        }
+
+        .guide-option p {
+            font-size: clamp(19px, 1.55vw, 23px);
+            line-height: 1.24;
+            max-width: 400px;
+            margin: 0
+        }
+
+        .guide-option .cta {
+            font-size: 20px
+        }
+
+        @media(max-height:740px) and (min-width:950px) {
+            .guide-stage {
+                gap: 25px
+            }
+
+            .guide-visual {
+                max-height: 335px
+            }
+
+            .guide-copy {
+                gap: 11px
+            }
+
+            .guide-main {
+                font-size: 29px
+            }
+
+            .guide-desc {
+                font-size: 22px
+            }
+
+            .guide-shot {
+                max-height: 310px
+            }
+
+            .guide-option {
+                min-height: 270px;
+                gap: 10px;
+                padding: 12px
+            }
+
+            .guide-option .icon {
+                font-size: 65px
+            }
+        }
+
+        @media(max-width:800px) {
+            .guide-stage {
+                gap: 12px
+            }
+
+            .guide-main {
+                font-size: 23px
+            }
+
+            .guide-desc {
+                font-size: 17px
+            }
+
+            .guide-copy {
+                gap: 9px
+            }
+
+            .guide-visual {
+                max-height: 260px;
+                padding: 8px
+            }
+
+            .guide-shot {
+                max-height: 240px
+            }
+
+            .guide-step-number {
+                font-size: 15px
+            }
+
+            .guide-hint {
+                font-size: 14px
+            }
+
+            .guide-screenshot-fallback {
+                font-size: 16px
+            }
+
+            .guide-screenshot-fallback .em {
+                font-size: 55px
+            }
+
+            .guide-code-example {
+                font-size: 14px
+            }
+
+            .guide-mock-top {
+                font-size: 12px;
+                padding: 8px
+            }
+
+            .guide-mock-share {
+                font-size: 17px
+            }
+
+            .guide-mock-bottom {
+                font-size: 32px;
+                min-height: 90px
+            }
+
+            .guide-mock-caption {
+                font-size: 11px
+            }
+
+            .guide-option {
+                min-height: 225px;
+                gap: 7px;
+                padding: 10px
+            }
+
+            .guide-option .icon {
+                font-size: 53px
+            }
+
+            .guide-option h2 {
+                font-size: 20px
+            }
+
+            .guide-option p {
+                font-size: 15px
+            }
+
+            .guide-option .cta {
+                font-size: 13px
+            }
+
+            .guide-logos .guide-arrow {
+                font-size: 25px
+            }
+        }
+
+        @media(max-width:600px) and (orientation:portrait) {
+            .guide-stage {
+                grid-template-columns: 1fr;
+                grid-template-rows: minmax(0, 1fr) minmax(0, 1.12fr);
+                gap: 3px
+            }
+
+            .guide-visual {
+                max-height: 195px;
+                min-height: 0;
+                padding: 5px
+            }
+
+            .guide-shot {
+                max-height: 175px
+            }
+
+            .guide-copy {
+                gap: 7px
+            }
+
+            .guide-main {
+                font-size: 19px
+            }
+
+            .guide-desc {
+                font-size: 15px
+            }
+
+            .guide-step-number {
+                font-size: 13px
+            }
+
+            .guide-hint {
+                font-size: 12px
+            }
+
+            .guide-code-example {
+                font-size: 12px;
+                padding: 8px
+            }
+
+            .guide-option {
+                min-height: 210px
+            }
+
+            .guide-choose {
+                gap: 6px
+            }
+
+            .guide-option .icon {
+                font-size: 40px
+            }
+
+            .guide-option h2 {
+                font-size: 16px
+            }
+
+            .guide-option p {
+                font-size: 12px
+            }
+
+            .guide-option .cta {
+                font-size: 11px;
+                padding: 7px
+            }
+
+            .guide-mock-bottom {
+                min-height: 56px;
+                font-size: 23px
+            }
+
+            .guide-mock-caption {
+                font-size: 10px
+            }
+
+            .guide-mock-share {
+                font-size: 13px;
+                padding: 6px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="topbar" aria-label="Navigasi kelas">
+        <div class="brand-logos"><img
+                src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+                alt="Kalananti" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span
+                class="brand-fallback" hidden>Kalananti</span><span class="brand-divider"></span><img
+                src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+                alt="Ruangguru Coding" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span
+                class="brand-fallback rg" hidden>Ruangguru Coding</span></div>
+        <div class="course-tools"><span class="course-name"><i>●</i> Scratch Advanced + AI Introduction</span>
+            <div class="select-wrap"><select id="meetingSelector" class="session-select"
+                    aria-label="Pilih session"></select><span class="select-arrow">⌄</span></div>
+        </div>
+    </nav>
+    <main class="workarea">
+        <div id="slideContent" aria-live="polite"></div>
+    </main>
+    <footer class="footbar">
+        <div><span class="foot-label">MATERI SEKARANG</span><span class="foot-title" id="meetingTitle">Session 1</span>
+        </div>
+        <div class="nav-controls"><button class="navbtn" id="prevBtn" aria-label="Slide sebelumnya">←</button><span
+                class="nav-count"><span id="currentSlide">1</span> / <span id="totalSlides">14</span></span><button
+                class="navbtn next" id="nextBtn" aria-label="Slide berikutnya">→</button></div>
+    </footer>
+    <script>
+        'use strict';
+        const sessions = [{ "id": 1, "topic": "AI FOUNDATIONS", "title": "Smart Greeting Assistant", "platform": "Scratch", "objective": "Buat robot yang bisa menyapa, bertanya, dan berbicara dengan Text to Speech.", "agenda": ["Kenali program yang bisa merespons", "Pelajari Input → Process → Output", "Coba robot penyapa", "Bikin versimu bersama guru"], "opening_title": "Kalau Kamu Bertemu Robot... 🤖", "opening": "Robot bertanya, “Siapa namamu?” Kamu mengetik “Alex”, lalu robot menjawab, “Salam kenal, Alex!” Kok robotnya bisa tahu nama kita, ya?", "concept_title": "Robot Bisa Merespons!", "concept": "Program menerima jawabanmu, mengolahnya, lalu memberi respons yang sesuai.", "flow": ["👤 Input", "⚙️ Process", "🤖 Output"], "think_q": "Robot bertanya, “Makanan favoritmu apa?” Kamu menjawab “Pizza”. Agar bisa menyebut “Pizza” lagi, robot perlu apa?", "think_choices": [["Bertanya lagi", false], ["Mengingat jawabanmu", true], ["Menghentikan program", false]], "project_points": ["Bertanya kepada pengguna", "Menyimpan jawaban", "Menyapa dengan nama pengguna", "Berbicara lewat Text to Speech"], "notice": ["Robot meminta informasi", "Jawabanmu mengubah respons robot", "Text to Speech membuat robot berbicara"], "sample": "https://scratch.mit.edu/projects/1363744452/", "starter": "", "quiz": [["Apa itu Input?", ["Informasi yang kita berikan", "Efek suara", "Tampilan terakhir"], 0], ["Apa fungsi ask and wait?", ["Menggerakkan karakter", "Bertanya dan menunggu jawaban", "Menghentikan kode"], 1], ["Kenapa pakai Text to Speech?", ["Agar teks bisa diucapkan", "Untuk menggambar", "Untuk mengganti latar"], 0]], "recap": [["Input", "Informasi yang kita masukkan."], ["Process", "Cara program mengolah informasi."], ["Answer", "Jawaban yang diingat Scratch."], ["Text to Speech", "Mengubah tulisan menjadi suara."]] }, { "id": 2, "topic": "TEXT RESPONSE", "title": "Feeling Word Robot", "platform": "Scratch", "objective": "Buat robot yang merespons perasaan senang, sedih, atau lelah dengan tepat.", "agenda": ["Ngobrol soal perasaan", "Kenali kondisi if / else", "Coba Feeling Word Robot", "Bikin respons yang berbeda"], "opening_title": "Kalau Temanmu Sedih... 💬", "opening": "Saat teman berkata “Aku sedih”, tentu responsmu berbeda dengan saat ia berkata “Aku senang”. Robot juga bisa memilih respons berdasarkan jawaban!", "concept_title": "Satu Pertanyaan, Banyak Respons", "concept": "Blok if / else membantu robot memilih respons sesuai kata yang kamu ketik.", "flow": ["💬 Jawaban", "🔎 Cek kondisi", "🤖 Respons"], "think_q": "Pengguna berkata, “Aku sedih.” Balasan robot mana yang paling pas?", "think_choices": [["“Wah, senangnya!”", false], ["“Semoga kamu segera ceria!”", true], ["“Nyalakan kipas.”", false]], "project_points": ["Tanya perasaan pengguna", "Cek kata happy, sad, atau tired", "Berikan respons yang cocok", "Tangani jawaban lain dengan else"], "notice": ["Satu pertanyaan bisa punya banyak jawaban", "Robot mencocokkan kata dengan kondisi", "Else dipakai untuk jawaban yang belum dikenal"], "sample": "https://scratch.mit.edu/projects/1363739116/", "starter": "https://scratch.mit.edu/projects/1387308981/", "quiz": [["Blok apa yang dipakai untuk memilih respons?", ["if / else", "move 10 steps", "play sound"], 0], ["Mengapa robot perlu membandingkan jawaban?", ["Agar responsnya sesuai", "Agar robot membesar", "Agar internet mati"], 0], ["Kapan kita memakai else?", ["Saat jawabannya tidak dikenali", "Agar semua jawaban sama", "Untuk menghapus project"], 0]], "recap": [["Ask", "Meminta jawaban pengguna."], ["Compare", "Mencocokkan jawaban dengan kata."], ["If / Else", "Memilih aksi berdasarkan kondisi."], ["Response", "Balasan yang sesuai jawaban."]] }, { "id": 3, "topic": "WORD FILTERING", "title": "Good Word, Bad Word", "platform": "Scratch", "objective": "Uji penyaring kata Scratch dan cari tahu mengapa komputer belum tentu paham perasaan orang.", "agenda": ["Kenali kata baik dan menyakitkan", "Lihat cara kerja word filter", "Uji berbagai contoh kata", "Diskusikan batas kemampuan filter"], "opening_title": "Komputer Tahu Kata Kasar? 🤔", "opening": "Kita bisa memahami candaan dan nada bicara. Komputer biasanya hanya mengecek kata tertentu. Jadi, pesan yang terdengar jahat belum tentu berhasil disaring.", "concept_title": "Menyaring Bukan Berarti Memahami", "concept": "Filter bisa menerima atau memblokir kata, tetapi belum tentu mengerti maksud dan situasinya.", "flow": ["✍️ Kata", "🧹 Cek filter", "✅ Lolos / 🚫 Blokir"], "think_q": "Ada pesan yang memakai kata biasa, tetapi terasa menyakitkan. Apakah filter pasti bisa mengenalinya?", "think_choices": [["Ya, selalu", false], ["Belum tentu, karena ada konteks", true], ["Hanya jika sprite berwarna biru", false]], "project_points": ["Gunakan blok Translate untuk cek kata", "Uji kata baik dan tidak baik", "Amati kata yang diblokir", "Bandingkan hasil filter dengan maknanya"], "notice": ["Ada kata yang diblokir", "Ada pesan menyakitkan yang bisa lolos", "Filter bukan pengganti penilaian manusia"], "sample": "https://scratch.mit.edu/projects/1363744580/", "starter": "https://scratch.mit.edu/projects/1387313193/", "quiz": [["Apa yang diperiksa word filter?", ["Kata atau pola tertentu", "Ramalan cuaca", "Ukuran sprite"], 0], ["Bisakah filter sederhana memahami semua konteks?", ["Bisa", "Belum tentu", "Hanya hari Jumat"], 1], ["Kenapa perlu mencoba banyak kata?", ["Untuk melihat batas filter", "Supaya suara lebih keras", "Supaya gerakan lebih cepat"], 0]], "recap": [["Filter", "Alat untuk mengecek kata tertentu."], ["Context", "Situasi yang memengaruhi makna."], ["Limit", "Filter juga bisa salah."], ["Responsible Use", "Tetap pikirkan dampak kata-katamu."]] }, { "id": 4, "topic": "SMART HOME LOGIC", "title": "Save Energy Part 1: Text Commands", "platform": "Scratch", "objective": "Buat rumah pintar yang menyalakan dan mematikan lampu atau kipas lewat perintah teks.", "agenda": ["Kenali perintah rumah pintar", "Pelajari Command → Condition → Action", "Coba kontrol lampu dan kipas", "Buat tombol kendali lewat teks"], "opening_title": "Rumah Pintar Bisa Nurut? 🏠", "opening": "Bayangkan kamu mengetik “turn on lamp” dan lampunya langsung menyala! Rumah itu tidak menebak; programnya mengikuti aturan yang kita buat.", "concept_title": "Perintah Masuk, Alat Bergerak", "concept": "Program membaca perintah, memeriksa kecocokannya, lalu menjalankan aksi.", "flow": ["⌨️ Perintah", "🔎 Cek kondisi", "💡 Aksi"], "think_q": "Kamu mengetik “turn off fan”. Apa yang perlu dicek program sebelum kipas berubah?", "think_choices": [["Apakah teks sesuai perintah", true], ["Warna kesukaan sprite", false], ["Posisi mouse saja", false]], "project_points": ["Ketik perintah lampu dan kipas", "Gunakan kondisi untuk mengecek teks", "Ganti kostum ON dan OFF", "Beri respons untuk perintah lain"], "notice": ["Satu kotak teks bisa mengatur dua alat", "Kondisi menghubungkan perintah dengan aksi", "Kostum menunjukkan alat ON atau OFF"], "sample": "https://scratch.mit.edu/projects/1363742412/", "starter": "https://scratch.mit.edu/projects/1387313772/", "quiz": [["Apa yang dilakukan setelah menerima perintah?", ["Memeriksa kondisinya", "Langsung menutup project", "Memilih kostum acak"], 0], ["Kenapa kostum lampu perlu berubah?", ["Untuk menunjukkan ON atau OFF", "Untuk melatih model AI", "Untuk menerjemahkan kata"], 0], ["Jika perintah tidak dikenal, apa yang baik dilakukan?", ["Berikan petunjuk", "Buat program rusak", "Hapus kipas"], 0]], "recap": [["Command", "Instruksi dari pengguna."], ["Condition", "Mengecek perintah yang masuk."], ["Action", "Aksi lampu atau kipas."], ["State", "Kondisi ON atau OFF."]] }, { "id": 5, "topic": "PRETRAINED SERVICES", "title": "Owl Wikipedia", "platform": "ML4K", "objective": "Buat burung hantu yang mencari informasi melalui layanan Wikipedia siap pakai.", "agenda": ["Kenali layanan siap pakai", "Lihat cara mencari informasi", "Coba Owl Wikipedia", "Buat bot di editor ML4K"], "opening_title": "Kenalan dengan Pustakawan 🦉📚", "opening": "Pustakawan tak perlu menulis semua buku untuk membantu kita. Begitu juga bot: ia bisa meminta informasi dari layanan Wikipedia yang sudah tersedia.", "concept_title": "Tak Semua Harus Dibuat dari Nol", "concept": "Project kita bisa meminta informasi ke layanan siap pakai, lalu menampilkan hasilnya.", "flow": ["❓ Topik", "🌐 Wikipedia", "🦉 Informasi"], "think_q": "Burung hantu ingin tahu tentang gunung berapi. Apa yang perlu dikirim ke Wikipedia?", "think_choices": [["Topik dari pengguna", true], ["Angka acak", false], ["Ukuran sprite", false]], "project_points": ["Tanya topik kepada pengguna", "Kirim topik ke Wikipedia", "Ambil informasi yang ditemukan", "Tampilkan hasil lewat burung hantu"], "notice": ["Bot menggunakan layanan lain", "Topik pengguna menjadi kata pencarian", "Hasil pencarian menjadi jawaban"], "sample": "https://drive.google.com/file/d/1QA7jnlvBa8A1PZ_345CSn6BN6rgcJ0xE/view?usp=drive_link", "starter": "https://drive.google.com/file/d/12p8XeX6R2-csUU7TCQ2VpZM3RsJdc9vi/view?usp=drive_link", "editor": "https://machinelearningforkids.co.uk/scratch/", "quiz": [["Apa itu layanan siap pakai?", ["Layanan yang sudah bisa digunakan", "Kostum sprite", "Tombol keyboard"], 0], ["Apa input untuk Owl Wikipedia?", ["Topik dari pengguna", "Warna backdrop", "Volume suara"], 0], ["Dari mana informasi bot berasal?", ["Layanan Wikipedia", "Pointer mouse", "Clone acak"], 0]], "recap": [["Service", "Layanan yang dapat kita gunakan."], ["Input", "Topik yang ingin dicari."], ["Request", "Permintaan informasi ke layanan."], ["Response", "Informasi yang dikirim kembali."]] }, { "id": 6, "topic": "SPEECH RECOGNITION", "title": "Save Energy Part 2: Voice Commands", "platform": "ML4K", "objective": "Upgrade rumah pintar agar lampu dan kipas bisa dikendalikan dengan suara.", "agenda": ["Bandingkan ketik dan bicara", "Kenali Speech → Text → Action", "Coba perintah suara", "Upgrade Save Energy bersama guru"], "opening_title": "Sekarang Bisa Pakai Suara! 🎙️", "opening": "Kalau sebelumnya kamu mengetik, sekarang cukup bicara! Speech to Text mengubah ucapanmu menjadi tulisan agar program bisa memahami perintah.", "concept_title": "Suara Bisa Jadi Perintah", "concept": "Speech to Text mengubah suara menjadi teks. Setelah itu, aturan dari project sebelumnya tetap bisa dipakai.", "flow": ["🎙️ Suara", "📝 Teks", "🔎 Cek perintah", "💡 Aksi"], "think_q": "Kamu berkata “turn on lamp”. Apa hasil yang seharusnya dibuat Speech to Text?", "think_choices": [["Teks “turn on lamp”", true], ["Kostum baru otomatis", false], ["Skor acak", false]], "project_points": ["Dengarkan perintah suara", "Ubah ucapan menjadi teks", "Periksa teks perintah", "Atur lampu atau kipas"], "notice": ["Suara adalah salah satu Input", "Speech Recognition mengubah suara menjadi teks", "Aturan Part 1 bisa dipakai lagi"], "sample": "https://drive.google.com/file/d/1aYsmrCGh5na84j6dq1sJNQONUUowABed/view?usp=drive_link", "starter": "https://drive.google.com/file/d/1cbQ3K1t_qcw8vQPgGkp_y5C4pRzHXCSB/view?usp=drive_link", "editor": "https://machinelearningforkids.co.uk/scratch/", "quiz": [["Apa hasil Speech to Text?", ["Teks dari ucapan", "Sprite baru", "Video baru"], 0], ["Setelah suara jadi teks, apa berikutnya?", ["Program mengecek perintah", "Komputer mati", "Sprite menghilang selamanya"], 0], ["Mengapa logika Part 1 bisa digunakan lagi?", ["Karena perintah akhirnya berupa teks", "Karena suara tak punya data", "Karena kipas berubah jadi AI"], 0]], "recap": [["Speech", "Perintah yang diucapkan."], ["Recognition", "Mengubah suara menjadi teks."], ["Command", "Teks yang diperiksa program."], ["Action", "Rumah pintar merespons."]] }, { "id": 7, "topic": "RULE-BASED AI", "title": "Pong Against AI Part 1: Pong Setup", "platform": "Scratch", "objective": "Bangun game Pong dengan bola, pemukul pemain, dan pemukul komputer.", "agenda": ["Kenali aturan game Pong", "Buat bola bergerak dan memantul", "Coba sample game", "Siapkan pemukul komputer"], "opening_title": "Game-nya Harus Jalan Dulu! 🎮", "opening": "Sebelum komputer bisa jadi lawanmu, lapangan, bola, dan pemukulnya harus siap. Kita mulai dari gerakan sederhana dan aturan pantulan.", "concept_title": "Game Bergerak Karena Aturan", "concept": "Arah, gerakan, sentuhan, dan tombol kontrol membuat game Pong bisa dimainkan.", "flow": ["⌨️ Tombol pemain", "🎮 Aturan game", "🏓 Gerak & pantul"], "think_q": "Bola menyentuh tepi atas layar. Apa yang sebaiknya dilakukan bola?", "think_choices": [["Memantul", true], ["Berhenti selamanya", false], ["Mengubah nama pemain", false]], "project_points": ["Buat lapangan Pong", "Gerakkan dan pantulkan bola", "Atur pemukul dengan keyboard", "Siapkan pemukul lawan"], "notice": ["Bola mengikuti aturan gerak", "Menyentuh tepi membuat bola memantul", "Keyboard menggerakkan pemukul pemain"], "sample": "https://scratch.mit.edu/projects/1363756422/", "starter": "https://scratch.mit.edu/projects/1387314530/", "quiz": [["Pemain menggerakkan pemukul dengan apa?", ["Keyboard", "Wikipedia", "Text to Speech"], 0], ["Apa yang terjadi saat bola menyentuh tepi?", ["Memantul", "Terhapus", "Melatih model AI"], 0], ["Kenapa game dibuat sebelum lawannya?", ["Agar aturan game sudah berjalan", "AI otomatis bisa memperbaiki semuanya", "Agar komputer lebih berisik"], 0]], "recap": [["Movement", "Menggerakkan sprite."], ["Direction", "Menentukan arah bola."], ["Touching", "Mendeteksi sentuhan untuk memantul."], ["Controls", "Tombol untuk menggerakkan pemukul."]] }, { "id": 8, "topic": "RULE-BASED AI", "title": "Pong Against AI Part 2: Computer Opponent", "platform": "Scratch", "objective": "Buat lawan komputer yang mengikuti bola dan punya tingkat kesulitan berbeda.", "agenda": ["Cari tahu siapa mengontrol lawan", "Tulis aturan mengikuti bola", "Ubah tingkat kesulitan", "Uji lawan komputer"], "opening_title": "Siapa yang Menggerakkan Lawan? 🤖🏓", "opening": "Tidak ada orang yang menekan tombol pemukul lawan. Komputer melihat posisi bola dan mengikuti aturan untuk bergerak ke atas atau bawah.", "concept_title": "Lawan Pintar dengan Aturan", "concept": "Rule-Based AI bergerak berdasarkan kondisi yang kita tulis, bukan belajar sendiri dari data.", "flow": ["👀 Posisi bola", "🔎 Aturan if / else", "🤖 Gerak pemukul"], "think_q": "Bola berada di atas pemukul komputer. Apa yang harus dilakukan lawan?", "think_choices": [["Bergerak ke atas", true], ["Bergerak ke bawah", false], ["Menanyakan nama pemain", false]], "project_points": ["Cek posisi bola", "Gerakkan pemukul naik atau turun", "Atur kecepatan komputer", "Coba level mudah dan sulit"], "notice": ["Lawan merespons posisi bola", "Keputusan berasal dari aturan", "Kecepatan membuat game terasa lebih sulit"], "sample": "https://scratch.mit.edu/projects/1363756422/", "starter": "https://scratch.mit.edu/projects/1387314530/", "quiz": [["Informasi apa yang digunakan lawan?", ["Posisi bola", "Topik Wikipedia", "Suara mikrofon saja"], 0], ["Apakah lawan ini belajar dari data latihan?", ["Tidak, ia mengikuti aturan", "Ya, pasti", "Setelah mencetak 10 poin"], 0], ["Bagaimana membuat lawan lebih sulit?", ["Percepat pemukul komputer", "Hilangkan bolanya", "Matikan tombol pemain"], 0]], "recap": [["Rule-Based AI", "AI yang mengikuti aturan buatan kita."], ["Position", "Letak bola di layar."], ["Condition", "Memilih gerak naik atau turun."], ["Difficulty", "Bisa diubah lewat kecepatan."]] }, { "id": 9, "topic": "VIDEO SENSING", "title": "Pop the Balloon", "platform": "Scratch", "objective": "Gunakan Video Sensing untuk memecahkan balon saat tanganmu bergerak di depan kamera.", "agenda": ["Kenali game dengan kamera", "Coba mendeteksi gerakan", "Pecahkan balon dengan tangan", "Buat efek balon meletus"], "opening_title": "Tanganmu Jadi Kontrol Game! ✋📷", "opening": "Tak perlu menekan keyboard! Kamera bisa menangkap gerakan tanganmu. Yuk, coba buat balon meletus saat tangan mendekat!", "concept_title": "Kamera Mendeteksi Gerakan", "concept": "Scratch membaca gerakan dari video. Jika gerakannya cukup besar di area balon, program menjalankan aksi.", "flow": ["📷 Kamera", "〰️ Deteksi gerak", "🎈 Balon bereaksi"], "think_q": "Tanganmu bergerak di dekat balon. Apa yang perlu dicek oleh program?", "think_choices": [["Gerakan video di area balon", true], ["Password keyboard", false], ["Halaman Wikipedia", false]], "project_points": ["Aktifkan Video Sensing", "Deteksi gerakan dekat balon", "Buat balon meletus", "Tambahkan suara atau animasi"], "notice": ["Kamera berfungsi sebagai Input", "Gerakan bisa memicu aksi", "Balon bereaksi saat syarat terpenuhi"], "sample": "https://scratch.mit.edu/projects/1355576339/", "starter": "https://scratch.mit.edu/projects/1366784859/", "quiz": [["Apa Input pada Video Sensing?", ["Video dari kamera", "File teks", "Kalkulator"], 0], ["Apa yang dideteksi Video Sensing?", ["Gerakan", "Topik Wikipedia", "Nomor telepon"], 0], ["Apa yang bisa terjadi saat tangan bergerak?", ["Balon meletus", "Kamera menjadi sprite", "Internet mati"], 0]], "recap": [["Camera", "Mengambil video secara langsung."], ["Motion", "Gerakan yang terbaca di video."], ["Threshold", "Batas gerakan untuk memicu aksi."], ["Reaction", "Balon meletus atau bersuara."]] }, { "id": 10, "topic": "FACE SENSING", "title": "Shy Panda", "platform": "Scratch", "objective": "Buat panda yang menari saat tak ada wajah, lalu malu saat wajah muncul di kamera.", "agenda": ["Kenali deteksi wajah", "Lihat dua kondisi: ada / tidak ada", "Coba Shy Panda", "Buat dua reaksi panda"], "opening_title": "Panda Pemalu Ketahuan Menari! 🐼", "opening": "Saat tidak ada yang terlihat di kamera, panda asyik menari. Eh, begitu wajahmu muncul, panda langsung berhenti dan malu!", "concept_title": "Wajah Mengubah Aksi Panda", "concept": "Face Sensing mengecek apakah wajah terlihat, lalu panda memilih untuk menari atau malu.", "flow": ["📷 Kamera", "🙂 Cek wajah", "🐼 Menari / malu"], "think_q": "Tidak ada wajah di depan kamera. Apa yang dilakukan panda?", "think_choices": [["Menari", true], ["Berubah jadi malu", false], ["Mencari Wikipedia", false]], "project_points": ["Aktifkan kamera", "Cek apakah wajah terlihat", "Menari saat tak ada wajah", "Ganti kostum malu saat wajah muncul"], "notice": ["Kamera memberi informasi wajah", "Project punya dua kondisi", "Kondisi menentukan aksi panda"], "sample": "https://scratch.mit.edu/projects/1356538242/", "starter": "https://scratch.mit.edu/projects/1385602143/", "quiz": [["Apa yang dicek Face Sensing?", ["Apakah ada wajah", "Warna favorit pengguna", "Perintah yang diketik"], 0], ["Apa yang dilakukan panda saat wajah muncul?", ["Menjadi malu", "Mencari Wikipedia", "Mereset skor"], 0], ["Apa yang menghubungkan deteksi dan aksi?", ["Kondisi if / else", "Alat kuas", "Filter kata"], 0]], "recap": [["Face Input", "Mendeteksi wajah lewat kamera."], ["Condition", "Memeriksa ada atau tidak ada wajah."], ["State", "Dua keadaan: menari dan malu."], ["Reaction", "Aksi panda mengikuti hasil deteksi."]] }, { "id": 11, "topic": "HYBRID AI PROJECT", "title": "Laser Eyes Part 1: Face and Voice Setup", "platform": "ML4K", "objective": "Gabungkan deteksi wajah dan suara untuk memunculkan laser saat mengucap “laser eyes”.", "agenda": ["Kenali dua jenis Input", "Cari posisi wajah dan dengar suara", "Coba setup Laser Eyes", "Buat pemicu laser bersama guru"], "opening_title": "Jadi Superhero dengan Dua Kekuatan! 🦸", "opening": "Bayangkan laser muncul dari matamu saat kamu berkata “laser eyes”! Kamera membantu menemukan posisinya, dan suaramu menjadi tombol rahasia.", "concept_title": "Satu Project, Dua Input", "concept": "Hybrid AI menggabungkan informasi wajah dan perintah suara untuk satu aksi yang seru.", "flow": ["🙂 Posisi wajah", "+", "🎙️ Perintah suara", "⚡ Laser muncul"], "think_q": "Input mana yang memberi tahu program KAPAN laser harus muncul?", "think_choices": [["Perintah suara", true], ["Warna backdrop", false], ["Skor game", false]], "project_points": ["Temukan posisi wajah atau mata", "Dengar kata “laser eyes”", "Siapkan dua sprite laser", "Munculkan laser setelah perintah benar"], "notice": ["Wajah memberi informasi posisi", "Suara menjadi pemicu", "Dua Input bekerja sama"], "sample": "https://drive.google.com/file/d/1OLLj95rwHFWJcFLQNudYAGA9IL-cdK31/view?usp=sharing", "starter": "https://drive.google.com/file/d/1rYz3wYPvx-YdUOVuf7Mch7SCqlLiJAgs/view?usp=drive_link", "editor": "https://machinelearningforkids.co.uk/scratch/", "quiz": [["Dua Input apa yang digabungkan?", ["Wajah dan suara", "Keyboard dan printer", "Wikipedia dan warna"], 0], ["Deteksi wajah membantu mencari apa?", ["Posisi wajah atau mata", "Ejaan kata", "Kecepatan internet"], 0], ["Apa yang memicu laser muncul?", ["Ucapan “laser eyes”", "Suara acak", "Membuka tab baru"], 0]], "recap": [["Hybrid", "Menggabungkan lebih dari satu Input."], ["Face", "Membantu mencari posisi wajah."], ["Voice", "Memberikan perintah rahasia."], ["Trigger", "Pemicu aksi laser."]] }, { "id": 12, "topic": "HYBRID AI PROJECT", "title": "Laser Eyes Part 2: Action and Final Test", "platform": "ML4K", "objective": "Selesaikan Laser Eyes dengan gerakan laser, target, efek, skor, dan pengujian.", "agenda": ["Gerakkan laser saat dipicu", "Tambahkan target dan efek", "Coba wajah dan suara bersama", "Perbaiki hingga berfungsi"], "opening_title": "Superpower-nya Harus Beraksi! ⚡🎯", "opening": "Kamera sudah menemukan wajahmu dan mikrofon sudah mendengar perintah. Sekarang kita buat laser meluncur, mengenai target, dan menghasilkan efek seru!", "concept_title": "Input Pintar + Aturan Game", "concept": "Deteksi memberi tahu apa yang terjadi. Aturan game menentukan aksi berikutnya.", "flow": ["🙂 + 🎙️ Input", "⚡ Gerak laser", "🎯 Kena target?", "⭐ Skor / efek"], "think_q": "Laser mengenai target. Apa yang sebaiknya dilakukan program?", "think_choices": [["Munculkan efek terkena laser", true], ["Lupakan semua kode", false], ["Cari topik Wikipedia", false]], "project_points": ["Gerakkan laser dari area mata", "Cek apakah laser mengenai target", "Tambahkan skor, suara, atau animasi", "Uji dan perbaiki project"], "notice": ["Deteksi memulai aksi", "Touching mengecek target terkena", "Efek memberi tahu hasil permainan"], "sample": "https://drive.google.com/file/d/1OLLj95rwHFWJcFLQNudYAGA9IL-cdK31/view?usp=sharing", "starter": "https://drive.google.com/file/d/1rYz3wYPvx-YdUOVuf7Mch7SCqlLiJAgs/view?usp=drive_link", "editor": "https://machinelearningforkids.co.uk/scratch/", "quiz": [["Setelah pemicu terdeteksi, apa berikutnya?", ["Aturan game menjalankan aksi", "Tidak akan terjadi apa-apa", "Browser tertutup"], 0], ["Bagaimana mendeteksi target terkena?", ["Blok touching", "Pencarian Wikipedia", "Filter kata"], 0], ["Kenapa wajah dan suara perlu diuji bersama?", ["Keduanya mengendalikan project", "Agar sprite bertambah", "Agar font berubah"], 0]], "recap": [["Input", "Informasi wajah dan suara."], ["Action", "Laser bergerak dari arah mata."], ["Target", "Sentuhan menandakan laser mengenai sasaran."], ["Debug", "Mencoba, menemukan, dan memperbaiki bug."]] }, { "id": 13, "topic": "INNOVATION PROJECT", "title": "Project Ideation & Planning", "platform": "Scratch", "objective": "Rancang project Scratch dengan fitur pintar berdasarkan idemu sendiri.", "agenda": ["Ingat fitur yang pernah dipelajari", "Pilih ide dan tujuan project", "Tentukan Input, Logic, Output", "Gambar rencana atau storyboard"], "opening_title": "Ide Hebat Dimulai dari Coretan! 💡", "opening": "Sebelum mulai coding, coba tanya: “Aku mau bikin apa, dan siapa yang akan memakainya?” Rencana sederhana bikin proses membuat project jadi lebih mudah.", "concept_title": "Mulai dari Ide dan Pengguna", "concept": "Pilih pengguna, tujuan, cara mereka berinteraksi, dan respons yang akan muncul.", "flow": ["👤 Pengguna", "❓ Ide", "🎛️ Input", "🧠 Logic", "✨ Output"], "think_q": "Mana ide yang paling mungkin selesai dibuat dalam beberapa sesi?", "think_choices": [["Satu ide jelas dengan fitur utama", true], ["Game dengan 50 fitur belum jadi", false], ["Ide tanpa tujuan atau pengguna", false]], "project_points": ["Tentukan pengguna dan tujuan", "Pilih satu jenis Input utama", "Tentukan respons project", "Buat storyboard sederhana"], "notice": ["Ide sederhana lebih mudah diselesaikan", "Input dan Output harus terhubung", "Project lama bisa jadi inspirasi"], "sample": "", "starter": "", "quiz": [["Apa yang perlu dipilih sebelum coding?", ["Tujuan project", "Semua warna kostum", "Bug terakhir"], 0], ["Kenapa mulai dari satu fitur utama?", ["Agar project fokus", "Agar file membesar", "Agar tak perlu testing"], 0], ["Storyboard membantu menjelaskan apa?", ["Alur project", "Password", "Kecepatan internet"], 0]], "recap": [["User", "Orang yang akan memakai project."], ["Goal", "Tujuan yang ingin dicapai."], ["Input", "Cara pengguna memberi perintah."], ["Output", "Respons dari project."]] }, { "id": 14, "topic": "INNOVATION PROJECT", "title": "Build the Core Project", "platform": "Scratch", "objective": "Mulai buat fitur utama dan alur interaksi pada project Scratch-mu.", "agenda": ["Buka kembali rencana project", "Buat sprite dan tampilan utama", "Jalankan fitur inti", "Tambahkan efek yang mendukung"], "opening_title": "Bangun Mesin Utamanya Dulu! 🏗️", "opening": "Bayangkan membangun rumah. Fondasinya harus kuat sebelum dihias. Begitu juga project: pastikan fitur utamanya jalan sebelum menambah banyak efek.", "concept_title": "Fitur Utama Dulu, Hiasan Belakangan", "concept": "Selesaikan versi sederhana yang bisa dijalankan. Setelah itu, baru tambah suara, animasi, atau skor.", "flow": ["🧱 Persiapan", "🎛️ Input utama", "🧠 Logic", "✅ Hasil"], "think_q": "Fitur utamamu sudah jalan, tapi belum ada musik. Apa yang sebaiknya dilakukan dulu?", "think_choices": [["Uji fitur utamanya", true], ["Hapus dan mulai dari musik", false], ["Ganti seluruh ide project", false]], "project_points": ["Buat sprite dan backdrop", "Rangkai Input dan respons", "Hubungkan fitur pintar", "Tambahkan efek pendukung"], "notice": ["Fitur inti harus bekerja dulu", "Coba project setiap selesai satu bagian", "Efek harus membantu, bukan mengganggu"], "sample": "", "starter": "", "quiz": [["Apa yang sebaiknya dibangun pertama?", ["Alur fitur utama", "Semua fitur tambahan", "Slide presentasi"], 0], ["Kapan sebaiknya project diuji?", ["Saat proses membuat", "Hanya setelah presentasi", "Tidak perlu diuji"], 0], ["Apa contoh fitur tambahan?", ["Suara, animasi, atau skor", "Tujuan project", "Link rusak"], 0]], "recap": [["Core", "Bagian paling penting dari project."], ["Build", "Membuat sedikit demi sedikit."], ["Test", "Mengecek hasil setelah perubahan."], ["Polish", "Mempercantik setelah fitur utama berjalan."]] }, { "id": 15, "topic": "INNOVATION PROJECT", "title": "Test, Debug & Improve", "platform": "Scratch", "objective": "Uji project-mu, cari bug, lalu perbaiki agar semakin mudah digunakan.", "agenda": ["Coba berbagai jenis Input", "Temukan bug dan bagian membingungkan", "Perbaiki satu per satu", "Rapikan untuk dipresentasikan"], "opening_title": "Jadilah Detektif Bug! 🐞", "opening": "Project berhasil sekali belum tentu selalu berhasil. Yuk, coba jawaban unik, ulangi aksi, dan ajak teman mencoba untuk menemukan bagian yang perlu diperbaiki.", "concept_title": "Test → Find → Fix → Test Again", "concept": "Debugging itu seperti jadi detektif: coba, cari masalah, perbaiki, lalu tes lagi!", "flow": ["🧪 Tes", "🔎 Cari bug", "🛠️ Perbaiki", "🔁 Tes lagi"], "think_q": "Temanmu menemukan bug saat mencoba project. Apa langkah terbaik?", "think_choices": [["Coba ulang bug dan perbaiki", true], ["Abaikan karena tadi sempat berhasil", false], ["Hapus semua sprite", false]], "project_points": ["Tes Input normal dan tidak biasa", "Cari masalah pada logic atau sensor", "Perbaiki bagian yang membingungkan", "Rapikan suara, teks, dan tampilan"], "notice": ["Teman bisa menemukan bug yang luput", "Perbaiki satu bug setiap kali", "Petunjuk jelas memudahkan pemain"], "sample": "", "starter": "", "quiz": [["Apa itu debugging?", ["Mencari dan memperbaiki kesalahan", "Menambah sprite acak", "Langsung mempublikasikan"], 0], ["Kenapa tes dengan Input berbeda?", ["Untuk menemukan hasil tak terduga", "Agar layar lebih terang", "Agar logika tidak perlu"], 0], ["Sesudah memperbaiki bug, lalu apa?", ["Tes lagi", "Jangan jalankan lagi", "Hapus petunjuk"], 0]], "recap": [["Test", "Mencoba project dengan beberapa cara."], ["Find", "Menemukan sumber kesalahan."], ["Fix", "Memperbaiki kode atau tampilan."], ["Improve", "Membuat project lebih nyaman dipakai."]] }, { "id": 16, "topic": "PROJECT SHOWCASE", "title": "Final Presentation & Demonstration", "platform": "Scratch", "objective": "Presentasikan ide, cara kerja, dan demo langsung project AI buatanmu.", "agenda": ["Siapkan hasil project terakhir", "Ceritakan ide dan fitur pintar", "Tunjukkan demo langsung", "Bagikan tantangan dan pelajaran"], "opening_title": "Pencipta Hebat Bisa Bercerita! 🎤", "opening": "Kamu sudah membuat project keren! Sekarang waktunya mengajak teman mengenal idemu, melihat cara kerjanya, dan mendengar cerita di balik proses membuatnya.", "concept_title": "Ceritakan → Tunjukkan → Refleksikan", "concept": "Presentasi bukan cuma memamerkan hasil. Teman-teman juga ingin tahu ide, cara kerja, dan pelajaranmu.", "flow": ["💡 Ide", "🧠 Cara kerja", "▶️ Demo", "💬 Cerita belajar"], "think_q": "Saat demo, ada bug kecil yang muncul. Apa yang sebaiknya kamu lakukan?", "think_choices": [["Tetap tenang, jelaskan, lanjutkan", true], ["Sembunyikan seluruh project", false], ["Salahkan penonton", false]], "project_points": ["Ceritakan ide project", "Jelaskan satu fitur pintarnya", "Demonstrasikan project langsung", "Bagikan satu masalah dan solusinya"], "notice": ["Mulailah dari ide, bukan semua blok kode", "Tunjukkan fitur utama dengan jelas", "Cerita tantangan menunjukkan proses belajarmu"], "sample": "", "starter": "", "quiz": [["Apa yang baik dijelaskan pertama?", ["Ide dan tujuan project", "Semua warna blok", "Riwayat browser"], 0], ["Apa yang perlu ditunjukkan saat demo?", ["Interaksi utama project", "Hanya layar judul", "Project orang lain"], 0], ["Apa cerita yang penting saat penutup?", ["Tantangan, solusi, dan pelajaran", "Hanya skor", "Tidak perlu cerita"], 0]], "recap": [["Explain", "Ceritakan ide dan tujuanmu."], ["Demonstrate", "Tunjukkan project secara langsung."], ["Reflect", "Bagikan tantangan dan solusinya."], ["Celebrate", "Bangga dengan proses belajarmu!"]] }];
+        const $ = s => document.querySelector(s);
+        const esc = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
+        const isScratch = url => /scratch\.mit\.edu\/projects\/\d+/.test(url || '');
+        const scratchEmbed = url => { const m = (url || '').match(/projects\/(\d+)/); return m ? `https://scratch.mit.edu/projects/${m[1]}/embed` : '' };
+        let currentSession = 1, currentSlide = 0, quizIndex = 0, quizScore = 0, pendingQuizTimer = null;
+        const topicsEmoji = ['🤖', '💬', '💛', '🏡', '🦉', '🎤', '🏓', '🤖', '🎈', '🐼', '⚡', '🎯', '💡', '🛠️', '🐞', '🎤'];
+        const agendaEmoji = ['👀', '🧠', '🎮', '🚀'];
+        const processEmoji = ['📥', '⚙️', '✨'];
+        const pointEmoji = ['👀', '🧩', '🎯', '✨'];
+        const noticeEmoji = ['🔍', '💡', '🌟'];
+        const recapEmoji = ['🧠', '🔑', '⚡', '🌟'];
+        const prepEmoji = ['📂', '🧩', '🚀'];
+        // Original illustration library. Each artwork is an inline vector, stays in the HTML and works offline.
+        function art(id) {
+            const P = '#263c83', B = '#54a8f9', O = '#ff994c', Y = '#ffce5b', V = '#a993ed', T = '#36caa2', W = '#ffffff';
+            const base = `<ellipse cx="245" cy="352" rx="176" ry="18" fill="#6a89b9" opacity=".13"/><circle cx="79" cy="79" r="9" fill="${Y}"/><circle cx="445" cy="56" r="11" fill="${T}"/><path d="M405 92l11-16 11 16-11 16z" fill="${O}"/><path d="M51 286l9-12 9 12-9 12z" fill="${V}"/>`;
+            const bot = `<path d="M247 96V63" stroke="${P}" stroke-width="13" stroke-linecap="round"/><circle cx="247" cy="56" r="17" fill="${Y}" stroke="${P}" stroke-width="7"/><rect x="118" y="113" width="261" height="201" rx="66" fill="${B}" stroke="${P}" stroke-width="10"/><rect x="145" y="141" width="207" height="128" rx="43" fill="${W}"/><circle cx="201" cy="195" r="17" fill="${P}"/><circle cx="296" cy="195" r="17" fill="${P}"/><path d="M210 235 Q249 260 286 235" fill="none" stroke="${P}" stroke-width="10" stroke-linecap="round"/><rect x="92" y="182" width="29" height="69" rx="14" fill="${O}"/><rect x="377" y="182" width="29" height="69" rx="14" fill="${O}"/><path d="M148 299v27M345 299v27" stroke="${P}" stroke-width="13" stroke-linecap="round"/>`;
+            const home = `<path d="M121 166 L249 62 L379 166" fill="none" stroke="${P}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M145 159 V322 H354 V159" fill="${W}" stroke="${P}" stroke-width="12" stroke-linejoin="round"/><rect x="180" y="193" width="73" height="67" rx="12" fill="#d3edff"/><path d="M217 191v-30" stroke="${P}" stroke-width="7"/><circle cx="217" cy="212" r="19" fill="${Y}"/><path d="M217 231v8" stroke="${O}" stroke-width="8"/><circle cx="309" cy="219" r="32" fill="#e6f7ff" stroke="${P}" stroke-width="8"/><path d="M309 219q-29-22-9-37q20-11 20 25q29 1 25 20q-8 18-37 3q-13 29-29 19q-14-11 17-33z" fill="${T}"/><rect x="266" y="275" width="61" height="47" rx="9" fill="${O}"/>`;
+            const owl = `<path d="M151 114 Q248 40 345 114 L370 259 Q338 343 247 344 Q159 340 123 261Z" fill="${V}" stroke="${P}" stroke-width="10"/><path d="M150 117L169 59l59 42M347 117l-18-58-59 42" fill="${V}" stroke="${P}" stroke-width="10" stroke-linejoin="round"/><circle cx="204" cy="180" r="48" fill="${W}"/><circle cx="298" cy="180" r="48" fill="${W}"/><circle cx="207" cy="182" r="17" fill="${P}"/><circle cx="294" cy="182" r="17" fill="${P}"/><path d="M237 231l14 22 14-22z" fill="${O}"/><path d="M118 252Q77 215 92 192Q128 174 165 242M377 252q42-36 27-60q-39-18-75 49" fill="${B}" stroke="${P}" stroke-width="8"/><path d="M155 276Q247 253 340 276v79Q248 329 155 355z" fill="${Y}" stroke="${P}" stroke-width="9"/><path d="M248 268v73" stroke="${P}" stroke-width="6"/>`;
+            const pong = `<rect x="89" y="85" width="322" height="232" rx="27" fill="${P}"/><path d="M250 89v225" stroke="${W}" stroke-width="6" stroke-dasharray="15 12" opacity=".6"/><rect x="115" y="165" width="24" height="86" rx="12" fill="${O}"/><rect x="361" y="130" width="24" height="86" rx="12" fill="${T}"/><circle cx="262" cy="191" r="22" fill="${Y}"/><path d="M184 226l42-16M171 248l26-10" stroke="${W}" stroke-width="7" stroke-linecap="round" opacity=".5"/><path d="M112 81l-13-19M393 82l17-20" stroke="${O}" stroke-width="7" stroke-linecap="round"/>`;
+            const panda = `<circle cx="170" cy="110" r="58" fill="${P}"/><circle cx="330" cy="110" r="58" fill="${P}"/><ellipse cx="250" cy="210" rx="139" ry="125" fill="${W}" stroke="${P}" stroke-width="12"/><ellipse cx="197" cy="197" rx="36" ry="48" transform="rotate(20 197 197)" fill="${P}"/><ellipse cx="301" cy="197" rx="36" ry="48" transform="rotate(-20 301 197)" fill="${P}"/><circle cx="205" cy="189" r="10" fill="${W}"/><circle cx="293" cy="189" r="10" fill="${W}"/><ellipse cx="249" cy="240" rx="17" ry="12" fill="${P}"/><path d="M231 261Q249 277 267 261" fill="none" stroke="${P}" stroke-width="7" stroke-linecap="round"/><ellipse cx="178" cy="263" rx="20" ry="9" fill="#ffb6b9"/><ellipse cx="320" cy="263" rx="20" ry="9" fill="#ffb6b9"/><text x="376" y="158" font-size="62">♫</text><text x="96" y="290" font-size="46">♪</text>`;
+            const laser = `<path d="M163 293l-35 54h247l-39-54" fill="${B}" stroke="${P}" stroke-width="10"/><ellipse cx="249" cy="184" rx="101" ry="119" fill="#ffd7ad" stroke="${P}" stroke-width="10"/><path d="M151 172Q136 63 234 72 Q346 47 351 169 Q314 133 288 140Q225 101 151 172" fill="${P}"/><rect x="165" y="171" width="75" height="40" rx="16" fill="${O}" stroke="${P}" stroke-width="8"/><rect x="258" y="171" width="75" height="40" rx="16" fill="${O}" stroke="${P}" stroke-width="8"/><path d="M240 188h18M200 210L67 306M292 210l139 96" stroke="${Y}" stroke-width="15" stroke-linecap="round"/><path d="M210 263q39 22 78 0" fill="none" stroke="${P}" stroke-width="8" stroke-linecap="round"/>`;
+            const document = `<rect x="153" y="56" width="215" height="285" rx="20" fill="${W}" stroke="${P}" stroke-width="10" transform="rotate(5 250 190)"/><rect x="179" y="95" width="131" height="17" rx="8" fill="${B}"/><path d="M183 143h141M183 171h129M183 199h151" stroke="#c9d7ec" stroke-width="13" stroke-linecap="round"/><rect x="182" y="236" width="119" height="65" rx="15" fill="#fff0d0"/><path d="M338 248l81-96 25 21-81 99-35 11z" fill="${O}" stroke="${P}" stroke-width="7"/><circle cx="112" cy="112" r="34" fill="${Y}"/><path d="M112 58v-20M112 166v19M58 112H37M166 112h21" stroke="${O}" stroke-width="7" stroke-linecap="round"/>`;
+            const bug = `<circle cx="225" cy="182" r="110" fill="#eef6ff" stroke="${P}" stroke-width="14"/><path d="M302 261l117 95" stroke="${O}" stroke-width="25" stroke-linecap="round"/><ellipse cx="224" cy="194" rx="45" ry="60" fill="${T}" stroke="${P}" stroke-width="8"/><circle cx="208" cy="177" r="7" fill="${P}"/><circle cx="239" cy="177" r="7" fill="${P}"/><path d="M198 214q27 23 51 0" fill="none" stroke="${P}" stroke-width="7"/><path d="M201 132l-16-30M246 132l17-30M181 192l-23-10M267 193l25-10M190 225l-22 14M258 225l23 14" stroke="${P}" stroke-width="7" stroke-linecap="round"/>`;
+            const stage = `<path d="M97 96l-17-42h340l-17 42z" fill="${O}"/><path d="M100 93v194h300V93" fill="#e9f2ff" stroke="${P}" stroke-width="10"/><path d="M108 94Q171 158 247 94Q318 158 393 94" stroke="${V}" stroke-width="18" fill="none"/><rect x="207" y="216" width="85" height="120" rx="10" fill="${O}" stroke="${P}" stroke-width="8"/><path d="M242 146v83" stroke="${P}" stroke-width="9"/><circle cx="242" cy="127" r="28" fill="${Y}" stroke="${P}" stroke-width="8"/><path d="M242 145v18" stroke="${P}" stroke-width="8"/><path d="M147 65l-10-20M360 57l20-21" stroke="${Y}" stroke-width="8"/>`;
+            const balloon = `<path d="M158 202q-64-117 5-142q65-4 55 100q-12 38-60 42z" fill="${O}" stroke="${P}" stroke-width="7"/><path d="M320 170q-68-110 5-145q76-5 59 104q-8 32-64 41z" fill="${B}" stroke="${P}" stroke-width="7"/><path d="M239 268q-52-94 9-125q65-1 56 77q-8 31-65 48z" fill="${V}" stroke="${P}" stroke-width="7"/><path d="M158 203q32 69 33 112M322 170q-19 88 12 162M241 266q-21 27-2 70" fill="none" stroke="${P}" stroke-width="4"/><path d="M392 240l14 24-14 24-14-24z" fill="${Y}"/><path d="M422 227v22M412 238h21" stroke="${O}" stroke-width="7" stroke-linecap="round"/>`;
+            const filter = `<path d="M104 116h290L286 220v85l-72 37V220Z" fill="#e9f3ff" stroke="${P}" stroke-width="10" stroke-linejoin="round"/><rect x="91" y="57" width="113" height="44" rx="20" fill="${T}"/><text x="148" y="86" font-family="Arial" font-weight="bold" font-size="20" fill="white" text-anchor="middle">KIND</text><rect x="293" y="61" width="116" height="44" rx="20" fill="${O}"/><text x="352" y="89" font-family="Arial" font-weight="bold" font-size="20" fill="white" text-anchor="middle">CHECK</text><circle cx="245" cy="270" r="27" fill="${Y}"/><path d="M234 270l8 8 15-18" stroke="${P}" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+            let shape = id === 1 || id === 2 ? bot : id === 3 ? filter : id === 4 || id === 6 ? home : id === 5 ? owl : id === 7 || id === 8 ? pong : id === 9 ? balloon : id === 10 ? panda : id === 11 || id === 12 ? laser : id === 13 ? document : id === 14 ? bot : id === 15 ? bug : stage;
+            if (id === 2) shape += `<circle cx="422" cy="140" r="38" fill="${Y}"/><path d="M406 140h32M406 155q16 13 32 0" stroke="${P}" stroke-width="5" fill="none"/>`;
+            if (id === 6) shape += `<path d="M64 174q-20 37 0 74M86 189q-13 22 0 42M432 177q18 36 0 69" fill="none" stroke="${V}" stroke-width="9" stroke-linecap="round"/>`;
+            if (id === 8) shape += `<text x="420" y="315" font-size="48">🤖</text>`;
+            if (id === 14) shape += `<rect x="78" y="289" width="67" height="57" rx="8" fill="${Y}" stroke="${P}" stroke-width="7"/><rect x="358" y="282" width="62" height="64" rx="8" fill="${T}" stroke="${P}" stroke-width="7"/>`;
+            return `<svg class="art" viewBox="0 0 500 380" role="img" aria-label="Ilustrasi ${esc(sessions[id - 1].title)}" xmlns="http://www.w3.org/2000/svg">${base}${shape}</svg>`;
+        }
+        function eyebrow(s, emoji = '✨') { return `<span class="eyebrow">${emoji} ${esc(s.topic)}</span>` }
+        function head(s, title, desc = '', emoji = '✨') { return `<header class="scene-head">${eyebrow(s, emoji)}<h1>${esc(title)}</h1>${desc ? `<p class="subtitle">${esc(desc)}</p>` : ''}</header>` }
+        function page(body, extra = '') { return `<section class="scene ${extra}">${body}</section>` }
+        function artwork(s, kind = 'blue') { return `<div class="art-frame"><div class="bubble ${kind}">${art(s.id)}</div></div>` }
+        function flowHtml(s) { return `<div class="flow-track">${s.flow.map((x, i) => { if (x === '+') return `<span class="flow-plus">+</span>`; const em = (x.match(/\p{Extended_Pictographic}/u) || [])[0] || (i % 2 ? '⚙️' : '💡'); const label = x.replace(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+/u, '').trim() || x; return `${i && s.flow[i - 1] !== '+' ? '<span class="flow-arrow">→</span>' : ''}<div class="flow-step"><div class="flow-orb">${em}</div><strong>${esc(label)}</strong></div>` }).join('')}</div>` }
+        function slideCover(s) { return page(`<div class="cover-grid"><div class="cover-copy">${eyebrow(s, '✨')}<div class="session-label">SESSION ${s.id} · ${esc(s.platform)}</div><h1>${esc(s.title)}</h1><p class="subtitle">${esc(s.objective)}</p><div class="cover-actions"><span>💭 Pikirkan</span><span>🧪 Coba</span><span>🛠️ Buat</span></div></div><div class="cover-art"><div class="bubble">${art(s.id)}</div><span class="sticker one">🌟</span><span class="sticker two">${topicsEmoji[s.id - 1]}</span></div></div>`, 'cover-scene') }
+        function slideAgenda(s) { return page(`${head(s, 'Today’s Adventure! 🚀', 'Empat hal seru yang akan kita jelajahi hari ini.', '🗺️')}<div class="scene-body"><div class="agenda-path">${s.agenda.map((x, i) => `<div class="agenda-item"><div class="agenda-blob"><span class="agenda-icon">${agendaEmoji[i]}</span><span class="agenda-num">${i + 1}</span></div><strong>${esc(x)}</strong></div>`).join('')}</div></div>`) }
+        function slideOpening(s) { return page(`${head(s, s.opening_title, '', '📖')}<div class="scene-body"><div class="story-layout"><div class="story-art">${artwork(s, 'orange')}<span class="sticker">✨</span></div><div class="story-copy"><div class="story-text">${esc(s.opening)}</div><div class="story-tip">💬 Yuk, ceritakan pendapatmu ke guru!</div></div></div></div>`) }
+        function slideConcept(s) { return page(`${head(s, s.concept_title, s.concept, '🧠')}<div class="scene-body"><div class="concept-layout">${flowHtml(s)}<div class="idea-tip">💡 Pahami idenya dulu, lalu kita coba coding bersama!</div></div></div>`) }
+        function slideThink(s) { return page(`${head(s, 'Think About It 🤔', 'Menurutmu, jawaban mana yang paling tepat?', '❓')}<div class="scene-body"><div class="think-layout"><div class="thought-mark">💭</div><div class="question">${esc(s.think_q)}</div><div class="answers" id="thinkOptions">${s.think_choices.map(([x, right]) => `<button type="button" class="choice" data-correct="${right}" onclick="answerThink(this)">${esc(x)}</button>`).join('')}</div><div class="answer-note" id="thinkFeedback" style="display:none"></div></div></div>`) }
+        function slideProject(s) { return page(`${head(s, 'Today’s Project 🛠️', 'Hari ini kita bakal bikin apa, ya?', '🚀')}<div class="scene-body"><div class="project-layout"><div class="project-show"><div class="art-frame">${art(s.id)}</div><h2>${esc(s.title)}</h2><p>${esc(s.objective)}</p></div><div class="project-milestones">${s.project_points.map((x, i) => `<div class="project-point"><span class="point-emoji">${pointEmoji[i]}</span><strong>${esc(x)}</strong></div>`).join('')}</div></div></div>`) }
+        function slideHow(s) { return page(`${head(s, 'How Does It Work? ⚙️', 'Yuk, lihat alur dari Input hingga Output!', '⚙️')}<div class="scene-body"><div class="how-layout">${flowHtml(s)}<div class="how-three"><div class="how-feature"><span class="how-emoji">📥</span><h3>INPUT</h3><p>Informasi apa yang masuk?</p></div><div class="how-feature"><span class="how-emoji">🧠</span><h3>LOGIC</h3><p>Apa yang diperiksa program?</p></div><div class="how-feature"><span class="how-emoji">🎉</span><h3>OUTPUT</h3><p>Apa yang muncul sebagai hasil?</p></div></div></div></div>`) }
+        function slideSample(s) { let body = ''; if (isScratch(s.sample)) { body = `<div class="sample-layout"><div class="scratch-stage"><iframe src="${scratchEmbed(s.sample)}" title="Contoh Scratch: ${esc(s.title)}" allow="camera; microphone; autoplay; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="sample-info"><div class="sample-emoji">🐱 🎮</div><h2>Coba Sendiri!</h2><p>Tekan <b>Green Flag</b> di Scratch, lalu lihat apa yang terjadi!</p><a class="cta" href="${esc(s.sample)}" target="_blank" rel="noopener">↗ BUKA PROJECT</a></div></div>` } else if (s.sample) { body = `<div class="ml4k-layout"><div class="art-frame">${art(s.id)}</div><div class="ml4k-info"><h2>📦 Sample Project ML4K</h2><p>Project ini memakai extension khusus ML4K, jadi tidak bisa dijalankan di Scratch biasa. Buka file melalui ML4K Scratch Editor bersama guru, ya!</p><div class="cta-row"><a class="cta" href="${esc(s.sample)}" target="_blank" rel="noopener">📂 BUKA SAMPLE</a>${s.editor ? `<a class="cta purple" href="${esc(s.editor)}" target="_blank" rel="noopener">✨ EDITOR ML4K</a>` : ''}</div></div></div>` } else { const prior = sessions.filter(x => x.id < 13 && x.sample).slice(-4); body = `<div class="inspiration-grid">${prior.map((p, i) => `<a class="inspiration-item" href="${esc(p.sample)}" target="_blank" rel="noopener"><span class="icon">${topicsEmoji[p.id - 1]}</span><b>${esc(p.title)} ↗</b></a>`).join('')}</div>` } return page(`${head(s, s.sample ? (isScratch(s.sample) ? 'Try the Sample Project ▶️' : 'Explore the Sample 📦') : 'Project Inspiration 💡', s.sample ? 'Coba project contohnya sebelum membuat versimu sendiri!' : 'Cari inspirasi dari project yang pernah kamu coba!', '🎮')}<div class="scene-body">${body}</div>`) }
+        function slideNotice(s) { return page(`${head(s, 'What Did You Notice? 🔍', 'Coba amati, bukan cuma dimainkan!', '🔎')}<div class="scene-body"><div class="notice-layout"><div class="notice-columns">${s.notice.map((x, i) => `<div class="notice-item"><span class="notice-emoji">${noticeEmoji[i]}</span><strong>${esc(x)}</strong></div>`).join('')}</div><div class="notice-footer">💡 Coba pikirkan: <span>Apa Input-nya? Apa Logic-nya? Apa Output-nya?</span></div></div></div>`) }
+        function slideReady(s) { let links = '', steps = []; if (s.starter && s.editor) { links = `<a class="cta orange" href="${esc(s.starter)}" target="_blank" rel="noopener">📂 BUKA STARTER FILE</a><a class="cta purple" href="${esc(s.editor)}" target="_blank" rel="noopener">✨ BUKA EDITOR ML4K</a>`; steps = [['Buka', 'Buka starter project.'], ['Masukkan', 'Buka project di editor ML4K Scratch.'], ['Buat', 'Ikuti guru, lalu simpan project-mu.']] } else if (s.starter) { links = `<a class="cta orange" href="${esc(s.starter)}" target="_blank" rel="noopener">🐱 BUKA STARTER PROJECT</a>`; steps = [['Buka', 'Buka starter project.'], ['Remix', 'Klik Remix untuk membuat salinan.'], ['Beri Nama', 'Beri nama project-mu.']] } else if (s.id === 1) { links = `<a class="cta orange" href="${esc(s.sample)}" target="_blank" rel="noopener">🐱 BUKA SAMPLE & REMIX</a>`; steps = [['Buka', 'Buka sample project.'], ['See Inside', 'Lihat susunan blok Scratch.'], ['Remix', 'Buat versimu sendiri.']] } else { const url = s.id === 13 ? 'https://scratch.mit.edu/projects/editor/' : 'https://scratch.mit.edu/mystuff/'; links = `<a class="cta orange" href="${url}" target="_blank" rel="noopener">🐱 ${s.id === 13 ? 'BUKA SCRATCH' : 'BUKA MY PROJECTS'}</a>`; steps = [['Siapkan', s.id === 13 ? 'Mulai project baru.' : 'Buka project dari My Stuff.'], ['Ikuti Rencana', 'Fokus pada tujuan hari ini.'], ['Simpan', 'Pastikan hasilmu tersimpan.']] } return page(`${head(s, s.id >= 14 ? 'Ready to Continue? 🛠️' : 'Ready to Build? 🛠️', 'Ayo, kita mulai bikin project!', '🛠️')}<div class="scene-body"><div class="ready-layout"><div class="prep-steps">${steps.map(([t, p], i) => `<div class="prep-step"><div class="prep-emoji">${prepEmoji[i]}</div><b>${esc(t)}</b><p>${esc(p)}</p></div>`).join('')}</div><div class="cta-row">${links}</div></div></div>`) }
+        function slideTeacher(s) { const last = s.id === 16; const items = [['👀', 'Perhatikan', last ? 'Dengarkan tips presentasi dari guru.' : 'Perhatikan cara guru membuat project.'], ['🙋', 'Bertanya', 'Kalau bingung, langsung tanya guru!'], [last ? '🎤' : '🧪', last ? 'Latihan' : 'Coba & Tes', last ? 'Latihan sebelum tampil di depan teman.' : 'Coba project setiap selesai satu bagian.']]; return page(`${head(s, last ? 'Prepare With Your Teacher 👩‍🏫' : 'Build With Your Teacher 👩‍🏫', 'Lihat, coba, lalu praktikkan bersama!', '👩‍🏫')}<div class="scene-body"><div class="teacher-layout"><div class="teacher-columns">${items.map(([em, t, p]) => `<div class="teacher-item"><span class="teacher-icon">${em}</span><h3>${esc(t)}</h3><p>${esc(p)}</p></div>`).join('')}</div><div class="teacher-tip">${last ? '🌟 Tidak perlu menjelaskan semua blok. Ceritakan ide dan fitur utamamu!' : '💡 Tidak perlu menghafal semua blok. Yang penting kamu tahu fungsinya!'}</div></div></div>`) }
+        function quizDots() { return `<div class="quiz-progress">${[0, 1, 2].map(i => `<span class="step-dot ${i < quizIndex ? 'done' : i === quizIndex ? 'current' : ''}"></span>`).join('')}<span style="margin-left:8px">${Math.min(quizIndex + 1, 3)} / 3</span></div>` }
+        function slideQuiz(s) { if (quizIndex >= 3) return page(`${head(s, 'Quick Quiz 🧠', 'Semua pertanyaan sudah kamu jawab!', '🧠')}<div class="scene-body"><div class="quiz-result"><div class="result-emoji">🎉🏆</div><h2>Yeay, Quiz Selesai!</h2><p>Kamu menjawab <strong>${quizScore} dari 3</strong> soal dengan benar.</p><div class="cta-row"><button class="cta orange" onclick="replayQuiz()">↻ COBA LAGI</button><button class="cta navy" onclick="goToRecap()">LANJUT KE RECAP →</button></div></div></div>`); const q = s.quiz[quizIndex]; return page(`${head(s, 'Quick Quiz 🧠', 'Jawab satu soal, lalu lanjut ke soal berikutnya!', '🧠')}<div class="scene-body"><div class="quiz-layout">${quizDots()}<div class="question">${esc(q[0])}</div><div class="answers">${q[1].map((x, i) => `<button type="button" class="choice" data-correct="${i === q[2]}" onclick="answerQuiz(this)">${esc(x)}</button>`).join('')}</div><div class="quiz-status" id="quizStatus">👆 Pilih satu jawaban, ya!</div></div></div>`) }
+        function slideRecap(s) { return page(`${head(s, 'Today’s Recap 📚', 'Empat hal penting yang perlu kamu ingat!', '📚')}<div class="scene-body"><div class="recap-layout">${s.recap.map(([t, p], i) => `<div class="recap-item"><span class="recap-emoji">${recapEmoji[i]}</span><h3>${esc(t)}</h3><p>${esc(p)}</p></div>`).join('')}</div></div>`) }
+        function slideFeelings(s) { return page(`${head(s, 'How Was Today’s Session?', 'Pilih perasaanmu setelah belajar hari ini!', '💜')}<div class="scene-body" id="feelingContainer"><div class="feeling-grid">${[['😍', 'Suka Banget!'], ['🙂', 'Seru!'], ['😐', 'Lumayan'], ['😵', 'Butuh Bantuan']].map(([e, t]) => `<button class="feeling-btn" onclick="chooseFeeling('${e}','${t}')"><span class="face">${e}</span><span>${t}</span></button>`).join('')}</div></div>`) }
+        const renderers = [slideCover, slideAgenda, slideOpening, slideConcept, slideThink, slideProject, slideHow, slideSample, slideNotice, slideReady, slideTeacher, slideQuiz, slideRecap, slideFeelings];
+
+        // === Only new slides: platform walkthrough, local/cloud saving, and innovation platform choice. ===
+        const guideImgs = {
+            scratch: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb3JycgQQl9_xCE3notwQ8cqN3nYW7dqOUfoBA9dn5vA&s=10',
+            login: 'https://brightchamps.com/blog/wp-content/uploads/2022/02/save-and-share-a-project-in-Scratch-step-5-1.png',
+            remix: 'https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/616a5625-931d-4e8e-85e3-89b5418223e8.png',
+            ml4k: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3WkOY68y_SZ9QOwLxfcqIZUKj16a0WZwfRNCdFOHblg&s',
+            download: 'https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/dca6d539-f67b-43b1-94e3-d9c95e5470e9.png',
+            load: 'https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/c6503ee4-dd18-4d78-a5b6-f030d1d18ec0.png',
+            save: 'https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/0ce538d7-4b0e-4ebf-b508-4380cfaf7ff4.png'
+        };
+        function guideImage(url, alt, emoji = '📷') {
+            return `<img class="guide-shot" src="${esc(url)}" alt="${esc(alt)}" loading="eager" style="display:none" referrerpolicy="no-referrer" onload="this.style.display='block';this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><div class="guide-screenshot-fallback" style="display:flex"><span class="em">${emoji}</span><span>${esc(alt)}</span><small>Gambar panduan akan tampil jika tersambung internet.</small></div>`;
+        }
+        function guideDots(step) { return `<div class="guide-progress" aria-label="Langkah ${step} dari 3">${[1, 2, 3].map(i => `<span class="${i === step ? 'on' : ''}"></span>`).join('')}</div>` }
+        function guideStep(s, index) {
+            const ml = !!s.editor;
+            let headTitle = '', headDesc = '', name = '', detail = '', visual = '', links = '', hint = '', theme = '';
+            if (!ml) {
+                if (index === 1) { headTitle = 'Kita Coding di Mana? 🐱'; headDesc = 'Hari ini pakai Scratch biasa, ya!'; name = 'Buka scratch.mit.edu 🌐'; detail = 'Klik tombol di bawah untuk masuk ke website Scratch.'; visual = guideImage(guideImgs.scratch, 'Tampilan situs Scratch', '🐱'); links = `<a class="cta" href="https://scratch.mit.edu/" target="_blank" rel="noopener">🌐 BUKA SCRATCH</a>`; theme = 'orange'; }
+                if (index === 2) { headTitle = 'Sudah Login? 🔐'; headDesc = 'Siapkan akun Scratch kamu dulu!'; name = 'Masuk ke akunmu 👤'; detail = 'Klik Sign in, lalu gunakan akun Scratch milikmu sendiri sebelum mulai membuat project.'; visual = guideImage(guideImgs.login, 'Contoh posisi tombol Sign in di Scratch', '🔐'); hint = 'Kalau belum bisa login, minta bantuan guru, ya.'; theme = 'blue'; }
+                if (index === 3) { headTitle = 'Sekarang Remix! 🎨'; headDesc = 'Buka project yang sudah disiapkan untukmu.'; name = 'Buka starter lalu klik Remix! 🧩'; detail = 'Klik link di bawah, pilih See Inside bila perlu, lalu klik Remix agar menjadi project milikmu.'; visual = guideImage(guideImgs.remix, 'Tampilan tombol Remix di Scratch', '🎨'); links = `<a class="cta orange" href="${esc(s.starter || s.sample)}" target="_blank" rel="noopener">🐱 BUKA ${s.starter ? 'STARTER' : 'SAMPLE'} & REMIX</a>`; theme = 'purple'; }
+            } else {
+                if (index === 1) { headTitle = 'Hari Ini Pakai ML4K! 🧠'; headDesc = 'Ini Scratch khusus dengan extension Machine Learning for Kids.'; name = 'Buka Scratch versi ML4K 🌐'; detail = 'Bukan Scratch biasa! Kita akan coding di ML4K Scratch Editor.'; visual = `<div class="guide-logos"><div class="guide-brand"><span class="guide-brand-emoji">🐱</span><b>Scratch</b></div><span class="guide-arrow">+</span><div class="guide-brand"><span class="guide-brand-emoji">🤖</span><b>ML4K</b></div></div>`; links = '<a class="cta purple" href="https://machinelearningforkids.co.uk/scratch/" target="_blank" rel="noopener">🧠 BUKA SCRATCH ML4K</a>'; theme = 'purple'; }
+                if (index === 2) { headTitle = 'Download Starter Project 📂'; headDesc = 'Kita ambil file yang akan dipakai untuk coding.'; name = 'Unduh file project-mu ⬇️'; detail = 'Klik link Starter Project di bawah, lalu download filenya ke laptopmu.'; visual = guideImage(guideImgs.download, 'Contoh tombol download Starter Project', '📥'); links = `<a class="cta orange" href="${esc(s.starter)}" target="_blank" rel="noopener">📂 BUKA & DOWNLOAD STARTER</a>`; theme = 'orange'; }
+                if (index === 3) { headTitle = 'Masukkan ke ML4K! 🧩'; headDesc = 'File yang di-download siap dibuka sekarang.'; name = 'Load Project di editor 🔄'; detail = 'Kembali ke ML4K Scratch, pilih File → Load from your computer, lalu pilih file yang tadi kamu download.'; visual = guideImage(guideImgs.load, 'Contoh cara load project dari komputer di Scratch ML4K', '📁'); links = '<a class="cta purple" href="https://machinelearningforkids.co.uk/scratch/" target="_blank" rel="noopener">🧠 BUKA EDITOR ML4K</a>'; theme = 'teal'; }
+            }
+            return page(`${head(s, headTitle, headDesc, '🗺️')}<div class="scene-body"><div class="guide-stage"><div class="guide-visual ${theme}">${visual}</div><div class="guide-copy"><div class="guide-step-number">✨ LANGKAH ${index} DARI 3</div><div class="guide-main">${name}</div><div class="guide-desc">${detail}</div>${links ? `<div class="cta-row">${links}</div>` : ''}${hint ? `<div class="guide-hint">💡 ${hint}</div>` : ''}${guideDots(index)}</div></div></div>`, 'guide-scene');
+        }
+        function guideSave(s) {
+            if (!s.editor) {
+                let image = `<div class="guide-scratch-mock"><div class="guide-mock-top"><strong>🐱 Scratch Editor</strong><span class="guide-mock-share">Share ↗</span></div><div class="guide-mock-bottom">🐱 🌟 💻</div><div class="guide-mock-caption">Ilustrasi posisi tombol Share di Scratch</div></div>`;
+                return page(`${head(s, 'Jangan Lupa Simpan! ☁️', 'Kerja kerasmu harus tetap ada setelah kelas!', '💾')}<div class="scene-body"><div class="guide-stage"><div class="guide-visual orange">${image}</div><div class="guide-copy"><div class="guide-main">Simpan di akun Scratch-mu 🐱</div><div class="guide-desc">Kalau sudah login, project biasanya tersimpan otomatis. Beri nama yang jelas, lalu cek di <b>My Stuff</b>!</div><div class="guide-hint">🌟 Klik <b>Share</b> kalau project sudah siap dibagikan ke guru atau teman.</div><a class="cta" href="https://scratch.mit.edu/mystuff/" target="_blank" rel="noopener">☁️ CEK MY STUFF</a></div></div></div>`, 'guide-scene');
+            }
+            const nice = { 5: 'OwlWikipedia', 6: 'SaveEnergyVoice', 11: 'LaserEyes', 12: 'LaserEyes' }[s.id] || 'AIProject';
+            return page(`${head(s, 'Save Project ke Laptop! 💾', 'Di ML4K, project tidak otomatis tersimpan di akun cloud.', '📁')}<div class="scene-body"><div class="guide-stage"><div class="guide-visual teal">${guideImage(guideImgs.save, 'Contoh menu File kemudian Save to your computer di ML4K', '💾')}</div><div class="guide-copy"><div class="guide-main">File → Save to your computer 📥</div><div class="guide-desc">Klik menu <b>File</b>, pilih <b>Save to your computer</b>, lalu simpan file ke folder yang mudah ditemukan.</div><div class="guide-code-example">📂 S${String(s.id).padStart(2, '0')}_${nice}_NamaKamu.sb3</div><div class="guide-hint">⚠️ File disimpan di laptop, bukan otomatis di cloud. Jangan sampai hilang!</div></div></div></div>`, 'guide-scene');
+        }
+        function guideChoose(s) {
+            const explain = s.id === 13 ? 'Pilih tempat yang cocok untuk ide project yang kamu rencanakan.' : 'Lanjutkan coding di platform yang sudah kamu pilih.';
+            return page(`${head(s, 'Pilih Platform Project-mu! 💡', explain, '🧭')}<div class="scene-body"><div class="guide-choose"><div class="guide-option"><span class="icon">🐱</span><h2>Scratch</h2><p>Cocok untuk project memakai blok Scratch biasa.</p><a class="cta" href="https://scratch.mit.edu/" target="_blank" rel="noopener">🌐 BUKA SCRATCH</a></div><div class="guide-option"><span class="icon">🤖</span><h2>Scratch ML4K</h2><p>Cocok untuk project yang butuh extension khusus ML4K.</p><a class="cta purple" href="https://machinelearningforkids.co.uk/scratch/" target="_blank" rel="noopener">🧠 BUKA ML4K</a></div></div></div>`, 'guide-scene');
+        }
+        function getSessionRenderers(s) {
+            if (s.id <= 12) return [...renderers.slice(0, 9), x => guideStep(x, 1), x => guideStep(x, 2), x => guideStep(x, 3), ...renderers.slice(9, 11), guideSave, ...renderers.slice(11)];
+            if (s.id === 13 || s.id === 14) return [...renderers.slice(0, 9), guideChoose, ...renderers.slice(9)];
+            return renderers;
+        }
+        function getQuizSlideIndex() { return getSessionRenderers(sessions[currentSession - 1]).indexOf(slideQuiz) }
+        function goToRecap() { goToSlide(getQuizSlideIndex() + 1) }
+
+        function render() { const s = sessions[currentSession - 1], slides = getSessionRenderers(s); $('#slideContent').innerHTML = slides[currentSlide](s); $('#meetingTitle').textContent = `Session ${s.id}: ${s.title}`; $('#currentSlide').textContent = currentSlide + 1; $('#totalSlides').textContent = slides.length; $('#prevBtn').disabled = currentSlide === 0; $('#nextBtn').disabled = currentSlide === slides.length - 1; $('#meetingSelector').value = currentSession }
+        function goToSlide(i) { if (i < 0 || i >= getSessionRenderers(sessions[currentSession - 1]).length) return; clearTimeout(pendingQuizTimer); pendingQuizTimer = null; currentSlide = i; if (i === getQuizSlideIndex()) { quizIndex = 0; quizScore = 0 } render() }
+        function answerThink(btn) { const all = [...document.querySelectorAll('#thinkOptions .choice')]; if (all.some(x => x.disabled)) return; all.forEach(x => { x.disabled = true; if (x.dataset.correct === 'true') x.classList.add('correct') }); const right = btn.dataset.correct === 'true'; if (!right) btn.classList.add('incorrect'); const note = $('#thinkFeedback'); note.style.display = ''; note.className = `answer-note ${right ? '' : 'try'}`; note.textContent = right ? '✅ Benar! Kamu sudah paham!' : '💡 Belum tepat. Lihat jawaban hijau, yuk!' }
+        function answerQuiz(btn) { const all = [...document.querySelectorAll('.quiz-layout .choice')]; if (all.some(x => x.disabled)) return; const right = btn.dataset.correct === 'true'; if (right) quizScore++; all.forEach(x => { x.disabled = true; if (x.dataset.correct === 'true') x.classList.add('correct') }); if (!right) btn.classList.add('incorrect'); const el = $('#quizStatus'); el.className = `quiz-status ${right ? 'good' : 'oops'}`; el.textContent = right ? '✅ Betul! Hebat!' : '💡 Belum tepat. Yang hijau jawaban benar!'; pendingQuizTimer = setTimeout(() => { quizIndex++; render(); pendingQuizTimer = null }, 1450) }
+        function replayQuiz() { clearTimeout(pendingQuizTimer); pendingQuizTimer = null; quizIndex = 0; quizScore = 0; render() }
+        function chooseFeeling(emoji, title) { $('#feelingContainer').innerHTML = `<div class="feeling-result"><span class="face">${emoji}</span><strong>${esc(title)}</strong><p>Makasih sudah memilih! Kalau masih bingung, boleh tanya ke guru, ya! 🌟</p></div>` }
+        $('#meetingSelector').innerHTML = sessions.map(s => `<option value="${s.id}">Session ${s.id}: ${esc(s.title)}</option>`).join('');
+        $('#meetingSelector').addEventListener('change', e => { currentSession = +e.target.value; goToSlide(0) });
+        $('#prevBtn').addEventListener('click', () => goToSlide(currentSlide - 1)); $('#nextBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+        document.addEventListener('keydown', e => { if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return; if (e.key === 'ArrowRight') goToSlide(currentSlide + 1); else if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1) });
+        render();
+    </script>
+</body>
+
+</html>
